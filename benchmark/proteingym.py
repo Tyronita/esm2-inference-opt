@@ -20,8 +20,8 @@ REFERENCE_URL = (
     "main/reference_files/DMS_substitutions.csv"
 )
 DMS_ZIP_URL = (
-    "https://github.com/OATML-Markslab/ProteinGym/releases/download/"
-    "v1.1/DMS_ProteinGym_substitutions.zip"
+    "https://marks.hms.harvard.edu/proteingym/ProteinGym_v1.3/"
+    "DMS_ProteinGym_substitutions.zip"
 )
 
 # PD-relevant assay IDs (LewyGym focus)
