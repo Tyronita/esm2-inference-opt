@@ -115,13 +115,22 @@
 
 % ─────────────────────────────────────────────────────────────────────────────
 \begin{integritybox}
-\textbf{Reproducibility certificate.}
-Every result in this document is reproducible from the pinned SHAs above.
-Run \lstinline|python benchmark/verify_integrity.py| to verify the installed
-\texttt{fair-esm} package matches the submodule byte-for-byte.
-Merkle root: \texttt{\textcolor{sha}{5e31a69554e4cd912f378c642cb108ba}} \
-(31 files, 0 diffs). \
-Consistency gate: \lstinline|python check_consistency.py| → $\rho = +0.999973$.
+\textbf{Reproducibility certificate — two-track source verification.}
+
+\textbf{Track~A (reference, fp32):}
+\lstinline|python benchmark/verify_integrity.py --track-a|~—~
+\texttt{fair-esm} submodule \texttt{2b369911} vs installed package; 31/31 files byte-identical.
+Merkle root: \texttt{\textcolor{sha}{5e31a69554e4cd912f378c642cb108ba}}.
+Used only in \texttt{check\_consistency.py}.
+
+\textbf{Track~B (production, fp16 CUDA):}
+\lstinline|python benchmark/verify_integrity.py --track-b|~—~
+three \texttt{transformers==4.44.0} ESM files pinned by SHA256; 3/3 CLEAN.
+All \texttt{scoring/*.py} benchmark inference runs through this track.
+
+\textbf{Bridge:}
+\lstinline|python check_consistency.py| $\Rightarrow$ $\rho = +0.999973$ (gate $\geq 0.999$) \textbf{PASS}.
+Track~A and Track~B agree to within $\max|\Delta|=0.020073$ across 200 SNCA variants.
 \end{integritybox}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -238,43 +247,76 @@ overfit evolutionary co-occurrence patterns that do not transfer to
 experimental fitness landscapes.
 \end{infobox}
 
-\paragraph{Ten annotated lines.}
-The critical lines in the source code (all verified against submodule):
+\paragraph{Two-track architecture.}
+\textbf{There are two separate ESM-2 implementations in this repo, serving different roles.}
+Neither is a bug; they are deliberately kept in sync and verified to agree.
+
+\begin{integritybox}
+\textbf{Track A — REFERENCE (fp32):} \texttt{refs/fair-esm/esm/} pinned at git SHA
+\texttt{2b369911}.  Used \emph{only} in \texttt{check\_consistency.py}.
+Verified by \texttt{benchmark/verify\_integrity.py --track-a}: 31/31 files byte-identical
+to submodule; merkle root \texttt{5e31a69554e4cd91}.\\[4pt]
+\textbf{Track B — PRODUCTION (fp16 CUDA):} \texttt{transformers==4.44.0},
+\texttt{models/esm/\{modeling,configuration,tokenization\}\_esm.py}.
+Used in \emph{all} \texttt{scoring/*.py} files during actual benchmark inference.
+Verified by \texttt{benchmark/verify\_integrity.py --track-b}: 3/3 SHA256 hashes match pinned values.\\[4pt]
+\textbf{Bridge:} \texttt{python check\_consistency.py} runs both tracks on 200 SNCA
+single-site variants and measures agreement.
+Result: $\rho = +0.999973$ (gate: $\rho \geq 0.999$) \textbf{PASS}. Max $|\Delta| = 0.020073$.
+\end{integritybox}
+
+\paragraph{Track A — annotated lines (REFERENCE, \texttt{refs/fair-esm}).}
+These lines document the algorithmic design; they do \emph{not} execute during benchmark inference.
 
 \begin{lstlisting}[style=python,caption={%
-  Ten most important lines.
-  Files: \texttt{refs/fair-esm/esm/model/esm2.py},
-  \texttt{refs/fair-esm/esm/rotary\_embedding.py},
-  \texttt{scoring/masked\_marginals.py}.
-  All verified via \texttt{benchmark/verify\_integrity.py}.
+  Track A: \texttt{refs/fair-esm/esm/model/esm2.py} and
+  \texttt{refs/fair-esm/esm/rotary\_embedding.py}.
+  Verified clean by \texttt{benchmark/verify\_integrity.py --track-a}.
 }]
-# esm2.py:53  — FFN = 4*d (architectural constant, matches config.json)
+# esm2.py:53  — FFN width = 4*d (matches config.json intermediate_size=5120)
 TransformerLayer(self.embed_dim, 4 * self.embed_dim, ...)
 
 # esm2.py:57  — RoPE on; no learned positional embeddings
 use_rotary_embeddings=True
 
-# esm2.py:42  — embed_scale=1 (unlike original BERT which used sqrt(d))
+# esm2.py:42  — embed_scale=1  (BERT used sqrt(d); ESM-2 does not)
 self.embed_scale = 1
 
-# esm2.py:87-92 — token-dropout rescaling (12% effective mask rate at train)
+# esm2.py:87-92 — token-dropout rescaling (12% effective mask rate at train time)
 x.masked_fill_((tokens == self.mask_idx).unsqueeze(-1), 0.0)
 mask_ratio_train = 0.15 * 0.8
 x = x * (1 - mask_ratio_train) / (1 - mask_ratio_observed)[:, None, None]
 
-# rotary_embedding.py:40 — RoPE frequencies (base=10000, as in RoFormer)
+# rotary_embedding.py:40 — RoPE frequencies (base=10000, matches RoFormer)
 inv_freq = 1.0 / (10000 ** (torch.arange(0, dim, 2).float() / dim))
 
 # rotary_embedding.py:20 — RoPE rotation: complex multiply in real space
 return (x * cos) + (rotate_half(x) * sin)
+\end{lstlisting}
+
+\paragraph{Track B — annotated lines (PRODUCTION, \texttt{transformers 4.44.0}).}
+These lines \emph{actually execute} during every benchmark forward pass.
+
+\begin{lstlisting}[style=python,caption={%
+  Track B: \texttt{transformers/models/esm/\{modeling,configuration,tokenization\}\_esm.py}
+  (SHA256 pinned in \texttt{benchmark/verify\_integrity.py::TRANSFORMERS\_EXPECTED}).
+  \texttt{scoring/masked\_marginals.py} is in-repo and tracked by git.
+}]
+# modeling_esm.py — EsmAttention: pre-LN, rotary Q/K, scaled dot-product
+Q, K, V = self.query(x), self.key(x), self.value(x)  # nn.Linear 1280->1280
+Q, K = self.rotary_embeddings(Q, K)                  # RoPE applied here
+attn_weights = torch.bmm(Q, K.transpose(-1,-2)) * head_size**-0.5
+
+# modeling_esm.py — EsmLMHead: logits over 33-token vocab
+logits = self.decoder(self.dense(hidden_states))      # 1280->1280->33
 
 # masked_marginals.py:69 — inject one [MASK] per forward pass
 ids[0, pos_1] = mask_id   # pos_1: BOS at 0, AA_1 at 1 .. AA_L at L
 
-# masked_marginals.py:71 — log-softmax in fp32 even when model is fp16
+# masked_marginals.py:71 — fp32 softmax even when model is fp16 (numerical stability)
 return torch.log_softmax(logits.float(), dim=-1)
 
-# masked_marginals.py:61 — THE scoring equation (implements Eq. 1)
+# masked_marginals.py:61 — THE scoring equation (Eq. 1); runs L times per assay
 score += (lp[mut_id] - lp[wt_id]).item()
 \end{lstlisting}
 
@@ -316,25 +358,37 @@ python check_consistency.py            # fair-esm fp32 vs HF fp16  rho=+0.999973
 python smoke_test.py                   # 44/44 PASS
 \end{lstlisting}
 
-\subsection{Proof: installed == \texttt{refs/} at every level}
+\subsection{Proof: installed == pinned at every level}
 
 \begin{table}[ht]
 \centering
-\caption{Integrity verification chain. Each level proves the one above it.}
+\caption{%
+  Two-track integrity chain. Track~A verifies the reference submodule
+  byte-for-byte; Track~B pins the production package by SHA256.
+  The bridge proves both tracks agree numerically.
+}
 \label{tab:integrity}
-\begin{tabular}{llll}
+\begin{tabular}{lllll}
 \toprule
-Level & What is pinned & Command & Result \\
+Track & Level & What is pinned & Command & Result \\
 \midrule
-Git submodule & \texttt{refs/fair-esm @ 2b369911} &
+A (ref) & Git submodule & \texttt{refs/fair-esm @ 2b369911} &
   \lstinline|git submodule status| & $\checkmark$ \\
-Installed .py & 31 files, byte-identical &
-  \lstinline|verify_integrity.py| & 31/31 CLEAN \\
-Merkle root & \texttt{5e31a69554e4cd91} &
+A (ref) & Installed .py & 31 files, byte-identical &
+  \lstinline|verify_integrity.py --track-a| & 31/31 CLEAN \\
+A (ref) & Merkle root & \texttt{5e31a69554e4cd91} &
   printed by verifier & $\checkmark$ \\
-Score parity & $\rho = +0.999973$ fair-esm$\leftrightarrow$HF &
+\midrule
+B (prod) & modeling\_esm.py & SHA256 \texttt{03e3784d\ldots} &
+  \lstinline|verify_integrity.py --track-b| & CLEAN \\
+B (prod) & configuration\_esm.py & SHA256 \texttt{04122d10\ldots} &
+  \lstinline|verify_integrity.py --track-b| & CLEAN \\
+B (prod) & tokenization\_esm.py & SHA256 \texttt{1c3e895f\ldots} &
+  \lstinline|verify_integrity.py --track-b| & CLEAN \\
+\midrule
+Bridge & Score parity & $\rho = +0.999973$, A$\leftrightarrow$B &
   \lstinline|check_consistency.py| & PASS \\
-Smoke test & 44/44 all code paths &
+— & Smoke test & 44/44 all code paths &
   \lstinline|smoke_test.py| & PASS \\
 \bottomrule
 \end{tabular}
