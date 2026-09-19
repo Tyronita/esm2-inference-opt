@@ -124,74 +124,78 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 114 | 2026-09-18T23:12:19 | like exploring the dna inteeractively, bring it to life, | `a144c44` | Initial commit: ESM-2 650M inference optimisation  |
 | 115 | 2026-09-18T23:48:42 | can u open it for me | `a144c44` | Initial commit: ESM-2 650M inference optimisation  |
 | 116 | 2026-09-18T23:58:06 | pls find the lewygym stuff we were looking at and push it up to github pls.. fin | `a144c44` | Initial commit: ESM-2 650M inference optimisation  |
-| 117 | 2026-09-19T00:00:05 | pls correct this  1. is a benchmark analgous to ProteinGym but focused on Parkin | `8926169` | feat: reference times with commit provenance |
-| 118 | 2026-09-19T00:02:35 | no pls undo this, revert this last commit pls | `8926169` | feat: reference times with commit provenance |
-| 119 | 2026-09-19T00:04:26 | w/o making an edit... pls explain ... Parkinson's disease what ProteinGym is to  | `8926169` | feat: reference times with commit provenance |
-| 120 | 2026-09-19T00:06:47 | different phrasings pls | `8926169` | feat: reference times with commit provenance |
-| 121 | 2026-09-19T00:10:28 | okay like .... you need to go into the leetbio and see every opportunity to make | `8926169` | feat: reference times with commit provenance |
-| 122 | 2026-09-19T00:13:29 | please deep rpi a better design that tells a story, tracks a users progress and  | `8926169` | feat: reference times with commit provenance |
-| 123 | 2026-09-19T00:14:31 | a43bf0963ba76a412 toolu_018cGSk2a2R75qxUauWgr7ij /private/tmp/claude-501/-Users- | `8926169` | feat: reference times with commit provenance |
-| 124 | 2026-09-19T00:14:38 | a9ce4a44cfa70cc8a toolu_01Y6XEkvcmikA5MYhT4eaMUj /private/tmp/claude-501/-Users- | `8926169` | feat: reference times with commit provenance |
-| 125 | 2026-09-19T00:15:17 | like literlaly go through what is a gene... to all the things around it... like  | `8926169` | feat: reference times with commit provenance |
-| 126 | 2026-09-19T00:26:49 | b2e2i7chh toolu_01SjwpQ5PpVKzdw7MT3JUtSg /private/tmp/claude-501/-Users-niallole | `8926169` | feat: reference times with commit provenance |
-| 127 | 2026-09-19T00:31:48 | can i see it - open it up! | `8926169` | feat: reference times with commit provenance |
-| 128 | 2026-09-19T00:33:15 | open it? | `8926169` | feat: reference times with commit provenance |
-| 129 | 2026-09-19T00:33:36 | this didnt work.... | `8926169` | feat: reference times with commit provenance |
-| 130 | 2026-09-19T00:34:27 | i.e. also random stuff like DAG builder... and yeah not tied into anything... th | `8926169` | feat: reference times with commit provenance |
-| 131 | 2026-09-19T00:38:31 | right... has our react + this divereged///... do all our testing... coverage...  | `8926169` | feat: reference times with commit provenance |
-| 132 | 2026-09-19T12:13:00 | ^ pls atatch a chats/ folder (we seek to capture all artefacts we have encounter | `8926169` | feat: reference times with commit provenance |
-| 133 | 2026-09-19T12:20:58 | please clone leetgpu | `8926169` | feat: reference times with commit provenance |
-| 134 | 2026-09-19T12:21:17 | nah go search for it please | `8926169` | feat: reference times with commit provenance |
-| 135 | 2026-09-19T12:24:48 | please, see what bio related challenges there is? | `8926169` | feat: reference times with commit provenance |
-| 136 | 2026-09-19T12:26:36 | please, find a benchmark for a bio problem like BLAST, is BLAST an AI-accleerate | `8926169` | feat: reference times with commit provenance |
-| 137 | 2026-09-19T12:27:35 | okay so theres not a standard dataset to measure its speed? | `8926169` | feat: reference times with commit provenance |
-| 138 | 2026-09-19T14:40:55 | esm 650m -> flops on big O worst case for assay on protein / amino acid in prote | `8926169` | feat: reference times with commit provenance |
-| 139 | 2026-09-19T14:44:46 | if you ran this on this PC how long would this take -> | `8926169` | feat: reference times with commit provenance |
-| 140 | 2026-09-19T14:46:43 | okay i actually meant the worse case of assay length on this machine | `8926169` | feat: reference times with commit provenance |
-| 141 | 2026-09-19T14:48:32 | run it and prove me wrong, how is this timeable, also show me the model architec | `8926169` | feat: reference times with commit provenance |
-| 142 | 2026-09-19T15:01:43 | how big are these weights? | `8926169` | feat: reference times with commit provenance |
-| 143 | 2026-09-19T15:05:04 | wait, what are you doing? i just wanted a chat output | `8926169` | feat: reference times with commit provenance |
-| 144 | 2026-09-19T15:05:41 | no i mean, i wanted the informational piece rightbackgrounded this bad boy.... e | `8926169` | feat: reference times with commit provenance |
-| 145 | 2026-09-19T15:08:23 | please start a fork of leetgpu, we're going to add an implementation for this mo | `8926169` | feat: reference times with commit provenance |
-| 146 | 2026-09-19T15:12:26 | great now, use their leetgpu cli to try and solve it please, | `8926169` | feat: reference times with commit provenance |
-| 147 | 2026-09-19T15:15:51 | you reckon leetgpu is the most reliable way to stress test this? | `8926169` | feat: reference times with commit provenance |
-| 148 | 2026-09-19T15:18:13 | maybe kaggle or google colab, how is best to do this, consider we need bare meta | `8926169` | feat: reference times with commit provenance |
-| 149 | 2026-09-19T15:19:00 | lets do modal | `8926169` | feat: reference times with commit provenance |
-| 150 | 2026-09-19T15:30:15 | hey you good, pls install the skills :) they also gave me this idk if it helps u | `8926169` | feat: reference times with commit provenance |
-| 151 | 2026-09-19T15:34:16 | right, what is the ESM-650m benchmarked against per chance? | `8926169` | feat: reference times with commit provenance |
-| 152 | 2026-09-19T15:35:52 | okay please make a repo for inference optimisation on this model, whereby we wil | `8926169` | feat: reference times with commit provenance |
-| 153 | 2026-09-19T15:39:31 | is there any sources on scoring | `8926169` | feat: reference times with commit provenance |
-| 154 | 2026-09-19T15:40:08 | sorry for time to go through each sample, what metrics make sense, tfft, tokens/ | `8926169` | feat: reference times with commit provenance |
-| 155 | 2026-09-19T15:41:06 | then fix it to a hardware they mention in the paper for inference pls | `8926169` | feat: reference times with commit provenance |
-| 156 | 2026-09-19T15:45:04 | great, take every known implementation and test it on the hardware, list all lim | `8926169` | feat: reference times with commit provenance |
-| 157 | 2026-09-19T15:55:21 | pls run all now, bout to disconnect, start sessions, name any assumptions, ensur | `8926169` | feat: reference times with commit provenance |
-| 158 | 2026-09-19T19:19:59 | right, pls see results | `8926169` | feat: reference times with commit provenance |
-| 159 | 2026-09-19T19:24:52 | b4a8ijoij toolu_01FqYmuUVYQxFnXE9ZLDMagA /private/tmp/claude-501/-Users-niallole | `8926169` | feat: reference times with commit provenance |
-| 160 | 2026-09-19T19:36:43 | b2x4w1lpq toolu_016HpKthwev36hhHY35ydEiE /private/tmp/claude-501/-Users-niallole | `8926169` | feat: reference times with commit provenance |
-| 161 | 2026-09-19T19:47:42 | next steps - show the url trace - | `8926169` | feat: reference times with commit provenance |
-| 162 | 2026-09-19T20:05:09 | i want the url trace for original code, as thats what i'm interested in, i need  | `8926169` | feat: reference times with commit provenance |
-| 163 | 2026-09-19T20:09:31 | show me every implementation -> pls... so we have them all as git submodules or  | `8926169` | feat: reference times with commit provenance |
-| 164 | 2026-09-19T20:27:30 | pls open in vscode so i can follow on | `8926169` | feat: reference times with commit provenance |
-| 165 | 2026-09-19T20:29:46 | i need verbatim proof, you are using reference implementations, and using refs/  | `8926169` | feat: reference times with commit provenance |
-| 166 | 2026-09-19T20:32:47 | i.e. i want to know we wont error, how can we do that? i.e. potentially install  | `8926169` | feat: reference times with commit provenance |
-| 167 | 2026-09-19T20:51:35 | pls push i paid | `8926169` | feat: reference times with commit provenance |
-| 168 | 2026-09-19T20:53:30 | pls add mac results.. also make a numbered list where you can max add one step o | `8926169` | feat: reference times with commit provenance |
-| 169 | 2026-09-19T20:57:11 | make sure this is append only pls, and add timestps... do we have the results... | `8926169` | feat: reference times with commit provenance |
-| 170 | 2026-09-19T21:02:05 | right, on the next run we, yes i'd like that... logging shouldnt interrupt the f | `8926169` | feat: reference times with commit provenance |
-| 171 | 2026-09-19T21:11:31 | ^ pls kick me off, with the best config -> and get me a time and a output correl | `8926169` | feat: reference times with commit provenance |
-| 172 | 2026-09-19T21:22:22 | b9albjsvv Monitor event: "ablate_pd_proteins Modal run — streaming ρ per assay,  | `8926169` | feat: reference times with commit provenance |
-| 173 | 2026-09-19T21:22:35 | is there like a master log for a modal instance that can be pulled? | `8926169` | feat: reference times with commit provenance |
-| 174 | 2026-09-19T21:25:17 | out of interest, other papers, show the original paper, make it as a pdf pls, fo | `8926169` | feat: reference times with commit provenance |
-| 175 | 2026-09-19T21:29:03 | my plan was to plug in shinka evolve, and cuda evolve this bad boy, throwing in  | `8926169` | feat: reference times with commit provenance |
-| 176 | 2026-09-19T21:36:46 | just to warn you, shinka evolve solely works on flat file | `8926169` | feat: reference times with commit provenance |
-| 177 | 2026-09-19T21:37:24 | b6yqb0wic toolu_01Mukds7sxTWwjvxSFSqCrgK /private/tmp/claude-501/-Users-niallole | `8926169` | feat: reference times with commit provenance |
-| 178 | 2026-09-19T21:37:41 | no pls pull my results, the observe stuff | `8926169` | feat: reference times with commit provenance |
-| 179 | 2026-09-19T21:40:04 | what is the wall | `8926169` | feat: reference times with commit provenance |
-| 180 | 2026-09-19T21:42:48 | please open the hf model card and any reference and also please deep dive the 10 | `8926169` | feat: reference times with commit provenance |
-| 181 | 2026-09-19T21:45:05 | like, i need this to read like an append only story, where every prompt summaris | `8926169` | feat: reference times with commit provenance |
-| 182 | 2026-09-19T21:51:28 | great, show me the exact commands and executive order, including bold for python | `8926169` | feat: reference times with commit provenance |
-| 183 | 2026-09-19T21:54:33 | please, add all our method as append only also add as a hook, please gitinclude  | `8926169` | feat: reference times with commit provenance |
-| 184 | 2026-09-19T22:17:43 | i'm upset / confused, our 10 line code trace, shouldn't these be going through r | `8926169` | feat: reference times with commit provenance |
-| 185 | 2026-09-19T22:25:42 | okay bake this into the commit history, commit all please, show me back the scie | `8926169` | feat: reference times with commit provenance |
-| 186 | 2026-09-19T22:27:56 | okay pls grab these reference times, with the commit ids attached | `8926169` | feat: reference times with commit provenance |
-| 187 | 2026-09-19T22:31:06 | great ^ cont. get me my results pls | `8926169` | feat: reference times with commit provenance |
+| 117 | 2026-09-19T00:00:05 | pls correct this  1. is a benchmark analgous to ProteinGym but focused on Parkin | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 118 | 2026-09-19T00:02:35 | no pls undo this, revert this last commit pls | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 119 | 2026-09-19T00:04:26 | w/o making an edit... pls explain ... Parkinson's disease what ProteinGym is to  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 120 | 2026-09-19T00:06:47 | different phrasings pls | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 121 | 2026-09-19T00:10:28 | okay like .... you need to go into the leetbio and see every opportunity to make | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 122 | 2026-09-19T00:13:29 | please deep rpi a better design that tells a story, tracks a users progress and  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 123 | 2026-09-19T00:14:31 | a43bf0963ba76a412 toolu_018cGSk2a2R75qxUauWgr7ij /private/tmp/claude-501/-Users- | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 124 | 2026-09-19T00:14:38 | a9ce4a44cfa70cc8a toolu_01Y6XEkvcmikA5MYhT4eaMUj /private/tmp/claude-501/-Users- | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 125 | 2026-09-19T00:15:17 | like literlaly go through what is a gene... to all the things around it... like  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 126 | 2026-09-19T00:26:49 | b2e2i7chh toolu_01SjwpQ5PpVKzdw7MT3JUtSg /private/tmp/claude-501/-Users-niallole | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 127 | 2026-09-19T00:31:48 | can i see it - open it up! | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 128 | 2026-09-19T00:33:15 | open it? | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 129 | 2026-09-19T00:33:36 | this didnt work.... | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 130 | 2026-09-19T00:34:27 | i.e. also random stuff like DAG builder... and yeah not tied into anything... th | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 131 | 2026-09-19T00:38:31 | right... has our react + this divereged///... do all our testing... coverage...  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 132 | 2026-09-19T12:13:00 | ^ pls atatch a chats/ folder (we seek to capture all artefacts we have encounter | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 133 | 2026-09-19T12:20:58 | please clone leetgpu | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 134 | 2026-09-19T12:21:17 | nah go search for it please | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 135 | 2026-09-19T12:24:48 | please, see what bio related challenges there is? | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 136 | 2026-09-19T12:26:36 | please, find a benchmark for a bio problem like BLAST, is BLAST an AI-accleerate | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 137 | 2026-09-19T12:27:35 | okay so theres not a standard dataset to measure its speed? | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 138 | 2026-09-19T14:40:55 | esm 650m -> flops on big O worst case for assay on protein / amino acid in prote | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 139 | 2026-09-19T14:44:46 | if you ran this on this PC how long would this take -> | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 140 | 2026-09-19T14:46:43 | okay i actually meant the worse case of assay length on this machine | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 141 | 2026-09-19T14:48:32 | run it and prove me wrong, how is this timeable, also show me the model architec | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 142 | 2026-09-19T15:01:43 | how big are these weights? | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 143 | 2026-09-19T15:05:04 | wait, what are you doing? i just wanted a chat output | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 144 | 2026-09-19T15:05:41 | no i mean, i wanted the informational piece rightbackgrounded this bad boy.... e | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 145 | 2026-09-19T15:08:23 | please start a fork of leetgpu, we're going to add an implementation for this mo | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 146 | 2026-09-19T15:12:26 | great now, use their leetgpu cli to try and solve it please, | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 147 | 2026-09-19T15:15:51 | you reckon leetgpu is the most reliable way to stress test this? | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 148 | 2026-09-19T15:18:13 | maybe kaggle or google colab, how is best to do this, consider we need bare meta | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 149 | 2026-09-19T15:19:00 | lets do modal | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 150 | 2026-09-19T15:30:15 | hey you good, pls install the skills :) they also gave me this idk if it helps u | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 151 | 2026-09-19T15:34:16 | right, what is the ESM-650m benchmarked against per chance? | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 152 | 2026-09-19T15:35:52 | okay please make a repo for inference optimisation on this model, whereby we wil | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 153 | 2026-09-19T15:39:31 | is there any sources on scoring | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 154 | 2026-09-19T15:40:08 | sorry for time to go through each sample, what metrics make sense, tfft, tokens/ | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 155 | 2026-09-19T15:41:06 | then fix it to a hardware they mention in the paper for inference pls | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 156 | 2026-09-19T15:45:04 | great, take every known implementation and test it on the hardware, list all lim | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 157 | 2026-09-19T15:55:21 | pls run all now, bout to disconnect, start sessions, name any assumptions, ensur | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 158 | 2026-09-19T19:19:59 | right, pls see results | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 159 | 2026-09-19T19:24:52 | b4a8ijoij toolu_01FqYmuUVYQxFnXE9ZLDMagA /private/tmp/claude-501/-Users-niallole | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 160 | 2026-09-19T19:36:43 | b2x4w1lpq toolu_016HpKthwev36hhHY35ydEiE /private/tmp/claude-501/-Users-niallole | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 161 | 2026-09-19T19:47:42 | next steps - show the url trace - | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 162 | 2026-09-19T20:05:09 | i want the url trace for original code, as thats what i'm interested in, i need  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 163 | 2026-09-19T20:09:31 | show me every implementation -> pls... so we have them all as git submodules or  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 164 | 2026-09-19T20:27:30 | pls open in vscode so i can follow on | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 165 | 2026-09-19T20:29:46 | i need verbatim proof, you are using reference implementations, and using refs/  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 166 | 2026-09-19T20:32:47 | i.e. i want to know we wont error, how can we do that? i.e. potentially install  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 167 | 2026-09-19T20:51:35 | pls push i paid | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 168 | 2026-09-19T20:53:30 | pls add mac results.. also make a numbered list where you can max add one step o | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 169 | 2026-09-19T20:57:11 | make sure this is append only pls, and add timestps... do we have the results... | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 170 | 2026-09-19T21:02:05 | right, on the next run we, yes i'd like that... logging shouldnt interrupt the f | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 171 | 2026-09-19T21:11:31 | ^ pls kick me off, with the best config -> and get me a time and a output correl | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 172 | 2026-09-19T21:22:22 | b9albjsvv Monitor event: "ablate_pd_proteins Modal run — streaming ρ per assay,  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 173 | 2026-09-19T21:22:35 | is there like a master log for a modal instance that can be pulled? | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 174 | 2026-09-19T21:25:17 | out of interest, other papers, show the original paper, make it as a pdf pls, fo | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 175 | 2026-09-19T21:29:03 | my plan was to plug in shinka evolve, and cuda evolve this bad boy, throwing in  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 176 | 2026-09-19T21:36:46 | just to warn you, shinka evolve solely works on flat file | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 177 | 2026-09-19T21:37:24 | b6yqb0wic toolu_01Mukds7sxTWwjvxSFSqCrgK /private/tmp/claude-501/-Users-niallole | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 178 | 2026-09-19T21:37:41 | no pls pull my results, the observe stuff | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 179 | 2026-09-19T21:40:04 | what is the wall | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 180 | 2026-09-19T21:42:48 | please open the hf model card and any reference and also please deep dive the 10 | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 181 | 2026-09-19T21:45:05 | like, i need this to read like an append only story, where every prompt summaris | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 182 | 2026-09-19T21:51:28 | great, show me the exact commands and executive order, including bold for python | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 183 | 2026-09-19T21:54:33 | please, add all our method as append only also add as a hook, please gitinclude  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 184 | 2026-09-19T22:17:43 | i'm upset / confused, our 10 line code trace, shouldn't these be going through r | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 185 | 2026-09-19T22:25:42 | okay bake this into the commit history, commit all please, show me back the scie | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 186 | 2026-09-19T22:27:56 | okay pls grab these reference times, with the commit ids attached | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 187 | 2026-09-19T22:31:06 | great ^ cont. get me my results pls | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 188 | 2026-09-19T22:32:29 | okay, and then.. expand pls.... we had 217 assays? where are they? | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 189 | 2026-09-19T22:33:46 | is this the pure implementation using refs? | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 190 | 2026-09-19T22:35:34 | great, how can we fix that? and comment the rest of the repo that isn't using th | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |
+| 191 | 2026-09-19T22:39:13 | by the end, we aim to testify the p value +- correlation agrees, (so reproduced  | `0e65e6d` | feat: Track A benchmark — fair-esm fp32, N=5 repea |

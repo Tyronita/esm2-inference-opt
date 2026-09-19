@@ -317,3 +317,19 @@ feat: reference times with commit provenance
 | Files | `paper/reference_times.tex`  `paper/report.tex`  `results/reference_times.md`  `scripts/reference_times.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 8926169 --no-edit` |
+
+---
+
+### 2026-09-19 · `0e65e6d` · nialloleary
+
+**feat: Track A benchmark — fair-esm fp32, N=5 repeats, HF dataset push**
+
+feat: Track A benchmark — fair-esm fp32, N=5 repeats, HF dataset push
+
+| | |
+|---|---|
+| SHA | `0e65e6da977106b74e8c671671bf121229a675b8` |
+| Changed | 12 files changed, 874 insertions(+), 5 deletions(-) |
+| Files | `benchmark/profiler.py`  `benchmark/repeated_run.py`  `modal_app.py`  `scoring/masked_marginals.py`  `scoring/pseudo_ppl.py`  `scoring/ref/__init__.py`  _6 more_ |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 0e65e6d --no-edit` |
