@@ -124,72 +124,74 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 114 | 2026-09-18T23:12:19 | like exploring the dna inteeractively, bring it to life, | `a144c44` | Initial commit: ESM-2 650M inference optimisation  |
 | 115 | 2026-09-18T23:48:42 | can u open it for me | `a144c44` | Initial commit: ESM-2 650M inference optimisation  |
 | 116 | 2026-09-18T23:58:06 | pls find the lewygym stuff we were looking at and push it up to github pls.. fin | `a144c44` | Initial commit: ESM-2 650M inference optimisation  |
-| 117 | 2026-09-19T00:00:05 | pls correct this  1. is a benchmark analgous to ProteinGym but focused on Parkin | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 118 | 2026-09-19T00:02:35 | no pls undo this, revert this last commit pls | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 119 | 2026-09-19T00:04:26 | w/o making an edit... pls explain ... Parkinson's disease what ProteinGym is to  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 120 | 2026-09-19T00:06:47 | different phrasings pls | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 121 | 2026-09-19T00:10:28 | okay like .... you need to go into the leetbio and see every opportunity to make | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 122 | 2026-09-19T00:13:29 | please deep rpi a better design that tells a story, tracks a users progress and  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 123 | 2026-09-19T00:14:31 | a43bf0963ba76a412 toolu_018cGSk2a2R75qxUauWgr7ij /private/tmp/claude-501/-Users- | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 124 | 2026-09-19T00:14:38 | a9ce4a44cfa70cc8a toolu_01Y6XEkvcmikA5MYhT4eaMUj /private/tmp/claude-501/-Users- | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 125 | 2026-09-19T00:15:17 | like literlaly go through what is a gene... to all the things around it... like  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 126 | 2026-09-19T00:26:49 | b2e2i7chh toolu_01SjwpQ5PpVKzdw7MT3JUtSg /private/tmp/claude-501/-Users-niallole | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 127 | 2026-09-19T00:31:48 | can i see it - open it up! | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 128 | 2026-09-19T00:33:15 | open it? | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 129 | 2026-09-19T00:33:36 | this didnt work.... | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 130 | 2026-09-19T00:34:27 | i.e. also random stuff like DAG builder... and yeah not tied into anything... th | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 131 | 2026-09-19T00:38:31 | right... has our react + this divereged///... do all our testing... coverage...  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 132 | 2026-09-19T12:13:00 | ^ pls atatch a chats/ folder (we seek to capture all artefacts we have encounter | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 133 | 2026-09-19T12:20:58 | please clone leetgpu | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 134 | 2026-09-19T12:21:17 | nah go search for it please | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 135 | 2026-09-19T12:24:48 | please, see what bio related challenges there is? | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 136 | 2026-09-19T12:26:36 | please, find a benchmark for a bio problem like BLAST, is BLAST an AI-accleerate | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 137 | 2026-09-19T12:27:35 | okay so theres not a standard dataset to measure its speed? | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 138 | 2026-09-19T14:40:55 | esm 650m -> flops on big O worst case for assay on protein / amino acid in prote | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 139 | 2026-09-19T14:44:46 | if you ran this on this PC how long would this take -> | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 140 | 2026-09-19T14:46:43 | okay i actually meant the worse case of assay length on this machine | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 141 | 2026-09-19T14:48:32 | run it and prove me wrong, how is this timeable, also show me the model architec | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 142 | 2026-09-19T15:01:43 | how big are these weights? | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 143 | 2026-09-19T15:05:04 | wait, what are you doing? i just wanted a chat output | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 144 | 2026-09-19T15:05:41 | no i mean, i wanted the informational piece rightbackgrounded this bad boy.... e | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 145 | 2026-09-19T15:08:23 | please start a fork of leetgpu, we're going to add an implementation for this mo | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 146 | 2026-09-19T15:12:26 | great now, use their leetgpu cli to try and solve it please, | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 147 | 2026-09-19T15:15:51 | you reckon leetgpu is the most reliable way to stress test this? | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 148 | 2026-09-19T15:18:13 | maybe kaggle or google colab, how is best to do this, consider we need bare meta | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 149 | 2026-09-19T15:19:00 | lets do modal | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 150 | 2026-09-19T15:30:15 | hey you good, pls install the skills :) they also gave me this idk if it helps u | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 151 | 2026-09-19T15:34:16 | right, what is the ESM-650m benchmarked against per chance? | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 152 | 2026-09-19T15:35:52 | okay please make a repo for inference optimisation on this model, whereby we wil | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 153 | 2026-09-19T15:39:31 | is there any sources on scoring | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 154 | 2026-09-19T15:40:08 | sorry for time to go through each sample, what metrics make sense, tfft, tokens/ | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 155 | 2026-09-19T15:41:06 | then fix it to a hardware they mention in the paper for inference pls | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 156 | 2026-09-19T15:45:04 | great, take every known implementation and test it on the hardware, list all lim | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 157 | 2026-09-19T15:55:21 | pls run all now, bout to disconnect, start sessions, name any assumptions, ensur | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 158 | 2026-09-19T19:19:59 | right, pls see results | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 159 | 2026-09-19T19:24:52 | b4a8ijoij toolu_01FqYmuUVYQxFnXE9ZLDMagA /private/tmp/claude-501/-Users-niallole | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 160 | 2026-09-19T19:36:43 | b2x4w1lpq toolu_016HpKthwev36hhHY35ydEiE /private/tmp/claude-501/-Users-niallole | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 161 | 2026-09-19T19:47:42 | next steps - show the url trace - | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 162 | 2026-09-19T20:05:09 | i want the url trace for original code, as thats what i'm interested in, i need  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 163 | 2026-09-19T20:09:31 | show me every implementation -> pls... so we have them all as git submodules or  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 164 | 2026-09-19T20:27:30 | pls open in vscode so i can follow on | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 165 | 2026-09-19T20:29:46 | i need verbatim proof, you are using reference implementations, and using refs/  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 166 | 2026-09-19T20:32:47 | i.e. i want to know we wont error, how can we do that? i.e. potentially install  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 167 | 2026-09-19T20:51:35 | pls push i paid | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 168 | 2026-09-19T20:53:30 | pls add mac results.. also make a numbered list where you can max add one step o | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 169 | 2026-09-19T20:57:11 | make sure this is append only pls, and add timestps... do we have the results... | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 170 | 2026-09-19T21:02:05 | right, on the next run we, yes i'd like that... logging shouldnt interrupt the f | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 171 | 2026-09-19T21:11:31 | ^ pls kick me off, with the best config -> and get me a time and a output correl | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 172 | 2026-09-19T21:22:22 | b9albjsvv Monitor event: "ablate_pd_proteins Modal run — streaming ρ per assay,  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 173 | 2026-09-19T21:22:35 | is there like a master log for a modal instance that can be pulled? | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 174 | 2026-09-19T21:25:17 | out of interest, other papers, show the original paper, make it as a pdf pls, fo | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 175 | 2026-09-19T21:29:03 | my plan was to plug in shinka evolve, and cuda evolve this bad boy, throwing in  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 176 | 2026-09-19T21:36:46 | just to warn you, shinka evolve solely works on flat file | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 177 | 2026-09-19T21:37:24 | b6yqb0wic toolu_01Mukds7sxTWwjvxSFSqCrgK /private/tmp/claude-501/-Users-niallole | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 178 | 2026-09-19T21:37:41 | no pls pull my results, the observe stuff | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 179 | 2026-09-19T21:40:04 | what is the wall | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 180 | 2026-09-19T21:42:48 | please open the hf model card and any reference and also please deep dive the 10 | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 181 | 2026-09-19T21:45:05 | like, i need this to read like an append only story, where every prompt summaris | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 182 | 2026-09-19T21:51:28 | great, show me the exact commands and executive order, including bold for python | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 183 | 2026-09-19T21:54:33 | please, add all our method as append only also add as a hook, please gitinclude  | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 184 | 2026-09-19T22:17:43 | i'm upset / confused, our 10 line code trace, shouldn't these be going through r | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
-| 185 | 2026-09-19T22:25:42 | okay bake this into the commit history, commit all please, show me back the scie | `b2ba2b0` | fix: two-track integrity — pin transformers ESM pr |
+| 117 | 2026-09-19T00:00:05 | pls correct this  1. is a benchmark analgous to ProteinGym but focused on Parkin | `8926169` | feat: reference times with commit provenance |
+| 118 | 2026-09-19T00:02:35 | no pls undo this, revert this last commit pls | `8926169` | feat: reference times with commit provenance |
+| 119 | 2026-09-19T00:04:26 | w/o making an edit... pls explain ... Parkinson's disease what ProteinGym is to  | `8926169` | feat: reference times with commit provenance |
+| 120 | 2026-09-19T00:06:47 | different phrasings pls | `8926169` | feat: reference times with commit provenance |
+| 121 | 2026-09-19T00:10:28 | okay like .... you need to go into the leetbio and see every opportunity to make | `8926169` | feat: reference times with commit provenance |
+| 122 | 2026-09-19T00:13:29 | please deep rpi a better design that tells a story, tracks a users progress and  | `8926169` | feat: reference times with commit provenance |
+| 123 | 2026-09-19T00:14:31 | a43bf0963ba76a412 toolu_018cGSk2a2R75qxUauWgr7ij /private/tmp/claude-501/-Users- | `8926169` | feat: reference times with commit provenance |
+| 124 | 2026-09-19T00:14:38 | a9ce4a44cfa70cc8a toolu_01Y6XEkvcmikA5MYhT4eaMUj /private/tmp/claude-501/-Users- | `8926169` | feat: reference times with commit provenance |
+| 125 | 2026-09-19T00:15:17 | like literlaly go through what is a gene... to all the things around it... like  | `8926169` | feat: reference times with commit provenance |
+| 126 | 2026-09-19T00:26:49 | b2e2i7chh toolu_01SjwpQ5PpVKzdw7MT3JUtSg /private/tmp/claude-501/-Users-niallole | `8926169` | feat: reference times with commit provenance |
+| 127 | 2026-09-19T00:31:48 | can i see it - open it up! | `8926169` | feat: reference times with commit provenance |
+| 128 | 2026-09-19T00:33:15 | open it? | `8926169` | feat: reference times with commit provenance |
+| 129 | 2026-09-19T00:33:36 | this didnt work.... | `8926169` | feat: reference times with commit provenance |
+| 130 | 2026-09-19T00:34:27 | i.e. also random stuff like DAG builder... and yeah not tied into anything... th | `8926169` | feat: reference times with commit provenance |
+| 131 | 2026-09-19T00:38:31 | right... has our react + this divereged///... do all our testing... coverage...  | `8926169` | feat: reference times with commit provenance |
+| 132 | 2026-09-19T12:13:00 | ^ pls atatch a chats/ folder (we seek to capture all artefacts we have encounter | `8926169` | feat: reference times with commit provenance |
+| 133 | 2026-09-19T12:20:58 | please clone leetgpu | `8926169` | feat: reference times with commit provenance |
+| 134 | 2026-09-19T12:21:17 | nah go search for it please | `8926169` | feat: reference times with commit provenance |
+| 135 | 2026-09-19T12:24:48 | please, see what bio related challenges there is? | `8926169` | feat: reference times with commit provenance |
+| 136 | 2026-09-19T12:26:36 | please, find a benchmark for a bio problem like BLAST, is BLAST an AI-accleerate | `8926169` | feat: reference times with commit provenance |
+| 137 | 2026-09-19T12:27:35 | okay so theres not a standard dataset to measure its speed? | `8926169` | feat: reference times with commit provenance |
+| 138 | 2026-09-19T14:40:55 | esm 650m -> flops on big O worst case for assay on protein / amino acid in prote | `8926169` | feat: reference times with commit provenance |
+| 139 | 2026-09-19T14:44:46 | if you ran this on this PC how long would this take -> | `8926169` | feat: reference times with commit provenance |
+| 140 | 2026-09-19T14:46:43 | okay i actually meant the worse case of assay length on this machine | `8926169` | feat: reference times with commit provenance |
+| 141 | 2026-09-19T14:48:32 | run it and prove me wrong, how is this timeable, also show me the model architec | `8926169` | feat: reference times with commit provenance |
+| 142 | 2026-09-19T15:01:43 | how big are these weights? | `8926169` | feat: reference times with commit provenance |
+| 143 | 2026-09-19T15:05:04 | wait, what are you doing? i just wanted a chat output | `8926169` | feat: reference times with commit provenance |
+| 144 | 2026-09-19T15:05:41 | no i mean, i wanted the informational piece rightbackgrounded this bad boy.... e | `8926169` | feat: reference times with commit provenance |
+| 145 | 2026-09-19T15:08:23 | please start a fork of leetgpu, we're going to add an implementation for this mo | `8926169` | feat: reference times with commit provenance |
+| 146 | 2026-09-19T15:12:26 | great now, use their leetgpu cli to try and solve it please, | `8926169` | feat: reference times with commit provenance |
+| 147 | 2026-09-19T15:15:51 | you reckon leetgpu is the most reliable way to stress test this? | `8926169` | feat: reference times with commit provenance |
+| 148 | 2026-09-19T15:18:13 | maybe kaggle or google colab, how is best to do this, consider we need bare meta | `8926169` | feat: reference times with commit provenance |
+| 149 | 2026-09-19T15:19:00 | lets do modal | `8926169` | feat: reference times with commit provenance |
+| 150 | 2026-09-19T15:30:15 | hey you good, pls install the skills :) they also gave me this idk if it helps u | `8926169` | feat: reference times with commit provenance |
+| 151 | 2026-09-19T15:34:16 | right, what is the ESM-650m benchmarked against per chance? | `8926169` | feat: reference times with commit provenance |
+| 152 | 2026-09-19T15:35:52 | okay please make a repo for inference optimisation on this model, whereby we wil | `8926169` | feat: reference times with commit provenance |
+| 153 | 2026-09-19T15:39:31 | is there any sources on scoring | `8926169` | feat: reference times with commit provenance |
+| 154 | 2026-09-19T15:40:08 | sorry for time to go through each sample, what metrics make sense, tfft, tokens/ | `8926169` | feat: reference times with commit provenance |
+| 155 | 2026-09-19T15:41:06 | then fix it to a hardware they mention in the paper for inference pls | `8926169` | feat: reference times with commit provenance |
+| 156 | 2026-09-19T15:45:04 | great, take every known implementation and test it on the hardware, list all lim | `8926169` | feat: reference times with commit provenance |
+| 157 | 2026-09-19T15:55:21 | pls run all now, bout to disconnect, start sessions, name any assumptions, ensur | `8926169` | feat: reference times with commit provenance |
+| 158 | 2026-09-19T19:19:59 | right, pls see results | `8926169` | feat: reference times with commit provenance |
+| 159 | 2026-09-19T19:24:52 | b4a8ijoij toolu_01FqYmuUVYQxFnXE9ZLDMagA /private/tmp/claude-501/-Users-niallole | `8926169` | feat: reference times with commit provenance |
+| 160 | 2026-09-19T19:36:43 | b2x4w1lpq toolu_016HpKthwev36hhHY35ydEiE /private/tmp/claude-501/-Users-niallole | `8926169` | feat: reference times with commit provenance |
+| 161 | 2026-09-19T19:47:42 | next steps - show the url trace - | `8926169` | feat: reference times with commit provenance |
+| 162 | 2026-09-19T20:05:09 | i want the url trace for original code, as thats what i'm interested in, i need  | `8926169` | feat: reference times with commit provenance |
+| 163 | 2026-09-19T20:09:31 | show me every implementation -> pls... so we have them all as git submodules or  | `8926169` | feat: reference times with commit provenance |
+| 164 | 2026-09-19T20:27:30 | pls open in vscode so i can follow on | `8926169` | feat: reference times with commit provenance |
+| 165 | 2026-09-19T20:29:46 | i need verbatim proof, you are using reference implementations, and using refs/  | `8926169` | feat: reference times with commit provenance |
+| 166 | 2026-09-19T20:32:47 | i.e. i want to know we wont error, how can we do that? i.e. potentially install  | `8926169` | feat: reference times with commit provenance |
+| 167 | 2026-09-19T20:51:35 | pls push i paid | `8926169` | feat: reference times with commit provenance |
+| 168 | 2026-09-19T20:53:30 | pls add mac results.. also make a numbered list where you can max add one step o | `8926169` | feat: reference times with commit provenance |
+| 169 | 2026-09-19T20:57:11 | make sure this is append only pls, and add timestps... do we have the results... | `8926169` | feat: reference times with commit provenance |
+| 170 | 2026-09-19T21:02:05 | right, on the next run we, yes i'd like that... logging shouldnt interrupt the f | `8926169` | feat: reference times with commit provenance |
+| 171 | 2026-09-19T21:11:31 | ^ pls kick me off, with the best config -> and get me a time and a output correl | `8926169` | feat: reference times with commit provenance |
+| 172 | 2026-09-19T21:22:22 | b9albjsvv Monitor event: "ablate_pd_proteins Modal run — streaming ρ per assay,  | `8926169` | feat: reference times with commit provenance |
+| 173 | 2026-09-19T21:22:35 | is there like a master log for a modal instance that can be pulled? | `8926169` | feat: reference times with commit provenance |
+| 174 | 2026-09-19T21:25:17 | out of interest, other papers, show the original paper, make it as a pdf pls, fo | `8926169` | feat: reference times with commit provenance |
+| 175 | 2026-09-19T21:29:03 | my plan was to plug in shinka evolve, and cuda evolve this bad boy, throwing in  | `8926169` | feat: reference times with commit provenance |
+| 176 | 2026-09-19T21:36:46 | just to warn you, shinka evolve solely works on flat file | `8926169` | feat: reference times with commit provenance |
+| 177 | 2026-09-19T21:37:24 | b6yqb0wic toolu_01Mukds7sxTWwjvxSFSqCrgK /private/tmp/claude-501/-Users-niallole | `8926169` | feat: reference times with commit provenance |
+| 178 | 2026-09-19T21:37:41 | no pls pull my results, the observe stuff | `8926169` | feat: reference times with commit provenance |
+| 179 | 2026-09-19T21:40:04 | what is the wall | `8926169` | feat: reference times with commit provenance |
+| 180 | 2026-09-19T21:42:48 | please open the hf model card and any reference and also please deep dive the 10 | `8926169` | feat: reference times with commit provenance |
+| 181 | 2026-09-19T21:45:05 | like, i need this to read like an append only story, where every prompt summaris | `8926169` | feat: reference times with commit provenance |
+| 182 | 2026-09-19T21:51:28 | great, show me the exact commands and executive order, including bold for python | `8926169` | feat: reference times with commit provenance |
+| 183 | 2026-09-19T21:54:33 | please, add all our method as append only also add as a hook, please gitinclude  | `8926169` | feat: reference times with commit provenance |
+| 184 | 2026-09-19T22:17:43 | i'm upset / confused, our 10 line code trace, shouldn't these be going through r | `8926169` | feat: reference times with commit provenance |
+| 185 | 2026-09-19T22:25:42 | okay bake this into the commit history, commit all please, show me back the scie | `8926169` | feat: reference times with commit provenance |
+| 186 | 2026-09-19T22:27:56 | okay pls grab these reference times, with the commit ids attached | `8926169` | feat: reference times with commit provenance |
+| 187 | 2026-09-19T22:31:06 | great ^ cont. get me my results pls | `8926169` | feat: reference times with commit provenance |

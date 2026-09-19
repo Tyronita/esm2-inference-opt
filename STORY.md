@@ -301,3 +301,19 @@ Both source implementations pinned as git submodules with exact SHAs: fair-esm @
 | Files | `benchmark/verify_integrity.py`  `paper/report.tex` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert b2ba2b0 --no-edit` |
+
+---
+
+### 2026-09-19 · `8926169` · nialloleary
+
+**feat: reference times with commit provenance**
+
+feat: reference times with commit provenance
+
+| | |
+|---|---|
+| SHA | `89261692325e66758d6a02580164716c669b4132` |
+| Changed | 4 files changed, 183 insertions(+) |
+| Files | `paper/reference_times.tex`  `paper/report.tex`  `results/reference_times.md`  `scripts/reference_times.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 8926169 --no-edit` |
