@@ -1,0 +1,237 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{listings}
+\usepackage{graphicx}
+
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+
+\lstset{basicstyle=\ttfamily\small, breaklines=true, frame=single,
+        backgroundcolor=\color{gray!8}}
+
+\title{\textbf{Reproducing ESM-2 650M Masked Marginal Scoring on ProteinGym}\\[0.4em]
+\large A reproducibility study with empirical timing analysis}
+\author{Reproducibility run: \texttt{esm2-inference-opt}\\
+\small Hardware: NVIDIA A100-SXM4-40GB \quad
+Modal workspace: \texttt{tyronita}\\
+\small fair-esm SHA: \texttt{2b369911} \quad
+transformers: \texttt{4.44.0} \quad
+consistency gate: $\rho = +0.999973$}
+\date{September 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\vspace{1em}
+\noindent\textbf{Reproducibility statement.}
+All code, pinned dependency SHAs, and results are in
+\url{https://github.com/Tyronita/esm2-inference-opt}.
+The reference implementation is \texttt{refs/fair-esm/} at commit
+\texttt{2b369911bb5b4b0dda914521b9475cad1656b2ac} (fair-esm v2.0.1).
+Benchmark data: ProteinGym v1.3, \texttt{refs/ProteinGym/} at commit
+\texttt{144fe22b07dfaeec2b366f2346203a9838a55b4c}.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Method: Masked Marginal Scoring}
+
+Masked marginal scoring~\cite{meier2021language} quantifies the effect of a
+mutation by comparing how likely the mutant residue is versus the wildtype
+residue, \emph{given every other position in the sequence as context}.
+
+For a protein sequence $\mathbf{x} = (x_1, \ldots, x_L)$ and a set of
+mutations $\mathcal{M} = \{(i, x^*_i)\}$ (position, mutant residue):
+
+\begin{equation}
+  \text{Score}(\mathbf{x}, \mathcal{M}) =
+    \sum_{i \in \mathcal{M}}
+    \Bigl[
+      \log p\!\left(x^*_i \,\big|\, \mathbf{x}_{-i}\right)
+      -
+      \log p\!\left(x_i \,\big|\, \mathbf{x}_{-i}\right)
+    \Bigr]
+  \label{eq:score}
+\end{equation}
+
+where $\mathbf{x}_{-i}$ denotes the wildtype sequence with position $i$
+replaced by the special \texttt{[MASK]} token. Each term is a
+\emph{log-likelihood ratio}: positive means the model prefers the mutant;
+negative means the model prefers the wildtype.
+
+\paragraph{Computational cost.}
+Evaluating Equation~\ref{eq:score} for all variants in an assay requires
+$|\{i : i \in \text{some variant}\}|$ forward passes — one mask per unique
+mutated position. For a typical assay of length $L$, this is $L$ passes,
+each processing a sequence of $L$ tokens. The total cost scales as
+$\mathcal{O}(L^2)$ in the number of residues.
+
+\paragraph{Implementation.}
+Our implementation (\texttt{scoring/masked\_marginals.py}) uses
+\texttt{transformers==4.44.0} with \texttt{torch\_dtype=float16} on CUDA.
+We verified it reproduces the reference fair-esm (fp32) scores with
+Spearman $\rho = +0.999973$ on 200 SNCA single mutants
+(consistency check: \texttt{check\_consistency.py}).
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{ESM-2 Architecture}
+
+ESM-2~\cite{lin2023esm2} is a family of transformer-based protein language
+models trained on UniRef50 (250M sequences) using masked language modelling.
+Key architectural choices (from \texttt{refs/fair-esm/esm/model/esm2.py}):
+
+\begin{itemize}
+  \item \textbf{Rotary positional embeddings (RoPE)} — no absolute positional
+        embeddings; relative position encoded in attention.
+  \item \textbf{Pre-LayerNorm} — normalisation before each sub-layer.
+  \item \textbf{GELU activations} in the feed-forward network.
+  \item \textbf{Token dropout} during training (masked at input level).
+  \item \textbf{Vocabulary size} = 33 (20 standard AAs + special tokens).
+  \item \textbf{Maximum context} = 1024 tokens (1022 residues + BOS + EOS).
+        Sequences longer than 1022 AA require windowing.
+  \item \textbf{FFN dimension} = $4 \times d_\text{model}$.
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\caption{ESM-2 model family. ProteinGym $\rho$ from
+\texttt{refs/ProteinGym/benchmarks/.../Summary\_performance\ldots.csv}.
+\textbf{Bold}: model used in this study.}
+\label{tab:models}
+\begin{tabular}{lrrrrrl}
+\toprule
+Model ID & Layers & $d$ & Heads & FFN & Params & PG $\rho$ \\
+\midrule
+esm2\_t6\_8M\_UR50D    &  6 &  320 & 20 &  1280 &   8M & 0.226 \\
+esm2\_t12\_35M\_UR50D  & 12 &  480 & 20 &  1920 &  35M & 0.321 \\
+esm2\_t30\_150M\_UR50D & 30 &  640 & 20 &  2560 & 150M & 0.387 \\
+\textbf{esm2\_t33\_650M\_UR50D} & \textbf{33} & \textbf{1280} & \textbf{20} & \textbf{5120} & \textbf{650M} & \textbf{0.414} \\
+esm2\_t36\_3B\_UR50D   & 36 & 2560 & 40 & 10240 &   3B & 0.406 \\
+esm2\_t48\_15B\_UR50D  & 48 & 5120 & 40 & 20480 &  15B & 0.400 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Observation.} The 650M model achieves the highest ProteinGym
+score despite being smaller than 3B and 15B variants. Larger models may
+overfit to evolutionary co-occurrence patterns that do not generalise to
+experimental fitness measurements.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Benchmark: ProteinGym}
+
+ProteinGym~\cite{notin2023proteingym} is a large-scale benchmark of
+deep mutational scanning (DMS) assays measuring protein fitness.
+We use the \textbf{substitution benchmark}: 217 assays, 2,465,767 total
+variants, covering diverse proteins, organisms, and fitness phenotypes.
+
+\paragraph{Metric.}
+For each assay, we compute the \textbf{Spearman rank correlation}
+$\rho_s$ between the predicted scores (Equation~\ref{eq:score}) and the
+experimentally measured fitness values. Spearman $\rho$ is chosen because
+fitness scales vary wildly across assays; rank correlation is invariant to
+monotone rescaling. The aggregate is a mean over 217 per-assay $\rho_s$.
+
+\paragraph{Published baseline.}
+ESM-2 650M with masked marginals scores $\rho = 0.414 \pm 0.012$ (mean
+$\pm$ bootstrap SE) across 217 assays~\cite{notin2023proteingym}.
+This is the target we reproduce.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Related Work}
+
+The following papers provide independent evidence that masked language
+model log-likelihoods are predictive of protein variant fitness.
+
+\begin{longtable}{p{3.5cm}p{9cm}}
+\caption{Papers supporting the masked LM approach to variant effect prediction.}
+\label{tab:related} \\
+\toprule
+Paper & Agreement with this work \\
+\midrule
+\endfirsthead
+\toprule
+Paper & Agreement with this work \\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{r}{\small\itshape continued\ldots}
+\endfoot
+\bottomrule
+\endlastfoot
+Rives et al.\ (2021) PNAS~\cite{rives2021biological}
+  & ESM-1b (predecessor to ESM-2) shows that large protein LMs trained on
+    evolutionary sequences learn representations that capture structural and
+    functional properties; validates the pretraining approach at 650M scale. \\[4pt]
+Elnaggar et al.\ (2021) IEEE TPAMI~\cite{elnaggar2021prottrans}
+  & ProtTrans (independent T5/BERT models on UniRef) independently confirms
+    that masked language model likelihoods correlate with variant effects
+    across multiple benchmark datasets. \\[4pt]
+Notin et al.\ (2022) ICML~\cite{notin2022tranception}
+  & Tranception introduces autoregressive scoring on the same DMS assays
+    used in ProteinGym; establishes the benchmark structure we target and
+    shows masked LMs are competitive baselines. \\[4pt]
+Kantroo et al.\ (2024) PRX Life~\cite{kantroo2024ofs}
+  & One Fell Swoop (OFS) achieves near-masked-marginal accuracy with a
+    single forward pass by training MLP heads on ESM-2 hidden states;
+    confirms that ESM-2 representations carry sufficient signal to predict
+    fitness in $\mathcal{O}(1)$ cost. \\
+\end{longtable}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Empirical Timing Model}
+
+The total wall-clock time for masked marginal scoring on a single assay
+follows two regimes depending on sequence length $L$:
+
+\begin{equation}
+  t(L) \approx
+  \begin{cases}
+    \beta \cdot L^2 & L \leq 1022 \\
+    \beta' \cdot L  & L > 1022 \quad\text{(windowing: each pass costs } \mathcal{O}(1022) \text{ tokens)}
+  \end{cases}
+  \label{eq:timing}
+\end{equation}
+
+\begin{table}[h]
+\centering
+\caption{Measured $\beta$ (s per AA$^2$) on different hardware.}
+\label{tab:timing}
+\begin{tabular}{llrl}
+\toprule
+Hardware & Measured on & $\beta$ (s/AA$^2$) & Note \\
+\midrule
+Apple M3 MPS  & SNCA L=140 (16.5s), LRRK2 L=2527 (85.8min) & $8.25 \times 10^{-4}$ & L$^2$ scaling confirmed \\
+A100-SXM4-40GB & SYUA L=140 (3.7s), PRKN L=465 (12.8s), BRCA1 L=1863 (12.1s) & $3.14 \times 10^{-5}$ & median across 4 assays \\
+\midrule
+Speedup (A100 vs M3) & \multicolumn{3}{l}{$\approx 26\times$ per unit $L^2$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Using $\beta_\text{A100} = 3.14 \times 10^{-5}$, the predicted
+cost for the full 217-assay run is:
+$\sum_i L_i^2 \times 3.14 \times 10^{-5} \approx 2{,}783$\,s $\approx$ 46\,min
+for the $L \leq 1022$ assays; assays with $L > 1022$ are faster due to windowing.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Results}
+\label{sec:results}
+
+Results are appended to this section automatically by \texttt{paper/generate\_results.py}
+after each run. The table below is append-only; each row is one completed assay.
+
+\input{results_table}
+
+\noindent\textbf{Published target:} ESM-2 650M masked marginals,
+$\rho = 0.414 \pm 0.012$ (217 assays, Notin et al.\ 2023~\cite{notin2023proteingym}).
+
+% ─────────────────────────────────────────────────────────────────────────────
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

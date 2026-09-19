@@ -251,6 +251,7 @@ def ablate_pd_proteins():
     import pandas as pd
     import torch
     import datetime, json
+    from benchmark.events import EventLog
     from benchmark.proteingym import PD_ASSAY_IDS
     from benchmark.timing import RunTimer
     from scoring.registry import get_registry
@@ -259,15 +260,18 @@ def ablate_pd_proteins():
     gpu_name = torch.cuda.get_device_name(0)
     _print_banner("ESM-2 650M — PD Protein Ablation (all methods)", gpu_name)
 
-    job_start_ts = datetime.datetime.utcnow().isoformat() + "Z"
-    model, tok = load_model(device)
-    model_loaded_ts = datetime.datetime.utcnow().isoformat() + "Z"
-
-    registry = get_registry(device)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     pg_cache = CACHE_DIR / "proteingym"
 
     from benchmark.proteingym import run_benchmark
+
+    # Event log for profiling — shared across all methods in this job
+    events = EventLog(RESULTS_DIR / "pd_proteins_events.jsonl")
+
+    model, tok = load_model(device)
+    events.model_loaded(MODEL_ID)
+
+    registry = get_registry(device)
 
     # JSONL stream — one line per assay, never truncated
     jsonl_path = RESULTS_DIR / "pd_proteins_stream.jsonl"
@@ -283,6 +287,7 @@ def ablate_pd_proteins():
 
         timer = RunTimer(method.name, len(PD_ASSAY_IDS))
         timer.mark_model_loaded()
+        events.job_start(method.name, len(PD_ASSAY_IDS))
         commit_counter = [0]
 
         def on_done(row, method_name=method.name):
@@ -292,13 +297,13 @@ def ablate_pd_proteins():
             with open(jsonl_path, "a") as f:
                 f.write(json.dumps(row) + "\n")
             commit_counter[0] += 1
-            if commit_counter[0] % 2 == 0:   # commit every 2 (PD only has 3 assays)
+            if commit_counter[0] % 2 == 0:
                 vol.commit()
 
         df = run_benchmark(
             method.fn, model, tok, device,
             assay_ids=PD_ASSAY_IDS, cache_dir=pg_cache,
-            on_assay_done=on_done, timer=timer,
+            on_assay_done=on_done, timer=timer, event_log=events,
         )
 
         if not df.empty:
@@ -349,6 +354,7 @@ def ablate_proteingym():
     import datetime, json
     import pandas as pd
     import torch
+    from benchmark.events import EventLog
     from benchmark.proteingym import run_benchmark
     from benchmark.timing import RunTimer
     from scoring.registry import get_registry
@@ -357,13 +363,14 @@ def ablate_proteingym():
     gpu_name = torch.cuda.get_device_name(0)
     _print_banner("ESM-2 650M — Full ProteinGym Ablation (217 assays × all methods)", gpu_name)
 
-    job_start_ts = datetime.datetime.utcnow().isoformat() + "Z"
-    model, tok = load_model(device)
-    model_loaded_ts = datetime.datetime.utcnow().isoformat() + "Z"
-
-    registry = get_registry(device)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     pg_cache = CACHE_DIR / "proteingym"
+
+    events = EventLog(RESULTS_DIR / "events.jsonl")
+    model, tok = load_model(device)
+    events.model_loaded(MODEL_ID)
+
+    registry = get_registry(device)
 
     all_results = {}
     for method in registry:
@@ -377,6 +384,7 @@ def ablate_proteingym():
         jsonl_path = RESULTS_DIR / f"{method.name}_stream.jsonl"
         timer = RunTimer(method.name, 217)
         timer.mark_model_loaded()
+        events.job_start(method.name, 217)
         commit_counter = [0]
 
         def on_done(row, method_name=method.name, jpath=jsonl_path):
@@ -386,13 +394,13 @@ def ablate_proteingym():
             with open(jpath, "a") as f:
                 f.write(json.dumps(row) + "\n")
             commit_counter[0] += 1
-            if commit_counter[0] % 10 == 0:   # flush every 10 assays, ~100ms overhead
+            if commit_counter[0] % 10 == 0:
                 vol.commit()
 
         df = run_benchmark(
             method.fn, model, tok, device,
             assay_ids=None, cache_dir=pg_cache,
-            on_assay_done=on_done, timer=timer,
+            on_assay_done=on_done, timer=timer, event_log=events,
         )
 
         if not df.empty:

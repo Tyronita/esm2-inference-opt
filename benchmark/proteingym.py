@@ -79,6 +79,7 @@ def run_benchmark(
     cache_dir: Path = Path("/tmp/proteingym_cache"),
     on_assay_done=None,
     timer=None,
+    event_log=None,
 ) -> pd.DataFrame:
     """
     Run ProteinGym benchmark.
@@ -88,6 +89,7 @@ def run_benchmark(
     JSONL writes or volume commits. Called in-process with ~0ms overhead.
 
     timer — optional RunTimer instance for TTFT / β tracking.
+    event_log — optional EventLog instance for start/stop profiling events.
 
     Returns DataFrame with all metrics per assay.
     """
@@ -134,6 +136,9 @@ def run_benchmark(
         L, N = len(sequence), len(variants)
         print(f"  {assay_id:<45} L={L:<5} N={N:<6}", end=" ", flush=True)
 
+        if event_log is not None:
+            event_log.assay_start(assay_id, L, N)
+
         t0 = time.perf_counter()
         try:
             scores = score_fn(model, tokenizer, sequence, variants, device)
@@ -163,6 +168,9 @@ def run_benchmark(
         rho = metrics.get("spearman_rho", float("nan"))
         eta_str = f"  {timer.summary_line()}" if timer else ""
         print(f"ρ={rho:+.3f}  {wall_s:.1f}s{eta_str}")
+
+        if event_log is not None:
+            event_log.assay_done(assay_id, L, wall_s, metrics.get("spearman_rho", float("nan")))
 
         if on_assay_done is not None:
             on_assay_done(row)
