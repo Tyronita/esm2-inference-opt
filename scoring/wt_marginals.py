@@ -1,5 +1,12 @@
+# =============================================================================
+# TRACK B — transformers==4.44.0, fp16, HuggingFace API
+# STATUS: commented out for benchmark runs. See scoring/ref/wt_marginals.py for Track A.
+# =============================================================================
 """
 Wildtype marginal scoring.
+
+TRACK B: transformers==4.44.0 HuggingFace API (fp16).
+For the reference implementation used in benchmarks, see scoring/ref/wt_marginals.py.
 
 Source: Meier et al. NeurIPS 2021 (ESM-1v paper), §Scoring Methods
 ProteinGym: compute_fitness.py strategy="wt-marginals"

@@ -1,5 +1,16 @@
+# =============================================================================
+# TRACK B — transformers==4.44.0, fp16, HuggingFace API
+# STATUS: commented out for benchmark runs. Kept for:
+#   (a) check_consistency.py — the consistency gate (rho=+0.999973 vs Track A)
+#   (b) future SOTA optimisation work (Flash Attention 2, torch.compile, etc.)
+# DO NOT use for ProteinGym benchmark scoring — use scoring/ref/ (Track A) instead.
+# TODO: when upgrading to SOTA settings, reactivate and update API calls here.
+# =============================================================================
 """
 Masked marginal log-likelihood ratio scoring.
+
+TRACK B: transformers==4.44.0 HuggingFace API (fp16).
+For the reference fp32 fair-esm implementation used in benchmarks, see scoring/ref/masked_marginals.py.
 
 Source: Meier et al. NeurIPS 2021 (ESM-1v paper), §Scoring Methods
 ProteinGym: compute_fitness.py strategy="masked-marginals"

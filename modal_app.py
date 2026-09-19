@@ -59,7 +59,9 @@ image = (
         "tqdm==4.66.4",
         "requests==2.32.3",
     )
-    # Step 4: our scoring + benchmark modules
+    # Step 4: huggingface_hub for dataset push
+    .pip_install("huggingface_hub==0.24.6", "datasets==2.20.0")
+    # Step 5: our scoring + benchmark modules
     .add_local_python_source("scoring", "benchmark")
 )
 
@@ -67,16 +69,39 @@ app = modal.App("esm2-inference-opt", image=image)
 
 vol = modal.Volume.from_name("esm2-weights", create_if_missing=True)
 
-MODEL_ID = "facebook/esm2_t33_650M_UR50D"
-CACHE_DIR = Path("/cache")
+MODEL_ID   = "facebook/esm2_t33_650M_UR50D"
+FAIR_ESM_SHA = "2b369911bb5b4b0dda914521b9475cad1656b2ac"
+CACHE_DIR  = Path("/cache")
 RESULTS_DIR = CACHE_DIR / "results"
 
+N_WARMUP = 2   # CUDA cold-start passes before timing begins
+N_TIMED  = 5   # timed passes per assay (mean ± std reported)
 
+
+# ── Track A: refs/fair-esm (REFERENCE, fp32) ─────────────────────────────────
+def load_model_ref(device: str = "cuda"):
+    """Load ESM-2 650M via refs/fair-esm @ 2b369911 — fp32, the reference implementation."""
+    import torch
+    import esm as fair_esm
+
+    print(f"  Loading {MODEL_ID} via fair-esm @ {FAIR_ESM_SHA[:8]}  ({device})...")
+    model, alphabet = fair_esm.pretrained.esm2_t33_650M_UR50D()
+    model = model.eval().to(device)
+    params = sum(p.numel() for p in model.parameters()) / 1e6
+    dtype  = next(model.parameters()).dtype
+    print(f"  Loaded {params:.0f}M params  {dtype}  peak={_gpu_mb():.0f}MB")
+    return model, alphabet
+
+
+# ── Track B: transformers (HF API, fp16) — kept for consistency gate ─────────
 def load_model(device: str = "cuda"):
+    # TRACK B — transformers==4.44.0, fp16.
+    # Used only by check_consistency() and legacy entrypoints.
+    # For benchmark runs, use load_model_ref() (Track A) above.
     import torch
     from transformers import AutoTokenizer, EsmForMaskedLM
 
-    print(f"  Loading {MODEL_ID} → {device}...")
+    print(f"  Loading {MODEL_ID} → {device}  [Track B: transformers fp16]...")
     tok = AutoTokenizer.from_pretrained(MODEL_ID, cache_dir=str(CACHE_DIR))
     model = (
         EsmForMaskedLM.from_pretrained(
@@ -338,7 +363,185 @@ def ablate_pd_proteins():
     return combined.to_dict(orient="records")
 
 
-# ── Full ProteinGym ablation — all methods, all 217 assays ────────────────────
+# ── CANONICAL BENCHMARK — Track A, fair-esm fp32, N=5 repeated runs ──────────
+
+@app.function(
+    gpu="A100",
+    timeout=28800,   # 8 hr — fp32 is ~2× slower than fp16; 217 × 3 methods × 5 runs
+    volumes={str(CACHE_DIR): vol},
+)
+def ablate_ref_proteingym(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP, methods: list[str] | None = None):
+    """
+    Reproduce Notin et al. NeurIPS 2023 Table 1 (ESM-2 650M) + A100 timing.
+
+    IMPLEMENTATION: refs/fair-esm @ 2b369911, fp32 (Track A — the reference).
+    Timing: N_WARMUP cold-start passes discarded, then N_TIMED timed passes per assay.
+    Results: mean ± std wall_s, CUDA device-side ms, per-run arrays, peak VRAM.
+
+    Published targets (Notin et al. 2023, 217 assays):
+      wt_marginals     ρ = 0.430
+      masked_marginals ρ = 0.440
+      pseudo_ppl       ρ = 0.440
+
+    Outputs:
+      results/ref_proteingym_stream.jsonl   (append-only, one row per assay × method)
+      results/traces/{assay}_{method}.json  (Chrome traces, first run of each)
+
+    Run:
+        modal run --detach modal_app.py::ablate_ref_proteingym
+    Pull:
+        modal run modal_app.py::pull_ref_results
+    """
+    import json
+    import torch
+    from benchmark.events import EventLog
+    from benchmark.metrics import compute_all
+    from benchmark.profiler import extract_summary, maybe_profile
+    from benchmark.repeated_run import repeated_run
+    from benchmark.proteingym import fetch_dms_data, fetch_reference
+    from scoring.ref.registry import get_registry
+
+    device   = "cuda"
+    gpu_name = torch.cuda.get_device_name(0)
+    _print_banner("ESM-2 650M — Canonical ProteinGym Benchmark (Track A, fp32)", gpu_name)
+    print(f"  Warmup passes : {n_warmup}  |  Timed passes : {n_timed}")
+    print(f"  Implementation: fair-esm @ {FAIR_ESM_SHA[:8]}  (refs/fair-esm)")
+
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    trace_dir  = RESULTS_DIR / "traces"
+    stream_path = RESULTS_DIR / "ref_proteingym_stream.jsonl"
+
+    events = EventLog(RESULTS_DIR / "ref_events.jsonl")
+    model, alphabet = load_model_ref(device)
+    events.model_loaded(MODEL_ID)
+
+    registry = get_registry()
+    if methods:
+        registry = [m for m in registry if m.name in methods]
+
+    pg_cache  = CACHE_DIR / "proteingym"
+    reference = fetch_reference(pg_cache)
+    fetch_dms_data(pg_cache)
+
+    # Build set of already-done (assay, method) pairs to support resuming
+    done: set[tuple[str, str]] = set()
+    if stream_path.exists():
+        with open(stream_path) as f:
+            for line in f:
+                r = json.loads(line)
+                done.add((r["assay_id"], r["method"]))
+        print(f"  Resuming — {len(done)} rows already in stream")
+
+    all_rows: list[dict] = []
+
+    for method in registry:
+        print(f"\n{'─'*72}")
+        print(f"  Method : {method.name}  [{method.passes} passes/assay]")
+        print(f"  Target ρ (published) : {method.published_rho:.3f}")
+
+        rhos = []
+        for _, ref_row in reference.iterrows():
+            assay_id = ref_row["DMS_id"]
+            if (assay_id, method.name) in done:
+                continue
+
+            dms_file = pg_cache / "DMS_substitutions" / ref_row["DMS_filename"]
+            if not dms_file.exists():
+                print(f"    SKIP {assay_id} — data file not found")
+                continue
+
+            import pandas as pd
+            dms = pd.read_csv(dms_file)
+            sequence = ref_row["target_seq"]
+            variants = dms["mutant"].tolist()
+            fitness  = dms["DMS_score"].tolist()
+            L        = len(sequence)
+
+            events.assay_start(assay_id, L, len(variants))
+
+            # Profile only first assay per method (profiling adds ~3-5× overhead)
+            profile_this = (len(rhos) == 0)
+            label = f"{assay_id}_{method.name}"
+
+            with maybe_profile(enabled=profile_this, out_dir=trace_dir, label=label) as prof:
+                timing = repeated_run(
+                    method.fn, model, alphabet,
+                    sequence, variants,
+                    device=device,
+                    n_warmup=n_warmup,
+                    n_timed=n_timed,
+                )
+
+            profile_summary = extract_summary(prof) if profile_this else {}
+            scores = timing["scores"]
+
+            metrics = compute_all(scores, fitness)
+            rho     = metrics["spearman_rho"]
+            rhos.append(rho)
+
+            row = {
+                "assay_id":        assay_id,
+                "sequence_length": L,
+                "n_variants":      len(variants),
+                "method":          method.name,
+                "implementation":  f"fair-esm@{FAIR_ESM_SHA[:8]}",
+                "dtype":           "float32",
+                "gpu":             gpu_name,
+                # timing
+                "wall_mean":       timing["wall_mean"],
+                "wall_std":        timing["wall_std"],
+                "wall_runs":       timing["wall_runs"],
+                "warmup_wall_s":   timing["warmup_wall_s"],
+                "cuda_ms_mean":    timing["cuda_ms_mean"],
+                "cuda_ms_std":     timing["cuda_ms_std"],
+                "peak_mem_mb":     timing["peak_mem_mb"],
+                "n_warmup":        n_warmup,
+                "n_timed":         n_timed,
+                # metrics
+                **metrics,
+                # profiling (first assay only)
+                "profile":         profile_summary,
+            }
+
+            with open(stream_path, "a") as f:
+                f.write(json.dumps(row) + "\n")
+            vol.commit()
+
+            events.assay_done(assay_id, L, timing["wall_mean"], rho)
+            print(
+                f"    {assay_id:<50}  ρ={rho:+.4f}  "
+                f"wall={timing['wall_mean']:.2f}±{timing['wall_std']:.2f}s"
+            )
+
+        if rhos:
+            import statistics
+            mean_rho = statistics.mean(rhos)
+            print(f"\n  {method.name}  mean ρ={mean_rho:+.4f}  (published {method.published_rho:.3f})")
+            all_rows.extend([row])
+
+    vol.commit()
+    print("\n  Stream complete →", stream_path)
+    return {"n_rows": len(all_rows)}
+
+
+@app.local_entrypoint()
+def pull_ref_results():
+    """Pull ref_proteingym_stream.jsonl from Modal volume to local results/."""
+    import subprocess
+    for fname in ["ref_proteingym_stream.jsonl", "ref_events.jsonl"]:
+        result = subprocess.run(
+            ["modal", "volume", "get", "esm2-weights", f"results/{fname}", f"results/{fname}"],
+            capture_output=True, text=True,
+        )
+        if result.returncode == 0:
+            print(f"  pulled results/{fname}")
+        else:
+            print(f"  {fname} not found (run not complete yet)")
+
+
+# ── Full ProteinGym ablation — Track B, all methods, all 217 assays ───────────
+# STATUS: commented out — superseded by ablate_ref_proteingym (Track A above).
+# Re-enable for SOTA optimisation work (Flash Attention 2, torch.compile, etc.)
 
 @app.function(
     gpu="A100",

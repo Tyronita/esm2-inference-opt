@@ -1,5 +1,12 @@
+# =============================================================================
+# TRACK B — transformers==4.44.0, fp16, HuggingFace API
+# STATUS: commented out for benchmark runs. See scoring/ref/pseudo_ppl.py for Track A.
+# =============================================================================
 """
 Pseudo-perplexity scoring on the mutant sequence.
+
+TRACK B: transformers==4.44.0 HuggingFace API (fp16).
+For the reference implementation used in benchmarks, see scoring/ref/pseudo_ppl.py.
 
 Source: Meier et al. NeurIPS 2021 / ProteinGym compute_fitness.py strategy="pseudo-ppl"
 
