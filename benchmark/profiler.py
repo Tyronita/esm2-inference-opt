@@ -49,23 +49,32 @@ def maybe_profile(enabled: bool, out_dir: Path, label: str):
     prof.export_chrome_trace(str(trace_path))
 
 
+def _cuda_us(e) -> float:
+    """Compatibility shim: torch 2.x renamed cuda_time_total on FunctionEventAvg."""
+    for attr in ("cuda_time_total", "self_cuda_time_total", "device_time_total"):
+        v = getattr(e, attr, None)
+        if v is not None:
+            return float(v)
+    return 0.0
+
+
 def extract_summary(prof) -> dict:
     """Pull top kernel stats from a completed profiler run."""
     if prof is None:
         return {}
     avgs = prof.key_averages()
-    top = sorted(avgs, key=lambda e: e.cuda_time_total, reverse=True)[:10]
+    top = sorted(avgs, key=_cuda_us, reverse=True)[:10]
     return {
         "top_kernels": [
             {
                 "key":          e.key,
-                "cuda_us":      e.cuda_time_total,
-                "cpu_us":       e.cpu_time_total,
+                "cuda_us":      _cuda_us(e),
+                "cpu_us":       getattr(e, "cpu_time_total", 0.0),
                 "count":        e.count,
-                "self_cuda_us": e.self_cuda_time_total,
+                "self_cuda_us": getattr(e, "self_cuda_time_total", 0.0),
             }
             for e in top
         ],
-        "total_cuda_us": sum(e.cuda_time_total for e in avgs),
-        "total_cpu_us":  sum(e.cpu_time_total  for e in avgs),
+        "total_cuda_us": sum(_cuda_us(e) for e in avgs),
+        "total_cpu_us":  sum(getattr(e, "cpu_time_total", 0.0) for e in avgs),
     }

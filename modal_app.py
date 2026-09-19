@@ -230,7 +230,7 @@ def _print_summary(all_results: dict[str, dict]):
     timeout=7200,
     volumes={str(CACHE_DIR): vol},
 )
-def run_method(method_name: str, assay_ids: list[str] | None = None):
+def run_method(method_name: str, assay_ids: str = ""):
     """Run one scoring method across given assays. Returns serialisable dict."""
     import torch
     from benchmark.proteingym import PD_ASSAY_IDS, fetch_dms_data, fetch_reference, run_benchmark
@@ -251,8 +251,9 @@ def run_method(method_name: str, assay_ids: list[str] | None = None):
     print(f"   Source : {method.source}")
     print(f"   Note   : {method.note}\n")
 
+    assay_list = assay_ids.split(",") if assay_ids else None
     pg_cache = CACHE_DIR / "proteingym"
-    df = run_benchmark(method.fn, model, tok, device, assay_ids=assay_ids, cache_dir=pg_cache)
+    df = run_benchmark(method.fn, model, tok, device, assay_ids=assay_list, cache_dir=pg_cache)
 
     if not df.empty:
         df["method"] = method_name
@@ -604,7 +605,7 @@ def ablate_pd_proteins():
     timeout=28800,   # 8 hr — fp32 is ~2× slower than fp16; 217 × 3 methods × 5 runs
     volumes={str(CACHE_DIR): vol},
 )
-def ablate_ref_proteingym(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP, methods: list[str] | None = None):
+def ablate_ref_proteingym(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP, methods: str = ""):
     """
     Reproduce Notin et al. NeurIPS 2023 Table 1 (ESM-2 650M) + A100 timing.
 
@@ -651,7 +652,8 @@ def ablate_ref_proteingym(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP, meth
 
     registry = get_registry()
     if methods:
-        registry = [m for m in registry if m.name in methods]
+        keep = set(methods.split(","))
+        registry = [m for m in registry if m.name in keep]
 
     pg_cache  = CACHE_DIR / "proteingym"
     reference = fetch_reference(pg_cache)
