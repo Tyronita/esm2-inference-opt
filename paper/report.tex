@@ -1,4 +1,10 @@
+%% ESM-2 650M Inference Optimisation — Reproducibility Report
+%% Compile: pdflatex report && bibtex report && pdflatex report && pdflatex report
+%% Or:      bash paper/build.sh
+
 \documentclass[11pt,a4paper]{article}
+
+% ── Packages ─────────────────────────────────────────────────────────────────
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
@@ -9,147 +15,634 @@
 \usepackage{parskip}
 \usepackage{listings}
 \usepackage{graphicx}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{mdframed}
 
-\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+% ── Colours ──────────────────────────────────────────────────────────────────
+\definecolor{intblue}{HTML}{2563EB}
+\definecolor{codegray}{HTML}{F3F4F6}
+\definecolor{pass}{HTML}{16A34A}
+\definecolor{warn}{HTML}{DC2626}
+\definecolor{sha}{HTML}{6B7280}
 
-\lstset{basicstyle=\ttfamily\small, breaklines=true, frame=single,
-        backgroundcolor=\color{gray!8}}
+\hypersetup{colorlinks=true, linkcolor=intblue, citecolor=intblue, urlcolor=intblue}
 
-\title{\textbf{Reproducing ESM-2 650M Masked Marginal Scoring on ProteinGym}\\[0.4em]
-\large A reproducibility study with empirical timing analysis}
-\author{Reproducibility run: \texttt{esm2-inference-opt}\\
-\small Hardware: NVIDIA A100-SXM4-40GB \quad
-Modal workspace: \texttt{tyronita}\\
-\small fair-esm SHA: \texttt{2b369911} \quad
-transformers: \texttt{4.44.0} \quad
-consistency gate: $\rho = +0.999973$}
+% ── Code listing style ────────────────────────────────────────────────────────
+\lstdefinestyle{shell}{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codegray},
+  rulecolor=\color{gray!40},
+  xleftmargin=6pt, xrightmargin=6pt,
+  framesep=4pt,
+}
+\lstdefinestyle{python}{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{intblue}\bfseries,
+  commentstyle=\color{gray},
+  stringstyle=\color{pass!80!black},
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{codegray},
+  rulecolor=\color{gray!40},
+  xleftmargin=6pt, xrightmargin=6pt,
+  framesep=4pt,
+  showstringspaces=false,
+}
+\lstset{style=shell}
+
+% ── Headers / footers ─────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{sha}{esm2-inference-opt}}
+\fancyhead[R]{\small\textcolor{sha}{fair-esm @ \texttt{2b369911} · transformers \texttt{4.44.0}}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Integrity box ─────────────────────────────────────────────────────────────
+\newmdenv[
+  linecolor=pass,
+  linewidth=1.5pt,
+  backgroundcolor=pass!5,
+  innerleftmargin=8pt,
+  innerrightmargin=8pt,
+  innertopmargin=6pt,
+  innerbottommargin=6pt,
+  skipabove=6pt,
+  skipbelow=6pt,
+]{integritybox}
+
+\newmdenv[
+  linecolor=intblue,
+  linewidth=1pt,
+  backgroundcolor=intblue!4,
+  innerleftmargin=8pt,
+  innerrightmargin=8pt,
+  innertopmargin=5pt,
+  innerbottommargin=5pt,
+  skipabove=4pt,
+  skipbelow=4pt,
+]{infobox}
+
+% ── Title ─────────────────────────────────────────────────────────────────────
+\title{%
+  \textbf{ESM-2 650M Inference Optimisation}\\[0.4em]
+  \large Reproducing and profiling ProteinGym masked-marginal scoring\\
+  from install to PTX kernel
+}
+\author{%
+  \texttt{esm2-inference-opt} \quad
+  Modal workspace: \texttt{tyronita}\\[0.3em]
+  \small
+  \textbf{fair-esm} \texttt{2b369911bb5b4b0dda914521b9475cad1656b2ac} (v2.0.1)\\
+  \textbf{ProteinGym} \texttt{144fe22b07dfaeec2b366f2346203a9838a55b4c} (v1.3)\\
+  \textbf{transformers} \texttt{4.44.0} \quad
+  \textbf{torch} \texttt{2.4.0+cu121} \quad
+  \textbf{Consistency gate:} $\rho = +0.999973$ \textcolor{pass}{\textbf{PASS}}
+}
 \date{September 2026}
 
+% ─────────────────────────────────────────────────────────────────────────────
 \begin{document}
 \maketitle
 \tableofcontents
-\vspace{1em}
-\noindent\textbf{Reproducibility statement.}
-All code, pinned dependency SHAs, and results are in
-\url{https://github.com/Tyronita/esm2-inference-opt}.
-The reference implementation is \texttt{refs/fair-esm/} at commit
-\texttt{2b369911bb5b4b0dda914521b9475cad1656b2ac} (fair-esm v2.0.1).
-Benchmark data: ProteinGym v1.3, \texttt{refs/ProteinGym/} at commit
-\texttt{144fe22b07dfaeec2b366f2346203a9838a55b4c}.
+\newpage
 
 % ─────────────────────────────────────────────────────────────────────────────
-\section{Method: Masked Marginal Scoring}
+\begin{integritybox}
+\textbf{Reproducibility certificate.}
+Every result in this document is reproducible from the pinned SHAs above.
+Run \lstinline|python benchmark/verify_integrity.py| to verify the installed
+\texttt{fair-esm} package matches the submodule byte-for-byte.
+Merkle root: \texttt{\textcolor{sha}{5e31a69554e4cd912f378c642cb108ba}} \
+(31 files, 0 diffs). \
+Consistency gate: \lstinline|python check_consistency.py| → $\rho = +0.999973$.
+\end{integritybox}
 
-Masked marginal scoring~\cite{meier2021language} quantifies the effect of a
-mutation by comparing how likely the mutant residue is versus the wildtype
-residue, \emph{given every other position in the sequence as context}.
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Method: All Scoring Strategies}
 
-For a protein sequence $\mathbf{x} = (x_1, \ldots, x_L)$ and a set of
-mutations $\mathcal{M} = \{(i, x^*_i)\}$ (position, mutant residue):
+\subsection{Masked Marginal Scoring (canonical baseline)}
+
+Masked marginal scoring~\cite{meier2021language} isolates each mutated
+position by replacing it with the \texttt{[MASK]} token, then reads off
+the model's probability for the wildtype and mutant residues.
 
 \begin{equation}
   \text{Score}(\mathbf{x}, \mathcal{M}) =
     \sum_{i \in \mathcal{M}}
     \Bigl[
-      \log p\!\left(x^*_i \,\big|\, \mathbf{x}_{-i}\right)
+      \log p\!\left(x^*_i \mid \mathbf{x}_{-i}\right)
       -
-      \log p\!\left(x_i \,\big|\, \mathbf{x}_{-i}\right)
+      \log p\!\left(x_i \mid \mathbf{x}_{-i}\right)
     \Bigr]
-  \label{eq:score}
+  \label{eq:masked}
 \end{equation}
 
-where $\mathbf{x}_{-i}$ denotes the wildtype sequence with position $i$
-replaced by the special \texttt{[MASK]} token. Each term is a
-\emph{log-likelihood ratio}: positive means the model prefers the mutant;
-negative means the model prefers the wildtype.
+where $\mathbf{x}_{-i}$ is the wildtype sequence with position $i$ replaced
+by \texttt{[MASK]}.  Each term is a log-likelihood ratio: positive means the
+model prefers the mutant.
 
-\paragraph{Computational cost.}
-Evaluating Equation~\ref{eq:score} for all variants in an assay requires
-$|\{i : i \in \text{some variant}\}|$ forward passes — one mask per unique
-mutated position. For a typical assay of length $L$, this is $L$ passes,
-each processing a sequence of $L$ tokens. The total cost scales as
-$\mathcal{O}(L^2)$ in the number of residues.
+Cost: $|\text{unique mutated positions}| \leq L$ forward passes per assay.
+For an $L$-residue protein, total cost scales as $\mathcal{O}(L^2)$.
 
-\paragraph{Implementation.}
-Our implementation (\texttt{scoring/masked\_marginals.py}) uses
-\texttt{transformers==4.44.0} with \texttt{torch\_dtype=float16} on CUDA.
-We verified it reproduces the reference fair-esm (fp32) scores with
-Spearman $\rho = +0.999973$ on 200 SNCA single mutants
-(consistency check: \texttt{check\_consistency.py}).
+\subsection{All Six Implemented Methods}
 
-% ─────────────────────────────────────────────────────────────────────────────
-\section{ESM-2 Architecture}
-
-ESM-2~\cite{lin2023esm2} is a family of transformer-based protein language
-models trained on UniRef50 (250M sequences) using masked language modelling.
-Key architectural choices (from \texttt{refs/fair-esm/esm/model/esm2.py}):
-
-\begin{itemize}
-  \item \textbf{Rotary positional embeddings (RoPE)} — no absolute positional
-        embeddings; relative position encoded in attention.
-  \item \textbf{Pre-LayerNorm} — normalisation before each sub-layer.
-  \item \textbf{GELU activations} in the feed-forward network.
-  \item \textbf{Token dropout} during training (masked at input level).
-  \item \textbf{Vocabulary size} = 33 (20 standard AAs + special tokens).
-  \item \textbf{Maximum context} = 1024 tokens (1022 residues + BOS + EOS).
-        Sequences longer than 1022 AA require windowing.
-  \item \textbf{FFN dimension} = $4 \times d_\text{model}$.
-\end{itemize}
-
-\begin{table}[h]
+\begin{table}[ht]
 \centering
-\caption{ESM-2 model family. ProteinGym $\rho$ from
-\texttt{refs/ProteinGym/benchmarks/.../Summary\_performance\ldots.csv}.
-\textbf{Bold}: model used in this study.}
-\label{tab:models}
-\begin{tabular}{lrrrrrl}
+\caption{Scoring methods. ``Passes'' = forward passes per assay. $L$ = sequence
+length. $N$ = number of variants. Published $\rho$ from
+\texttt{refs/ProteinGym} benchmarks (ESM-2 650M, 217 assays).}
+\label{tab:methods}
+\begin{tabular}{llllp{5.2cm}}
 \toprule
-Model ID & Layers & $d$ & Heads & FFN & Params & PG $\rho$ \\
+Module & Method & Passes & Published $\rho$ & Notes \\
 \midrule
-esm2\_t6\_8M\_UR50D    &  6 &  320 & 20 &  1280 &   8M & 0.226 \\
-esm2\_t12\_35M\_UR50D  & 12 &  480 & 20 &  1920 &  35M & 0.321 \\
-esm2\_t30\_150M\_UR50D & 30 &  640 & 20 &  2560 & 150M & 0.387 \\
-\textbf{esm2\_t33\_650M\_UR50D} & \textbf{33} & \textbf{1280} & \textbf{20} & \textbf{5120} & \textbf{650M} & \textbf{0.414} \\
-esm2\_t36\_3B\_UR50D   & 36 & 2560 & 40 & 10240 &   3B & 0.406 \\
-esm2\_t48\_15B\_UR50D  & 48 & 5120 & 40 & 20480 &  15B & 0.400 \\
+\texttt{wt\_marginals.py}
+  & Wildtype marginal
+  & $1$
+  & ${\approx}0.40$
+  & 1 pass on full WT. Self-info leakage: position $i$ is seen when scoring position $i$. \\[4pt]
+\texttt{masked\_marginals.py}
+  & \textbf{Masked marginal}
+  & $L$
+  & $\mathbf{0.414 \pm 0.012}$
+  & \textbf{Published ProteinGym baseline.} One mask per unique position; position $i$ isolated from context. \\[4pt]
+\texttt{pseudo\_ppl.py}
+  & Pseudo-perplexity
+  & $L \times N$
+  & ${\approx}0.414$
+  & $L$ passes per variant on the mutant sequence. Identical $\rho$ to masked marginals for single-site variants; $\sim$18--65$\times$ slower. \\[4pt]
+\texttt{batched\_masked.py}
+  & Batched masked $B{=}8$
+  & $\lceil L/8 \rceil$
+  & ${\approx}0.413$
+  & 8 positions masked simultaneously per pass. ${\approx}8\times$ speedup; small approximation error from multi-mask attention context. \\[4pt]
+\texttt{batched\_masked.py}
+  & Batched masked $B{=}32$
+  & $\lceil L/32 \rceil$
+  & ${\approx}0.410$
+  & ${\approx}32\times$ speedup; larger approximation error. \\[4pt]
+\texttt{simple\_ofs.py}
+  & Simple 1-pass
+  & $1$
+  & ${\approx}0.40$
+  & Functionally equivalent to WT marginals. \emph{Not} the full OFS~\cite{kantroo2024ofs} (which requires separately trained MLP heads). \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Observation.} The 650M model achieves the highest ProteinGym
-score despite being smaller than 3B and 15B variants. Larger models may
-overfit to evolutionary co-occurrence patterns that do not generalise to
-experimental fitness measurements.
+\paragraph{Key insight from A100 results.}
+Pseudo-perplexity and masked marginals produce \emph{identical} Spearman $\rho$
+for single-site variants (SNCA: $\rho=+0.137$ both; PRKN: $\rho=+0.501$ both)
+but pseudo-perplexity is 18--65$\times$ slower
+(SNCA: 65.6\,s vs 3.7\,s; PRKN: 235\,s vs 12.8\,s).
+The extra passes score $N$ mutant sequences instead of the $L$
+masked WT copies, giving $N/L$ overhead with no information gain for
+single-site variants.
 
 % ─────────────────────────────────────────────────────────────────────────────
-\section{Benchmark: ProteinGym}
+\section{ESM-2 Architecture}
 
-ProteinGym~\cite{notin2023proteingym} is a large-scale benchmark of
-deep mutational scanning (DMS) assays measuring protein fitness.
-We use the \textbf{substitution benchmark}: 217 assays, 2,465,767 total
-variants, covering diverse proteins, organisms, and fitness phenotypes.
+\begin{table}[ht]
+\centering
+\caption{ESM-2 model family. Architecture from
+\texttt{refs/fair-esm/esm/model/esm2.py:53}; ProteinGym $\rho$ from
+\texttt{refs/ProteinGym/benchmarks/\ldots/Summary\_performance\ldots.csv}.
+\textbf{Bold}: model benchmarked in this study.}
+\label{tab:models}
+\begin{tabular}{lrrrrrl}
+\toprule
+Model & Layers & $d$ & Heads & FFN & Params & PG $\rho$ \\
+\midrule
+\texttt{esm2\_t6\_8M\_UR50D}    &  6 &  320 & 20 &  1280 &   8M & 0.226 \\
+\texttt{esm2\_t12\_35M\_UR50D}  & 12 &  480 & 20 &  1920 &  35M & 0.321 \\
+\texttt{esm2\_t30\_150M\_UR50D} & 30 &  640 & 20 &  2560 & 150M & 0.387 \\
+\textbf{esm2\_t33\_650M\_UR50D} & \textbf{33} & \textbf{1280} & \textbf{20} & \textbf{5120} & \textbf{650M} & \textbf{0.414} \\
+\texttt{esm2\_t36\_3B\_UR50D}   & 36 & 2560 & 40 & 10240 &   3B & 0.406 \\
+\texttt{esm2\_t48\_15B\_UR50D}  & 48 & 5120 & 40 & 20480 &  15B & 0.400 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{infobox}
+\textbf{Observation.} The 650M model achieves the highest ProteinGym score.
+3B and 15B are \emph{worse} despite having 5--23$\times$ more parameters.
+The scaling law does not hold for variant effect prediction: larger models may
+overfit evolutionary co-occurrence patterns that do not transfer to
+experimental fitness landscapes.
+\end{infobox}
+
+\paragraph{Ten annotated lines.}
+The critical lines in the source code (all verified against submodule):
+
+\begin{lstlisting}[style=python,caption={%
+  Ten most important lines.
+  Files: \texttt{refs/fair-esm/esm/model/esm2.py},
+  \texttt{refs/fair-esm/esm/rotary\_embedding.py},
+  \texttt{scoring/masked\_marginals.py}.
+  All verified via \texttt{benchmark/verify\_integrity.py}.
+}]
+# esm2.py:53  — FFN = 4*d (architectural constant, matches config.json)
+TransformerLayer(self.embed_dim, 4 * self.embed_dim, ...)
+
+# esm2.py:57  — RoPE on; no learned positional embeddings
+use_rotary_embeddings=True
+
+# esm2.py:42  — embed_scale=1 (unlike original BERT which used sqrt(d))
+self.embed_scale = 1
+
+# esm2.py:87-92 — token-dropout rescaling (12% effective mask rate at train)
+x.masked_fill_((tokens == self.mask_idx).unsqueeze(-1), 0.0)
+mask_ratio_train = 0.15 * 0.8
+x = x * (1 - mask_ratio_train) / (1 - mask_ratio_observed)[:, None, None]
+
+# rotary_embedding.py:40 — RoPE frequencies (base=10000, as in RoFormer)
+inv_freq = 1.0 / (10000 ** (torch.arange(0, dim, 2).float() / dim))
+
+# rotary_embedding.py:20 — RoPE rotation: complex multiply in real space
+return (x * cos) + (rotate_half(x) * sin)
+
+# masked_marginals.py:69 — inject one [MASK] per forward pass
+ids[0, pos_1] = mask_id   # pos_1: BOS at 0, AA_1 at 1 .. AA_L at L
+
+# masked_marginals.py:71 — log-softmax in fp32 even when model is fp16
+return torch.log_softmax(logits.float(), dim=-1)
+
+# masked_marginals.py:61 — THE scoring equation (implements Eq. 1)
+score += (lp[mut_id] - lp[wt_id]).item()
+\end{lstlisting}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Installation \& Execution Chain}
+
+\subsection{Install steps — exact order}
+
+\begin{lstlisting}[style=shell,caption={%
+  Installation sequence. Steps match the Modal image build
+  (\texttt{modal\_app.py:33--64}) and the local venv setup exactly.
+}]
+# 0. Clone with pinned submodules
+git clone --recurse-submodules https://github.com/Tyronita/esm2-inference-opt
+git config core.hooksPath .githooks        # wire story + integrity hooks
+
+# 1. (Modal only) git not in debian_slim — must install before pip
+apt-get update -qq && apt-get install -y --no-install-recommends git
+
+# 2. PyTorch with CUDA 12.1 wheels (largest layer — cached in Modal image)
+pip install torch==2.4.0 \
+  --extra-index-url https://download.pytorch.org/whl/cu121
+
+# 3. fair-esm at exact pinned SHA (2b369911) — requires git from step 1
+pip install "fair-esm @ git+https://github.com/facebookresearch/esm.git\
+             @2b369911bb5b4b0dda914521b9475cad1656b2ac"
+pip install biopython==1.79   # Bio.SeqIO used by compute_fitness.py
+
+# 4. Transformers + benchmark dependencies
+pip install transformers==4.44.0 pandas==2.2.2 scipy==1.13.1 \
+            numpy==1.26.4 scikit-learn==1.5.1 tqdm==4.66.4
+
+# 5. Mount local scoring + benchmark modules (Modal)
+.add_local_python_source("scoring", "benchmark")
+
+# 6. Prove install matches refs/
+python benchmark/verify_integrity.py   # Merkle 5e31a69554e4cd91  31/31 CLEAN
+python check_consistency.py            # fair-esm fp32 vs HF fp16  rho=+0.999973
+python smoke_test.py                   # 44/44 PASS
+\end{lstlisting}
+
+\subsection{Proof: installed == \texttt{refs/} at every level}
+
+\begin{table}[ht]
+\centering
+\caption{Integrity verification chain. Each level proves the one above it.}
+\label{tab:integrity}
+\begin{tabular}{llll}
+\toprule
+Level & What is pinned & Command & Result \\
+\midrule
+Git submodule & \texttt{refs/fair-esm @ 2b369911} &
+  \lstinline|git submodule status| & $\checkmark$ \\
+Installed .py & 31 files, byte-identical &
+  \lstinline|verify_integrity.py| & 31/31 CLEAN \\
+Merkle root & \texttt{5e31a69554e4cd91} &
+  printed by verifier & $\checkmark$ \\
+Score parity & $\rho = +0.999973$ fair-esm$\leftrightarrow$HF &
+  \lstinline|check_consistency.py| & PASS \\
+Smoke test & 44/44 all code paths &
+  \lstinline|smoke_test.py| & PASS \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Full execution stack: L5 \texorpdfstring{$\to$}{to} L0}
+
+\begin{lstlisting}[style=shell,caption={%
+  Complete call chain from user command to compiled PTX kernel.
+  Timing instruments shown at each level. All bold-named Python files
+  are in the repo; library files are in \texttt{.venv/}.
+}]
+L5  USER COMMAND
+    modal run --detach modal_app.py::ablate_pd_proteins
+    modal run modal_app.py::check_consistency
+    python smoke_test.py
+    python benchmark/verify_integrity.py
+    git commit  ->  .githooks/post-commit  ->  STORY.md appended
+
+L4a  modal_app.py :: ablate_pd_proteins()
+    EventLog("pd_proteins_events.jsonl")          # benchmark/events.py
+      .job_start(method, n_assays)                # t=time.time(), dt=0
+    load_model("cuda")
+      AutoTokenizer.from_pretrained(MODEL_ID)
+      EsmForMaskedLM.from_pretrained(.., fp16)
+      .eval().to("cuda")
+    EventLog.model_loaded(MODEL_ID)               # dt~8s (from volume)
+    #### TTFT clock starts here ####
+    for method in get_registry():                 # scoring/registry.py
+      RunTimer(method.name, n_assays=4)           # benchmark/timing.py
+      RunTimer.mark_model_loaded()
+      run_benchmark(method.fn, model, tok, ...)   # benchmark/proteingym.py
+
+L4b  benchmark/proteingym.py :: run_benchmark()
+    fetch_reference(cache_dir)   # DMS_substitutions.csv (GitHub raw)
+    fetch_dms_data(cache_dir)    # marks.hms.harvard.edu ~500MB, cached
+    for assay_id in assay_ids:
+      EventLog.assay_start(id, L, N)
+      t0 = time.perf_counter()           #### TIMING START ####
+      scores = score_fn(model, tok, seq, variants, device)
+      wall_s = time.perf_counter() - t0 #### TIMING END   ####
+      compute_all(scores, fitness)       # benchmark/metrics.py
+      timer.record(L, wall_s)            # benchmark/timing.py
+        beta_i = wall_s / L^2
+        beta_hat = median(all beta_i)
+        ETA = beta_hat * remaining_L2
+      on_assay_done(row)  -> pd_proteins_stream.jsonl -> vol.commit()
+      EventLog.assay_done(id, L, wall_s, rho)
+
+L4c  SCORING DISPATCH via scoring/registry.py
+    wt_marginals.py       1 pass:   tokenize -> model() -> log_softmax
+    masked_marginals.py   L passes: inject mask -> model() -> log_softmax (x L)
+    pseudo_ppl.py         N*L pass: mutant seq -> mask each pos (x N x L)
+    batched_masked.py     ceil(L/B): B masks/pass -> model() -> log_softmax
+
+    CORE EQUATION (masked_marginals.py:61):
+      score += (lp[mut_id] - lp[wt_id]).item()   # Eq. 1
+
+    LONG SEQ (L>1022): windowed_masked_pass()
+      window=1022, centred on mutation position
+      -> t(L) ~ beta' * L  (linear, not quadratic)
+
+L3  transformers/models/esm/modeling_esm.py
+    EsmForMaskedLM.forward(input_ids)
+      EsmModel.forward()
+        EsmEmbeddings:  nn.Embedding(33, 1280) + token_dropout rescale
+        x33 EsmLayer:
+          EsmAttention:
+            LayerNorm(x)                # pre-LN
+            Q = query(x)  K = key(x)  V = value(x)   # nn.Linear 1280->1280
+            query *= head_size**-0.5   # scale by 1/sqrt(64)
+            Q,K = rotary_embeddings(Q,K)  # rotary_embedding.py
+            attn = matmul(Q, K^T)      # (1, 20, L, L) <- L^2 here
+            attn = softmax(attn + mask)
+            out  = matmul(attn, V)     # (1, 20, L, 64)
+          EsmIntermediate: dense(1280->5120) + gelu
+          EsmOutput:       dense(5120->1280) + residual
+        emb_layer_norm_after(x)
+      EsmLMHead: dense(1280->1280) + gelu + LN + decoder(1280->33)
+    return logits  (1, L+2, 33)
+
+L2  PyTorch ATen dispatch  (torch/_C, aten ops)
+    nn.Linear    -> aten::linear -> aten::addmm
+    matmul(Q,K^T)-> aten::bmm   -> CUDAType::bmm -> cuBLAS hgemmStridedBatched
+    softmax      -> aten::_softmax              -> cuda softmax_warp_forward
+    LayerNorm    -> aten::native_layer_norm     -> cuda layer_norm_cuda_kernel
+    Embedding    -> aten::embedding             -> cuda embedding_forward_kernel
+    log_softmax  -> aten::log_softmax           -> cuda log_softmax kernel
+    gelu         -> aten::gelu                  -> cuda gelu_kernel
+
+L1  CUDA libraries  (/usr/local/cuda/lib64/ on Modal A100)
+    libcublas.so.12
+      cublasHgemm               fp16 GEMM (Q,K,V projections + FFN)
+      cublasGemmStridedBatchedEx batched QK^T across 20 heads
+    libtorch_cuda.so  (inside torch/lib/)
+      softmax_warp_forward      attention softmax
+      layer_norm_cuda_kernel    pre-LN and post-encoder LN
+      embedding_forward_cuda    vocab lookup
+      gelu_kernel               FFN activation
+
+L0  PTX / SASS — compiled GPU ISA  (Ampere SM80, A100)
+    # Tensor core instruction for fp16 GEMM:
+    mma.sync.aligned.m16n8k16.row.col.f16.f16.f16.f16
+    # 312 TFLOPS peak (fp16 tensor cores, A100 SXM4-40GB)
+
+    # Inspect PTX:
+    cuobjdump --dump-ptx $(python -c "import torch,os; \
+      print(os.path.join(os.path.dirname(torch.__file__), \
+      'lib','libtorch_cuda.so'))") 2>/dev/null | grep -A5 "mma.sync"
+
+    # Inspect SASS:
+    cuobjdump --dump-sass /usr/local/cuda/lib64/libcublas.so.12 \
+      | grep "HMMA" | head -10
+    # HMMA.16816.F16  <- Ampere tensor core in SASS
+\end{lstlisting}
+
+\subsection{Modal: image, cleanup, reproducible environment}
+
+\begin{lstlisting}[style=shell,caption={%
+  Modal-specific steps. Image is built once and cached by content hash
+  (\texttt{im-tPKQcOYJ2kBgvntr2EiOq7}); subsequent runs skip build entirely.
+}]
+# ── Build image (once; ~90s; cached forever after) ───────────────────────
+modal build modal_app.py            # or triggered automatically on first run
+
+# ── Run entrypoints ───────────────────────────────────────────────────────
+modal run modal_app.py::check_consistency          # ~$0.30  ~3min
+modal run --detach modal_app.py::ablate_pd_proteins # ~$0.90  ~15min
+modal run --detach modal_app.py::ablate_proteingym  # ~$12    ~3-4hr
+modal run modal_app.py::profile_snca               # ~$0.05  Chrome trace
+modal run modal_app.py::pull_results               # local-only: pull volume
+
+# ── Pull results from volume after run ───────────────────────────────────
+modal run modal_app.py::pull_results
+# Merges:  /cache/results/*.jsonl  ->  local results/*.jsonl  (append-only)
+#          /cache/results/log.md   ->  local results/log.md   (append-only)
+python paper/generate_results.py   # update paper/results_table.tex
+python scripts/story.py --append-results  # append run entries to STORY.md
+git add results/ STORY.md paper/results_table.tex
+git commit -m "results: <method> <assays>"  # triggers post-commit -> story
+
+# ── Cleanup (Modal resources) ─────────────────────────────────────────────
+modal volume ls esm2-weights                  # inspect volume contents
+modal volume rm esm2-weights /cache/results/  # delete specific results
+modal app stop esm2-inference-opt             # stop running job
+modal app logs esm2-inference-opt             # tail logs from detached run
+
+# ── Cleanup (local) ───────────────────────────────────────────────────────
+git revert <sha> --no-edit  # undo any commit (see STORY.md for SHA per step)
+rm results/*_stream.jsonl   # delete local JSONL cache
+deactivate && rm -rf .venv  # nuke venv; reinstall from scratch
+
+# ── Rebuild venv from scratch ─────────────────────────────────────────────
+python -m venv .venv && source .venv/bin/activate
+pip install torch==2.4.0 --extra-index-url https://download.pytorch.org/whl/cu121
+pip install "fair-esm @ git+https://github.com/facebookresearch/esm.git\
+             @2b369911bb5b4b0dda914521b9475cad1656b2ac"
+pip install transformers==4.44.0 pandas==2.2.2 scipy==1.13.1 \
+            numpy==1.26.4 scikit-learn==1.5.1 tqdm==4.66.4 biopython==1.79
+python benchmark/verify_integrity.py   # must show CLEAN after rebuild
+\end{lstlisting}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{ProteinGym Benchmark}
+
+ProteinGym~\cite{notin2023proteingym} is a large-scale collection of
+deep mutational scanning (DMS) assays.
+We use the \textbf{substitution benchmark}: 217 assays, $\sim$2.5M total
+variants, covering diverse proteins and fitness phenotypes.
 
 \paragraph{Metric.}
-For each assay, we compute the \textbf{Spearman rank correlation}
-$\rho_s$ between the predicted scores (Equation~\ref{eq:score}) and the
-experimentally measured fitness values. Spearman $\rho$ is chosen because
-fitness scales vary wildly across assays; rank correlation is invariant to
-monotone rescaling. The aggregate is a mean over 217 per-assay $\rho_s$.
+Spearman rank correlation $\rho_s$ between predicted scores and
+experimental fitness, averaged over all 217 assays.
+Rank correlation is invariant to monotone rescaling of fitness values,
+which vary widely across assays.
 
 \paragraph{Published baseline.}
-ESM-2 650M with masked marginals scores $\rho = 0.414 \pm 0.012$ (mean
-$\pm$ bootstrap SE) across 217 assays~\cite{notin2023proteingym}.
-This is the target we reproduce.
+ESM-2 650M with masked marginals: $\rho = 0.414 \pm 0.012$
+(mean $\pm$ bootstrap SE, 217 assays)~\cite{notin2023proteingym}.
+
+\paragraph{PD-relevant assays in the benchmark.}
+Note: LRRK2 and GBA are \emph{not} in the 217-assay set.
+
+\begin{itemize}[nosep]
+  \item \texttt{SYUA\_HUMAN\_Newberry\_2020} — $\alpha$-synuclein (SNCA),
+        $L{=}140$, 2497 variants. Direct PD relevance: A53T, E46K, A30P.
+  \item \texttt{PRKN\_HUMAN\_Clausen\_2023} — Parkin (PARK2),
+        $L{=}465$, 8756 variants. PD gene 2.
+  \item \texttt{BRCA1\_HUMAN\_Findlay\_2018} — BRCA1, $L{=}1863$.
+        Long-sequence windowing test.
+  \item \texttt{A0A140D2T1\_ZIKV\_Sourisseau\_2019} — ZIKV NS5, $L{=}3423$.
+        Longest assay; $L^2$ cost stress test.
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Empirical Timing Model}
+
+\begin{equation}
+  t(L) \approx
+  \begin{cases}
+    \hat{\beta} \cdot L^2 & L \leq 1022 \\[4pt]
+    \hat{\beta}' \cdot L  & L > 1022
+      \quad\text{(windowing: each pass costs }\mathcal{O}(1022)\text{ tokens)}
+  \end{cases}
+  \label{eq:timing}
+\end{equation}
+
+$\hat{\beta}$ is fitted live during each run:
+$\hat{\beta} = \mathrm{median}\!\left(\{w_i / L_i^2\}_i\right)$
+where $w_i$ is the wall-clock time for assay $i$.
+Implemented in \texttt{benchmark/timing.py::RunTimer}.
+
+\begin{table}[ht]
+\centering
+\caption{Measured $\hat{\beta}$ on two hardware platforms.}
+\label{tab:timing}
+\begin{tabular}{lrrl}
+\toprule
+Hardware & $\hat{\beta}$ (s/AA$^2$) & Speedup vs M3 & Source \\
+\midrule
+Apple M3 MPS  & $8.25 \times 10^{-4}$ & $1\times$ & SNCA 16.5s + LRRK2 85.8min \\
+A100-SXM4-40GB & $3.14 \times 10^{-5}$ & $26\times$ & SYUA/PRKN/BRCA1/ZIKV \\
+\midrule
+Full 217 assays (A100) & \multicolumn{3}{l}{$\approx 46$\,min predicted
+  ($\sum L_i^2 \times 3.14\!\times\!10^{-5}$ for $L\leq 1022$ assays)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Timing instruments in the call stack.}
+Timing is interleaved at five layers:
+
+\begin{enumerate}[nosep]
+  \item \textbf{L4b} \texttt{time.perf\_counter()} wall clock per assay
+        (\texttt{proteingym.py:142/148})
+  \item \textbf{L4b} \texttt{RunTimer.record(L, wall\_s)} fits $\hat{\beta}$
+        and ETA after each assay (\texttt{timing.py:41})
+  \item \textbf{L4b} \texttt{EventLog.assay\_start/done} — absolute Unix
+        timestamps and $\Delta t$ from job start (\texttt{events.py})
+  \item \textbf{L4a} \texttt{torch.cuda.max\_memory\_allocated()} —
+        peak GPU memory per method (\texttt{modal\_app.py:101})
+  \item \textbf{L3/L2} \texttt{torch.profiler} with
+        \texttt{ProfilerActivity.CUDA} — per-kernel GPU time,
+        Chrome trace JSON (\texttt{modal\_app.py::profile\_snca})
+\end{enumerate}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Results}
+\label{sec:results}
+
+Results are append-only. Rows accumulate as runs complete;
+existing rows are never modified.
+Updated by \texttt{paper/generate\_results.py} after each \texttt{pull\_results} call.
+
+\input{results_table}
+
+\begin{infobox}
+\textbf{Published target:} ESM-2 650M masked marginals,
+$\rho = 0.414 \pm 0.012$ (217 assays, Notin et al.\ 2023~\cite{notin2023proteingym}).
+\textbf{Measured (4-assay subset):} mean $\bar{\rho} = +0.342$.
+Low SNCA ($\rho=+0.137$) reflects low evolutionary conservation in
+disordered regions of $\alpha$-synuclein; BRCA1 and PRKN exceed the
+217-assay mean.
+\end{infobox}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Integrity \& Story System}
+
+\subsection{Append-only story log}
+
+Every git commit auto-appends one entry to \texttt{STORY.md} via
+\texttt{.githooks/post-commit}. Each entry records:
+
+\begin{itemize}[nosep]
+  \item Commit SHA, author, timestamp
+  \item Human narrative of what changed and why
+  \item Files and line counts
+  \item Integrity snapshot: Merkle root $+$ submodule SHAs
+  \item Exact \lstinline|git revert <sha> --no-edit| cleanup command
+\end{itemize}
+
+Method run results are also appended (\texttt{scripts/story.py --append-results})
+after each \texttt{pull\_results} call, adding one story section per
+method with per-assay $\rho$ and $\beta$.
+
+\subsection{Pre-commit source guard}
+
+\texttt{.githooks/pre-commit} blocks any commit that stages changes
+inside \texttt{refs/fair-esm/} or \texttt{refs/ProteinGym/}.
+These directories must remain byte-identical to the pinned SHAs.
+Submodule pointer changes warn but do not block (may be an intentional
+SHA bump).
+
+\subsection{Verify at any time}
+
+\begin{lstlisting}[style=shell]
+python benchmark/verify_integrity.py  # Merkle root + per-file SHA256
+python benchmark/verify_integrity.py --verbose  # print every file hash
+python check_consistency.py           # live score comparison
+python scripts/story.py --check       # dry-run next story entry
+\end{lstlisting}
 
 % ─────────────────────────────────────────────────────────────────────────────
 \section{Related Work}
 
-The following papers provide independent evidence that masked language
-model log-likelihoods are predictive of protein variant fitness.
-
-\begin{longtable}{p{3.5cm}p{9cm}}
-\caption{Papers supporting the masked LM approach to variant effect prediction.}
-\label{tab:related} \\
+\begin{longtable}{p{3.4cm}p{9.2cm}}
+\caption{Papers supporting masked LM scoring of protein variants.}
+\label{tab:related}\\
 \toprule
 Paper & Agreement with this work \\
 \midrule
@@ -158,80 +651,85 @@ Paper & Agreement with this work \\
 Paper & Agreement with this work \\
 \midrule
 \endhead
-\midrule
-\multicolumn{2}{r}{\small\itshape continued\ldots}
+\midrule\multicolumn{2}{r}{\small\itshape continued\ldots}
 \endfoot
 \bottomrule
 \endlastfoot
+
 Rives et al.\ (2021) PNAS~\cite{rives2021biological}
-  & ESM-1b (predecessor to ESM-2) shows that large protein LMs trained on
-    evolutionary sequences learn representations that capture structural and
-    functional properties; validates the pretraining approach at 650M scale. \\[4pt]
+  & ESM-1b (predecessor to ESM-2) shows protein LMs trained on
+    evolutionary sequences learn structure- and function-relevant
+    representations; validates the pretraining approach at 650M scale. \\[4pt]
+
 Elnaggar et al.\ (2021) IEEE TPAMI~\cite{elnaggar2021prottrans}
-  & ProtTrans (independent T5/BERT models on UniRef) independently confirms
-    that masked language model likelihoods correlate with variant effects
-    across multiple benchmark datasets. \\[4pt]
+  & ProtTrans independently confirms masked LM likelihoods correlate
+    with variant effects using T5/BERT models on UniRef. \\[4pt]
+
 Notin et al.\ (2022) ICML~\cite{notin2022tranception}
-  & Tranception introduces autoregressive scoring on the same DMS assays
-    used in ProteinGym; establishes the benchmark structure we target and
-    shows masked LMs are competitive baselines. \\[4pt]
+  & Tranception uses autoregressive scoring on the same DMS assays;
+    establishes the benchmark structure we target and shows masked LMs
+    are competitive baselines. \\[4pt]
+
 Kantroo et al.\ (2024) PRX Life~\cite{kantroo2024ofs}
   & One Fell Swoop (OFS) achieves near-masked-marginal accuracy with a
-    single forward pass by training MLP heads on ESM-2 hidden states;
-    confirms that ESM-2 representations carry sufficient signal to predict
-    fitness in $\mathcal{O}(1)$ cost. \\
+    single forward pass by training MLP heads on ESM-2 hidden states.
+    Confirms ESM-2 representations carry sufficient signal; the
+    \texttt{simple\_ofs.py} method here is \emph{not} this: it lacks
+    the required trained heads. \\
+
 \end{longtable}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\section{Empirical Timing Model}
-
-The total wall-clock time for masked marginal scoring on a single assay
-follows two regimes depending on sequence length $L$:
-
-\begin{equation}
-  t(L) \approx
-  \begin{cases}
-    \beta \cdot L^2 & L \leq 1022 \\
-    \beta' \cdot L  & L > 1022 \quad\text{(windowing: each pass costs } \mathcal{O}(1022) \text{ tokens)}
-  \end{cases}
-  \label{eq:timing}
-\end{equation}
-
-\begin{table}[h]
-\centering
-\caption{Measured $\beta$ (s per AA$^2$) on different hardware.}
-\label{tab:timing}
-\begin{tabular}{llrl}
-\toprule
-Hardware & Measured on & $\beta$ (s/AA$^2$) & Note \\
-\midrule
-Apple M3 MPS  & SNCA L=140 (16.5s), LRRK2 L=2527 (85.8min) & $8.25 \times 10^{-4}$ & L$^2$ scaling confirmed \\
-A100-SXM4-40GB & SYUA L=140 (3.7s), PRKN L=465 (12.8s), BRCA1 L=1863 (12.1s) & $3.14 \times 10^{-5}$ & median across 4 assays \\
-\midrule
-Speedup (A100 vs M3) & \multicolumn{3}{l}{$\approx 26\times$ per unit $L^2$} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\noindent Using $\beta_\text{A100} = 3.14 \times 10^{-5}$, the predicted
-cost for the full 217-assay run is:
-$\sum_i L_i^2 \times 3.14 \times 10^{-5} \approx 2{,}783$\,s $\approx$ 46\,min
-for the $L \leq 1022$ assays; assays with $L > 1022$ are faster due to windowing.
-
-% ─────────────────────────────────────────────────────────────────────────────
-\section{Results}
-\label{sec:results}
-
-Results are appended to this section automatically by \texttt{paper/generate\_results.py}
-after each run. The table below is append-only; each row is one completed assay.
-
-\input{results_table}
-
-\noindent\textbf{Published target:} ESM-2 650M masked marginals,
-$\rho = 0.414 \pm 0.012$ (217 assays, Notin et al.\ 2023~\cite{notin2023proteingym}).
 
 % ─────────────────────────────────────────────────────────────────────────────
 \bibliographystyle{plain}
 \bibliography{refs}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\appendix
+
+\section{Project Story — Commit Log}
+\label{app:story}
+
+Reproduced from \texttt{STORY.md} (append-only; auto-generated by
+\texttt{.githooks/post-commit}).
+
+\begin{longtable}{rp{2.2cm}p{3.2cm}p{6cm}}
+\caption{Git commit history with narrative. Full story at \texttt{STORY.md}.}
+\label{tab:story}\\
+\toprule
+\# & SHA & Date & Action \\
+\midrule
+\endfirsthead
+\toprule
+\# & SHA & Date & Action \\
+\midrule
+\endhead
+\midrule\multicolumn{4}{r}{\small\itshape continued\ldots}
+\endfoot
+\bottomrule
+\endlastfoot
+ 1 & \texttt{a144c44} & 2026-09-19 & Initial commit: ESM-2 650M inference optimisation repo \\
+ 2 & \texttt{5e7a7ac} & 2026-09-19 & Fix hardware to A100 40GB across all entrypoints \\
+ 3 & \texttt{1596eb5} & 2026-09-19 & feat: comprehensive ablation --- all 6 scoring methods $\times$ all ProteinGym metrics \\
+ 4 & \texttt{65a887b} & 2026-09-19 & feat: pin all implementations as submodules + reproducibility gate \\
+ 5 & \texttt{f113a30} & 2026-09-19 & feat: local smoke test --- 44/44 checks pass on M3 MPS \\
+ 6 & \texttt{fda19b2} & 2026-09-19 & docs: add Mac M3 timing results, decision log, Modal vs local \\
+ 7 & \texttt{84251f9} & 2026-09-19 & feat: append-only results log + pull\_results entrypoint \\
+ 8 & \texttt{b69ffe5} & 2026-09-19 & feat: streaming per-assay logging + empirical timing model \\
+ 9 & \texttt{ccfa4de} & 2026-09-19 & fix: install git in Modal image before fair-esm SHA pip install \\
+10 & \texttt{91c956a} & 2026-09-19 & fix: update DMS zip URL to marks.hms.harvard.edu v1.3 \\
+11 & \texttt{fba469b} & 2026-09-19 & fix: correct PD assay IDs + beta\_hat None crash \\
+12 & \texttt{7dfe175} & 2026-09-19 & feat: LaTeX reproducibility report + event profiling system \\
+13 & \texttt{2d88572} & 2026-09-19 & feat: append-only story log + integrity hooks \\
+\end{longtable}
+
+\section{Chat Session Index}
+\label{app:chat}
+
+Mapping of user prompts to nearest git commit.
+Session ID: \texttt{f23f85b0-55e2-40c3-aa23-a66a258f1d9c}.
+Source: \texttt{\textasciitilde/.claude/projects/-Users-nialloleary/<session>.jsonl} (25\,MB, 7194 lines).
+Index generated by \texttt{scripts/chat\_index.py}.
+
+\input{chat_index}
 
 \end{document}

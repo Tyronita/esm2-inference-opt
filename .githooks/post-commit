@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Auto-append story entry after every non-story commit.
+# Auto-append story entry + method results + chat index after every non-story commit.
 
 # Recursion guard: skip if this IS a story commit
 last_msg=$(git log --format=%s -1)
@@ -7,27 +7,39 @@ if [[ "$last_msg" == "[story]"* ]]; then
   exit 0
 fi
 
-# Require python to be available
+repo_root="$(git rev-parse --show-toplevel)"
 python_bin=$(command -v python3 || command -v python)
-if [[ -z "$python_bin" ]]; then
-  echo "  [story] skipped — python not found"
-  exit 0
-fi
+[[ -z "$python_bin" ]] && { echo "  [hook] python not found — skipping"; exit 0; }
 
 # Activate venv if present
-repo_root="$(git rev-parse --show-toplevel)"
 venv="$repo_root/.venv/bin/activate"
 [[ -f "$venv" ]] && source "$venv"
 
-# Append story entry
-"$python_bin" "$repo_root/scripts/story.py" || {
-  echo "  [story] story.py failed — skipping story commit"
-  exit 0
-}
+# 1. Append commit entry to STORY.md
+"$python_bin" "$repo_root/scripts/story.py" 2>/dev/null \
+  || echo "  [hook] story.py failed — skipping story entry"
 
-# Commit STORY.md as a [story] commit (--no-verify skips pre-commit only)
+# 2. Append any new method run results from results/*_stream.jsonl
+if ls "$repo_root/results/"*_stream.jsonl > /dev/null 2>&1; then
+  "$python_bin" "$repo_root/scripts/story.py" --append-results 2>/dev/null
+fi
+
+# 3. Regenerate chat session index (maps prompts -> commit SHAs)
+"$python_bin" "$repo_root/scripts/chat_index.py" \
+  --latex-out "$repo_root/paper/chat_index.tex" 2>/dev/null \
+  || true  # non-fatal: chat JSONL may not be present on CI
+
+# 4. Commit everything as a [story] commit
 short=$(git log --format=%h -1)
 msg=$(git log --format=%s -1 | cut -c1-60)
-git add STORY.md
-git diff --cached --quiet && exit 0   # nothing to commit
-git commit --no-verify -m "[story] $short: $msg"
+
+files_to_add=()
+[[ -f "$repo_root/STORY.md"             ]] && files_to_add+=("STORY.md")
+[[ -f "$repo_root/chat/index.md"        ]] && files_to_add+=("chat/index.md")
+[[ -f "$repo_root/paper/chat_index.tex" ]] && files_to_add+=("paper/chat_index.tex")
+
+if [[ ${#files_to_add[@]} -gt 0 ]]; then
+  git add "${files_to_add[@]}"
+  git diff --cached --quiet && exit 0   # nothing new
+  git commit --no-verify -m "[story] $short: $msg"
+fi

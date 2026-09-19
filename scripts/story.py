@@ -270,9 +270,114 @@ def backfill(dry_run: bool = False):
             print(f"  wrote {commit['short']}  {commit['msg'][:60]}")
 
 
+def append_results(dry_run: bool = False):
+    """Append new method run entries from results/*_stream.jsonl to STORY.md."""
+    import json as _json
+
+    results_dir = REPO_ROOT / "results"
+    jsonl_files = sorted(results_dir.glob("*_stream.jsonl"))
+    if not jsonl_files:
+        print("  [story] no *_stream.jsonl files found")
+        return
+
+    # Read already-logged run IDs (assay+method+ts combos) from STORY.md
+    already = set()
+    if STORY_FILE.exists():
+        body = STORY_FILE.read_text()
+        # look for run markers we write below
+        for m in __import__("re").findall(r"\[run:([^\]]+)\]", body):
+            already.add(m)
+
+    new_entries = 0
+    for jsonl_path in jsonl_files:
+        method = jsonl_path.stem.replace("_stream", "").replace("pd_proteins_", "")
+        rows = []
+        with open(jsonl_path) as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    rows.append(_json.loads(line))
+                except _json.JSONDecodeError:
+                    pass
+
+        if not rows:
+            continue
+
+        # Group rows by method
+        by_method: dict[str, list] = {}
+        for row in rows:
+            m = row.get("method", method)
+            by_method.setdefault(m, []).append(row)
+
+        for m_name, m_rows in sorted(by_method.items()):
+            # build a stable ID from method + assay IDs
+            assay_ids = [r.get("assay_id", "?") for r in m_rows]
+            run_id = f"{m_name}:{','.join(sorted(assay_ids))}"
+            if run_id in already:
+                continue
+
+            gpu    = m_rows[0].get("gpu", "A100")
+            ts     = m_rows[0].get("ts", "")[:10]
+            n      = len(m_rows)
+            rhos   = [r.get("spearman_rho") for r in m_rows if r.get("spearman_rho") is not None]
+            mean_rho = sum(rhos) / len(rhos) if rhos else None
+            total_wall = sum(r.get("wall_s", 0) for r in m_rows)
+
+            # Per-assay lines
+            rows_md = ""
+            for r in m_rows:
+                rho   = r.get("spearman_rho")
+                rho_s = f"{rho:+.4f}" if rho is not None else "—"
+                beta  = r.get("beta")
+                beta_s = f"{beta:.2e}" if beta is not None else "—"
+                rows_md += (
+                    f"| {r.get('assay_id','?'):<45} "
+                    f"| L={r.get('sequence_length','?'):<5} "
+                    f"| N={r.get('n_variants','?'):<6} "
+                    f"| ρ={rho_s} "
+                    f"| β={beta_s} "
+                    f"| {r.get('wall_s','?'):.1f}s |\n"
+                    if isinstance(r.get("wall_s"), float)
+                    else f"| {r.get('assay_id','?')} | — | — | ρ={rho_s} | β={beta_s} | — |\n"
+                )
+
+            mean_s = f"{mean_rho:+.4f}" if mean_rho is not None else "—"
+            merkle = merkle_root()
+            esm_s  = submodule_sha(str(REPO_ROOT / "refs" / "fair-esm"))
+
+            entry = f"""
+---
+
+### {ts} · run · `{m_name}` on {gpu}
+
+<!-- [run:{run_id}] -->
+
+**Method run: `{m_name}` — {n} assays — mean ρ = {mean_s}**
+
+Wall total: {total_wall:.1f}s · Hardware: {gpu} · Integrity: Merkle `{merkle}` · fair-esm@`{esm_s}`
+
+| Assay | L | N | ρ | β (s/AA²) | Wall |
+|---|---|---|---|---|---|
+{rows_md}
+"""
+            if dry_run:
+                print(entry)
+            else:
+                with open(STORY_FILE, "a") as f:
+                    f.write(entry)
+                new_entries += 1
+
+    if not dry_run:
+        print(f"  [story] appended {new_entries} method run entries")
+
+
 if __name__ == "__main__":
     dry = "--check" in sys.argv
     if "--backfill" in sys.argv:
         backfill(dry_run=dry)
+    elif "--append-results" in sys.argv:
+        append_results(dry_run=dry)
     else:
         append_head(dry_run=dry)

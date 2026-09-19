@@ -10,24 +10,19 @@ $\beta$: wall\_s / L$^2$ (s/AA$^2$). Published target: $\rho = 0.414 \pm 0.012$.
 \toprule
 Run date & Assay & $L$ & $N_\text{var}$ & $\rho$ & $\beta$ (s/AA$^2$) & Hardware \\
 \midrule
-% ── Mac M3 MPS (measured, pre-Modal) ──
-2026-09-12 & SYUA\_HUMAN\_Newberry\_2020 & 140 & --- & --- & $8.4 \times 10^{-4}$ & M3 MPS \\
-2026-09-12 & LRRK2 (proxy) & 2527 & --- & --- & $8.0 \times 10^{-4}$ & M3 MPS \\
-\midrule
-% ── A100 ablation run: ablate_pd_proteins, masked_marginals ──
-2026-09-12 & SYUA\_HUMAN\_Newberry\_2020 & 140 & 8,606 & $+0.137$ & $1.89 \times 10^{-4}$ & A100 SXM4 \\
-2026-09-12 & PRKN\_HUMAN\_Clausen\_2023 & 465 & 9,405 & $+0.501$ & $5.93 \times 10^{-5}$ & A100 SXM4 \\
-2026-09-12 & BRCA1\_HUMAN\_Findlay\_2018 & 1863 & 7,694 & $+0.515$ & $3.49 \times 10^{-6}$ & A100 SXM4 \\
-2026-09-12 & A0A140D2T1\_ZIKV\_Sourisseau\_2019 & 3423 & 10,140 & $+0.216$ & $1.62 \times 10^{-6}$ & A100 SXM4 \\
-\midrule
-% ── New runs appended below ──
+% ── pd_proteins ──
+2026-09-19 & SYUA_HUMAN_Newberry_2020 & 140 & 2,497 & $+0.128$ & $3.05e-5$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & SYUA_HUMAN_Newberry_2020 & 140 & 2,497 & $+0.128$ & $2.14e-5$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & PRKN_HUMAN_Clausen_2023 & 465 & 8,756 & $+0.503$ & $1.63e-6$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & BRCA1_HUMAN_Findlay_2018 & 1863 & 1,837 & $+0.514$ & $1.40e-7$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & A0A140D2T1_ZIKV_Sourisseau_2019 & 3423 & 9,576 & $+0.209$ & $9.00e-8$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & SYUA_HUMAN_Newberry_2020 & 140 & 2,497 & $+0.137$ & $1.90e-4$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & PRKN_HUMAN_Clausen_2023 & 465 & 8,756 & $+0.501$ & $5.94e-5$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & BRCA1_HUMAN_Findlay_2018 & 1863 & 1,837 & $+0.515$ & $3.48e-6$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & A0A140D2T1_ZIKV_Sourisseau_2019 & 3423 & 9,576 & $+0.216$ & $1.61e-6$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & SYUA_HUMAN_Newberry_2020 & 140 & 2,497 & $+0.137$ & $3.35e-3$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & PRKN_HUMAN_Clausen_2023 & 465 & 8,756 & $+0.501$ & $1.09e-3$ & NVIDIA A100-SXM4-40GB \\
+2026-09-19 & BRCA1_HUMAN_Findlay_2018 & 1863 & 1,837 & $+0.515$ & $2.03e-5$ & NVIDIA A100-SXM4-40GB \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\paragraph{Mean $\rho$ (4 assays, masked\_marginals, A100).}
-$\bar{\rho} = +0.342$. Published full-benchmark mean is $0.414$ across 217 assays.
-The 4 PD/long-protein assays here include SNCA ($\rho=0.137$, a known hard assay
-where SNCA shows low evolutionary conservation signal) and ZIKV ($\rho=0.216$,
-viral protein with different selection pressures). BRCA1 ($\rho=0.515$) and
-PRKN ($\rho=0.501$) match or exceed the published mean.

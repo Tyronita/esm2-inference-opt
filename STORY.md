@@ -215,3 +215,57 @@ results/log.md made append-only with timestamps. pull_results Modal entrypoint m
 | Files | `.githooks/post-commit`  `.githooks/pre-commit`  `STORY.md`  `benchmark/verify_integrity.py`  `scripts/story.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 2d88572 --no-edit` |
+
+---
+
+### 2026-09-19 · run · `masked_marginals` on NVIDIA A100-SXM4-40GB
+
+<!-- [run:masked_marginals:A0A140D2T1_ZIKV_Sourisseau_2019,BRCA1_HUMAN_Findlay_2018,PRKN_HUMAN_Clausen_2023,SYUA_HUMAN_Newberry_2020] -->
+
+**Method run: `masked_marginals` — 4 assays — mean ρ = +0.3424**
+
+Wall total: 47.5s · Hardware: NVIDIA A100-SXM4-40GB · Integrity: Merkle `889c170fe685c443` · fair-esm@`2b369911`
+
+| Assay | L | N | ρ | β (s/AA²) | Wall |
+|---|---|---|---|---|---|
+| SYUA_HUMAN_Newberry_2020                      | L=140   | N=2497   | ρ=+0.1372 | β=1.90e-04 | 3.7s |
+| PRKN_HUMAN_Clausen_2023                       | L=465   | N=8756   | ρ=+0.5012 | β=5.94e-05 | 12.8s |
+| BRCA1_HUMAN_Findlay_2018                      | L=1863  | N=1837   | ρ=+0.5154 | β=3.48e-06 | 12.1s |
+| A0A140D2T1_ZIKV_Sourisseau_2019               | L=3423  | N=9576   | ρ=+0.2159 | β=1.61e-06 | 18.9s |
+
+
+---
+
+### 2026-09-19 · run · `pseudo_ppl` on NVIDIA A100-SXM4-40GB
+
+<!-- [run:pseudo_ppl:BRCA1_HUMAN_Findlay_2018,PRKN_HUMAN_Clausen_2023,SYUA_HUMAN_Newberry_2020] -->
+
+**Method run: `pseudo_ppl` — 3 assays — mean ρ = +0.3846**
+
+Wall total: 371.2s · Hardware: NVIDIA A100-SXM4-40GB · Integrity: Merkle `889c170fe685c443` · fair-esm@`2b369911`
+
+| Assay | L | N | ρ | β (s/AA²) | Wall |
+|---|---|---|---|---|---|
+| SYUA_HUMAN_Newberry_2020                      | L=140   | N=2497   | ρ=+0.1372 | β=3.35e-03 | 65.6s |
+| PRKN_HUMAN_Clausen_2023                       | L=465   | N=8756   | ρ=+0.5012 | β=1.09e-03 | 235.1s |
+| BRCA1_HUMAN_Findlay_2018                      | L=1863  | N=1837   | ρ=+0.5154 | β=2.03e-05 | 70.6s |
+
+
+---
+
+### 2026-09-19 · run · `wt_marginals` on NVIDIA A100-SXM4-40GB
+
+<!-- [run:wt_marginals:A0A140D2T1_ZIKV_Sourisseau_2019,BRCA1_HUMAN_Findlay_2018,PRKN_HUMAN_Clausen_2023,SYUA_HUMAN_Newberry_2020,SYUA_HUMAN_Newberry_2020] -->
+
+**Method run: `wt_marginals` — 5 assays — mean ρ = +0.2962**
+
+Wall total: 2.9s · Hardware: NVIDIA A100-SXM4-40GB · Integrity: Merkle `889c170fe685c443` · fair-esm@`2b369911`
+
+| Assay | L | N | ρ | β (s/AA²) | Wall |
+|---|---|---|---|---|---|
+| SYUA_HUMAN_Newberry_2020                      | L=140   | N=2497   | ρ=+0.1280 | β=3.05e-05 | 0.6s |
+| SYUA_HUMAN_Newberry_2020                      | L=140   | N=2497   | ρ=+0.1280 | β=2.14e-05 | 0.4s |
+| PRKN_HUMAN_Clausen_2023                       | L=465   | N=8756   | ρ=+0.5029 | β=1.63e-06 | 0.4s |
+| BRCA1_HUMAN_Findlay_2018                      | L=1863  | N=1837   | ρ=+0.5136 | β=1.40e-07 | 0.5s |
+| A0A140D2T1_ZIKV_Sourisseau_2019               | L=3423  | N=9576   | ρ=+0.2086 | β=9.00e-08 | 1.0s |
+
