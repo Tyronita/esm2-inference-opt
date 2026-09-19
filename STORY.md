@@ -333,3 +333,19 @@ feat: Track A benchmark — fair-esm fp32, N=5 repeats, HF dataset push
 | Files | `benchmark/profiler.py`  `benchmark/repeated_run.py`  `modal_app.py`  `scoring/masked_marginals.py`  `scoring/pseudo_ppl.py`  `scoring/ref/__init__.py`  _6 more_ |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 0e65e6d --no-edit` |
+
+---
+
+### 2026-09-20 · `dbd6015` · nialloleary
+
+**feat: compare_tracks — all 217 assays, Track A + B, no cherry-picking**
+
+feat: compare_tracks — all 217 assays, Track A + B, no cherry-picking
+
+| | |
+|---|---|
+| SHA | `dbd6015a22a7c56b2dd8d5042784e4255d505a55` |
+| Changed | 2 files changed, 240 insertions(+), 2 deletions(-) |
+| Files | `modal_app.py`  `scoring/registry.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert dbd6015 --no-edit` |
