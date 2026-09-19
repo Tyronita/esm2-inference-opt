@@ -264,6 +264,240 @@ def run_method(method_name: str, assay_ids: list[str] | None = None):
     return df.to_dict(orient="records") if not df.empty else []
 
 
+# ── Track A vs Track B comparison — ALL 217 assays, side-by-side ─────────────
+# No cherry-picking. Runs the full ProteinGym substitution benchmark on both
+# implementations so results are directly comparable without selection bias.
+
+@app.function(
+    gpu="A100",
+    timeout=28800,   # 8 hr — fp32 A track is ~2× slower; 217 × 3 methods × 2 tracks × 5 runs
+    volumes={str(CACHE_DIR): vol},
+)
+def compare_tracks(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP):
+    """
+    Run Track A and Track B on ALL 217 ProteinGym substitution assays.
+
+    Track A: refs/fair-esm @ 2b369911, fp32 — reference implementation
+    Track B: transformers==4.44.0, fp16    — HuggingFace API implementation
+
+    Identical harness for both: N_WARMUP cold-start passes discarded, then
+    N_TIMED timed passes per assay with wall clock + CUDA events + peak VRAM.
+    No assay filtering — all 217 assays in DMS_substitutions.csv are run.
+
+    Outputs:
+      results/comparison_stream.jsonl  — one row per track × method × assay
+      Printed side-by-side summary table at the end
+
+    Run:  modal run --detach modal_app.py::compare_tracks
+    Pull: modal run modal_app.py::pull_comparison
+    Cost: ~$25–35, ~12–16 hr on A100 40GB (fp32 A + fp16 B, all methods)
+    """
+    import json, statistics
+    import pandas as pd
+    import torch
+    from benchmark.events import EventLog
+    from benchmark.metrics import compute_all
+    from benchmark.profiler import extract_summary, maybe_profile
+    from benchmark.repeated_run import repeated_run
+    from benchmark.proteingym import fetch_dms_data, fetch_reference
+    # NOTE: PD_ASSAY_IDS intentionally NOT imported — no cherry-picking
+
+    device   = "cuda"
+    gpu_name = torch.cuda.get_device_name(0)
+    w = 76
+    print(f"\n{'='*w}")
+    print(f"  Track A vs Track B — ALL 217 ProteinGym Substitution Assays")
+    print(f"  GPU     : {gpu_name}")
+    print(f"  Model   : {MODEL_ID}")
+    print(f"  Warmup  : {n_warmup} passes   Timed: {n_timed} passes")
+    print(f"  Assays  : all 217 (no filtering)")
+    print(f"{'='*w}\n")
+
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    trace_dir   = RESULTS_DIR / "traces"
+    stream_path = RESULTS_DIR / "comparison_stream.jsonl"
+    events      = EventLog(RESULTS_DIR / "comparison_events.jsonl")
+
+    pg_cache  = CACHE_DIR / "proteingym"
+    reference = fetch_reference(pg_cache)
+    fetch_dms_data(pg_cache)
+
+    # ── Load both models ──────────────────────────────────────────────────────
+    print("Loading Track A (fair-esm fp32)...")
+    model_a, alphabet = load_model_ref(device)
+    events.model_loaded(f"{MODEL_ID}:track-a:fp32")
+
+    print("Loading Track B (transformers fp16)...")
+    model_b, tokenizer = load_model(device)
+    events.model_loaded(f"{MODEL_ID}:track-b:fp16")
+
+    # ── Method registries ─────────────────────────────────────────────────────
+    from scoring.ref.registry import get_registry as get_registry_a
+    from scoring import masked_marginals as mm_b, wt_marginals as wt_b, pseudo_ppl as ppl_b
+    from scoring.registry import ScoringMethod
+
+    registry_a = get_registry_a()
+
+    registry_b = [
+        ScoringMethod("wt_marginals",    wt_b.score_variants,  "1",          "transformers fp16", 0.430),
+        ScoringMethod("masked_marginals", mm_b.score_variants,  "L",          "transformers fp16", 0.440),
+        ScoringMethod("pseudo_ppl",      ppl_b.score_variants, "L (mutant)", "transformers fp16", 0.440),
+    ]
+
+    tracks = [
+        ("A", "fair-esm@2b369911", "float32", model_a, alphabet,  registry_a),
+        ("B", "transformers-4.44", "float16", model_b, tokenizer, registry_b),
+    ]
+
+    # ── Build assay list from full reference — ALL 217, no filter ────────────
+    assays = []
+    for _, ref_row in reference.iterrows():
+        assay_id = ref_row["DMS_id"]
+        dms_file = pg_cache / "DMS_substitutions" / ref_row["DMS_filename"]
+        if not dms_file.exists():
+            print(f"  SKIP {assay_id} — data file not found")
+            continue
+        dms = pd.read_csv(dms_file)
+        assays.append({
+            "assay_id": assay_id,
+            "sequence": ref_row["target_seq"],
+            "variants": dms["mutant"].tolist(),
+            "fitness":  dms["DMS_score"].tolist(),
+            "L":        len(ref_row["target_seq"]),
+            "N":        len(dms),
+        })
+    print(f"  Loaded {len(assays)} assays from reference")
+
+    # ── Build resume set ─────────────────────────────────────────────────────
+    done: set[tuple[str, str, str]] = set()   # (track, assay_id, method)
+    if stream_path.exists():
+        with open(stream_path) as f:
+            for line in f:
+                r = json.loads(line)
+                done.add((r["track"], r["assay_id"], r["method"]))
+        print(f"  Resuming — {len(done)} rows already complete")
+
+    # ── Run ───────────────────────────────────────────────────────────────────
+    all_rows = []
+    for track_id, impl, dtype, model, vocab, registry in tracks:
+        print(f"\n{'─'*w}")
+        print(f"  TRACK {track_id} — {impl}  ({dtype})")
+        print(f"{'─'*w}")
+
+        for method in registry:
+            print(f"\n  [{method.name}]  passes={method.passes}")
+            method_rows = []
+
+            for i, a in enumerate(assays):
+                if (track_id, a["assay_id"], method.name) in done:
+                    continue
+
+                # Profile only the very first assay of the entire run
+                profile_this = (i == 0 and track_id == "A" and method.name == "masked_marginals")
+                label = f"{track_id}_{method.name}_{a['assay_id'][:12]}"
+
+                events.assay_start(a["assay_id"], a["L"], a["N"])
+
+                with maybe_profile(profile_this, trace_dir, label) as prof:
+                    timing = repeated_run(
+                        method.fn, model, vocab,
+                        a["sequence"], a["variants"],
+                        device=device,
+                        n_warmup=n_warmup,
+                        n_timed=n_timed,
+                    )
+
+                profile_summary = extract_summary(prof) if profile_this else {}
+                metrics = compute_all(timing["scores"], a["fitness"])
+                rho     = metrics["spearman_rho"]
+
+                row = {
+                    "track":           track_id,
+                    "implementation":  impl,
+                    "dtype":           dtype,
+                    "assay_id":        a["assay_id"],
+                    "sequence_length": a["L"],
+                    "n_variants":      a["N"],
+                    "method":          method.name,
+                    "gpu":             gpu_name,
+                    "wall_mean":       timing["wall_mean"],
+                    "wall_std":        timing["wall_std"],
+                    "wall_runs":       timing["wall_runs"],
+                    "warmup_wall_s":   timing["warmup_wall_s"],
+                    "cuda_ms_mean":    timing["cuda_ms_mean"],
+                    "cuda_ms_std":     timing["cuda_ms_std"],
+                    "peak_mem_mb":     timing["peak_mem_mb"],
+                    "n_warmup":        n_warmup,
+                    "n_timed":         n_timed,
+                    **metrics,
+                    "profile":         profile_summary,
+                }
+
+                with open(stream_path, "a") as f:
+                    f.write(json.dumps(row) + "\n")
+
+                events.assay_done(a["assay_id"], a["L"], timing["wall_mean"], rho)
+                cuda_str = f"  cuda={timing['cuda_ms_mean']:.0f}ms" if timing["cuda_ms_mean"] else ""
+                print(
+                    f"    {a['assay_id']:<50}  ρ={rho:+.4f}  "
+                    f"wall={timing['wall_mean']:.3f}±{timing['wall_std']:.3f}s{cuda_str}"
+                )
+                method_rows.append(row)
+                all_rows.append(row)
+
+            if method_rows:
+                rhos = [r["spearman_rho"] for r in method_rows]
+                walls = [r["wall_mean"] for r in method_rows]
+                print(
+                    f"    {'── mean':<50}  ρ={statistics.mean(rhos):+.4f}  "
+                    f"(published {method.published_rho:.3f})  "
+                    f"total_wall={sum(walls):.0f}s"
+                )
+
+        vol.commit()
+
+    # ── Summary: mean ρ per method per track ─────────────────────────────────
+    print(f"\n{'='*w}")
+    print(f"  COMPARISON SUMMARY  (all {len(assays)} assays)")
+    print(f"  {'Method':<20}  {'Track':>5}  {'mean ρ':>8}  {'published':>9}  {'Δρ vs pub':>9}  {'total wall':>10}")
+    print(f"  {'-'*20}  {'-'*5}  {'-'*8}  {'-'*9}  {'-'*9}  {'-'*10}")
+
+    all_stored = all_rows
+    if stream_path.exists() and not all_stored:
+        with open(stream_path) as f:
+            all_stored = [json.loads(l) for l in f if l.strip()]
+
+    for method_name in ["wt_marginals", "masked_marginals", "pseudo_ppl"]:
+        pub = {"wt_marginals": 0.430, "masked_marginals": 0.440, "pseudo_ppl": 0.440}[method_name]
+        for track_id in ["A", "B"]:
+            subset = [r for r in all_stored if r["method"] == method_name and r["track"] == track_id]
+            if not subset:
+                continue
+            mean_rho  = statistics.mean(r["spearman_rho"] for r in subset)
+            total_wall = sum(r["wall_mean"] for r in subset)
+            delta     = mean_rho - pub
+            print(
+                f"  {method_name:<20}  {track_id:>5}  {mean_rho:+.4f}  "
+                f"{pub:+.3f}     {delta:+.4f}    {total_wall:8.0f}s"
+            )
+
+    print(f"{'='*w}\n")
+    vol.commit()
+    return {"n_rows": len(all_stored), "stream": str(stream_path)}
+
+
+@app.local_entrypoint()
+def pull_comparison():
+    """Pull comparison_stream.jsonl from Modal volume."""
+    import subprocess
+    for fname in ["comparison_stream.jsonl", "comparison_events.jsonl"]:
+        result = subprocess.run(
+            ["modal", "volume", "get", "esm2-weights", f"results/{fname}", f"results/{fname}"],
+            capture_output=True, text=True,
+        )
+        print(f"  {'pulled' if result.returncode == 0 else 'not ready'}: results/{fname}")
+
+
 # ── PD proteins ablation — all methods, fast ──────────────────────────────────
 
 @app.function(

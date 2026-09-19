@@ -20,9 +20,10 @@ from typing import Callable
 class ScoringMethod:
     name: str
     fn: Callable
-    passes: str        # "1", "L", "L/B", "L (mutant)"
+    passes: str            # "1", "L", "L/B", "L (mutant)"
     source: str
-    note: str
+    published_rho: float = 0.0   # Notin et al. 2023 Table 1, ESM-2 650M, 217 assays
+    note: str = ""
 
 
 def get_registry(device: str) -> list[ScoringMethod]:
@@ -34,6 +35,7 @@ def get_registry(device: str) -> list[ScoringMethod]:
             fn=wt_marginals.score_variants,
             passes="1",
             source="Meier et al. NeurIPS 2021",
+            published_rho=0.430,
             note="1 forward pass; model sees position being scored (self-info leakage)",
         ),
         ScoringMethod(
@@ -41,6 +43,7 @@ def get_registry(device: str) -> list[ScoringMethod]:
             fn=masked_marginals.score_variants,
             passes="L",
             source="Meier et al. NeurIPS 2021 (canonical ProteinGym baseline)",
+            published_rho=0.440,
             note="L passes; position isolated from context. Published ρ=0.44 on ESM-2 650M",
         ),
         ScoringMethod(
@@ -48,6 +51,7 @@ def get_registry(device: str) -> list[ScoringMethod]:
             fn=pseudo_ppl.score_variants,
             passes="L (mutant)",
             source="Meier et al. NeurIPS 2021 / ProteinGym compute_fitness.py",
+            published_rho=0.440,
             note="L passes on mutant sequence; identical to masked_marginals for single-site variants",
         ),
         ScoringMethod(
