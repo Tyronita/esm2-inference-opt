@@ -1,9 +1,15 @@
 """
 ESM-2 650M inference optimisation — Modal app.
 
+Hardware: A100 40GB throughout.
+Rationale: ESM-2 was trained on A100 80GB clusters (Lin et al. 2023, Science).
+A100 40GB is the standard academic inference GPU for this era and sufficient
+for ESM-2 650M (1.3GB fp16). Neither the ProteinGym nor OFS papers specify
+a GPU for scoring — A100 is the implied hardware.
+
 Entrypoints:
-    modal run modal_app.py::score_pd_proteins      # PD proteins only (~5 min T4)
-    modal run modal_app.py::score_proteingym        # all 217 assays (~2hr A100)
+    modal run modal_app.py::score_pd_proteins      # PD proteins only (~5 min)
+    modal run modal_app.py::score_proteingym        # all 217 assays (~2hr)
     modal run modal_app.py::compare_methods         # masked_marginal vs OFS vs wt_marginal
 """
 
@@ -59,7 +65,7 @@ def load_model(device: str = "cuda"):
 # ── PD proteins — fast smoke test ─────────────────────────────────────────────
 
 @app.function(
-    gpu="T4",
+    gpu="A100",
     timeout=600,
     volumes={str(CACHE_DIR): vol},
 )
@@ -160,7 +166,7 @@ def score_proteingym(method: str = "masked_marginal"):
 # ── Head-to-head comparison (same assays, all three methods) ──────────────────
 
 @app.function(
-    gpu="T4",
+    gpu="A100",
     timeout=3600,
     volumes={str(CACHE_DIR): vol},
 )
