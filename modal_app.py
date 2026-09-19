@@ -100,6 +100,18 @@ def _peak_gpu_mb() -> float:
     return torch.cuda.max_memory_allocated() / 1e6 if torch.cuda.is_available() else 0.0
 
 
+def _append_log(entry: str):
+    """Append a timestamped entry to the volume results log. Never truncates."""
+    import datetime
+    log_path = RESULTS_DIR / "log.md"
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    ts = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    block = f"\n---\n\n## {ts}  {entry}\n"
+    with open(log_path, "a") as f:
+        f.write(block)
+    vol.commit()
+
+
 def _print_banner(title: str, gpu_name: str):
     w = 72
     print(f"\n{'='*w}")
@@ -278,8 +290,20 @@ def ablate_pd_proteins():
     vol.commit()
 
     _print_summary(all_results)
-    print(f"  Results saved → {out}")
 
+    # Build log entry
+    import math
+    log_lines = [f"Modal A100 — PD proteins ablation (3 assays × 6 methods)\n\n```\ngpu : {gpu_name}\nmodel : {MODEL_ID}\n```\n"]
+    log_lines.append("| Method | Spearman ρ (mean) | Wall (s) |")
+    log_lines.append("|---|---|---|")
+    for method_name, df in all_results.items():
+        if df is not None and "spearman_rho" in df.columns:
+            rho = df["spearman_rho"].mean(skipna=True)
+            wall = df["wall_s"].sum() if "wall_s" in df.columns else float("nan")
+            log_lines.append(f"| {method_name} | {rho:+.4f} | {wall:.1f} |")
+    _append_log("\n".join(log_lines))
+
+    print(f"  Results saved → {out}")
     return combined.to_dict(orient="records")
 
 
@@ -335,8 +359,20 @@ def ablate_proteingym():
     vol.commit()
 
     _print_summary(all_results)
-    print(f"  Results saved → {RESULTS_DIR}/full_ablation_217.csv")
 
+    import math
+    log_lines = [f"Modal A100 — Full ProteinGym ablation (217 assays × 6 methods)\n\n```\ngpu : {gpu_name}\nmodel : {MODEL_ID}\ntarget : 0.414 ± 0.012\n```\n"]
+    log_lines.append("| Method | Spearman ρ (mean 217) | vs baseline | Wall (s) |")
+    log_lines.append("|---|---|---|---|")
+    for method_name, df in all_results.items():
+        if df is not None and "spearman_rho" in df.columns:
+            rho = df["spearman_rho"].mean(skipna=True)
+            delta = rho - 0.414
+            wall = df["wall_s"].sum() if "wall_s" in df.columns else float("nan")
+            log_lines.append(f"| {method_name} | {rho:+.4f} | {delta:+.4f} | {wall:.0f} |")
+    _append_log("\n".join(log_lines))
+
+    print(f"  Results saved → {RESULTS_DIR}/full_ablation_217.csv")
     return combined.to_dict(orient="records")
 
 
@@ -477,5 +513,67 @@ def check_consistency(n: int = 200):
     }
     (RESULTS_DIR / "consistency.json").write_text(json.dumps(out, indent=2))
     vol.commit()
+
+    log_entry = (
+        f"Modal A100 — consistency check (fair-esm fp32 vs transformers fp16)\n\n"
+        f"```\ngpu   : {torch.cuda.get_device_name(0)}\nmodel : {MODEL_ID}\n"
+        f"n     : {len(variants)} SNCA variants\n```\n\n"
+        f"| Metric | Value | Gate |\n|---|---|---|\n"
+        f"| Spearman ρ | {rho:+.6f} | ≥ 0.999 |\n"
+        f"| Max \\|diff\\| | {diff.max():.6f} | — |\n"
+        f"| Mean \\|diff\\| | {diff.mean():.6f} | — |\n"
+        f"| % within 1e-3 | {100*(diff < 1e-3).mean():.1f}% | — |\n\n"
+        f"**{verdict}**"
+    )
+    _append_log(log_entry)
+
     print(f"\n  Saved → {RESULTS_DIR}/consistency.json")
     return out
+
+
+# ── Pull results from Modal volume to local results/log.md ────────────────────
+
+@app.local_entrypoint()
+def pull_results():
+    """
+    Download results/log.md from Modal volume and append new entries to local
+    results/log.md. Run after any Modal job completes.
+
+        python -m modal run modal_app.py::pull_results
+    """
+    import subprocess
+    import datetime
+
+    print("Pulling results/log.md from Modal volume esm2-weights ...")
+    result = subprocess.run(
+        ["python", "-m", "modal", "volume", "get", "esm2-weights", "results/log.md", "/tmp/modal_log.md"],
+        capture_output=True, text=True,
+    )
+
+    if result.returncode != 0:
+        print(f"Volume get failed: {result.stderr}")
+        print("(No runs have completed yet, or volume log doesn't exist.)")
+        return
+
+    local_log = Path("results/log.md")
+    modal_log = Path("/tmp/modal_log.md")
+
+    local_text = local_log.read_text() if local_log.exists() else ""
+    modal_text = modal_log.read_text()
+
+    # Find entries in modal log that aren't in local log (append-only merge)
+    new_entries = []
+    for block in modal_text.split("\n---\n"):
+        block = block.strip()
+        if block and block not in local_text and block != "# Results Log":
+            new_entries.append(block)
+
+    if new_entries:
+        ts = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        with open(local_log, "a") as f:
+            for entry in new_entries:
+                f.write(f"\n---\n\n{entry}\n")
+        print(f"Appended {len(new_entries)} new entries to results/log.md")
+        print("Don't forget to commit: git add results/log.md && git commit -m 'results: add Modal run'")
+    else:
+        print("No new entries — results/log.md is up to date.")
