@@ -202,3 +202,9 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 192 | 2026-09-19T23:09:19 | did we get a reuslt back sorry? | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 193 | 2026-09-19T23:10:11 | yes please, ablate the track b, and track a, using the same consistent method wi | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 194 | 2026-09-19T23:11:59 | also pls ensure we arent doing anything fishy re PD related ones, ignore / comme | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
+| 195 | 2026-09-19T23:23:13 | are we online? hows my billing | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
+| 196 | 2026-09-19T23:25:28 | says 26$ left heads up | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
+| 197 | 2026-09-19T23:27:59 | if we take away the repeats and try 1 track the esm | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
+| 198 | 2026-09-19T23:28:36 | sure go for it | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
+| 199 | 2026-09-19T23:47:22 | pls check progress, % done | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
+| 200 | 2026-09-19T23:49:11 | pls ^ add this in an order and export the chat to include in our repo with anyth | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |

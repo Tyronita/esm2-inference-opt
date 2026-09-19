@@ -365,3 +365,19 @@ fix: DMS data path — fetch_dms_data extracts to DMS_substitutions/ flat dir
 | Files | `benchmark/proteingym.py`  `modal_app.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 576ee5b --no-edit` |
+
+---
+
+### 2026-09-20 · `cd59e30` · nialloleary
+
+**fix: Modal type annotations + profiler compat; add audit trail**
+
+Per-assay streaming JSONL added: every assay logs immediately, not batch at end. RunTimer tracks TTFT, fits β̂ = median(wall_s/L²) live, prints ETA after each assay. profile_snca entrypoint added for Chrome tracing.
+
+| | |
+|---|---|
+| SHA | `cd59e30d8f65cd350e7ed9a60ea99498e5f9b682` |
+| Changed | 3 files changed, 238 insertions(+), 10 deletions(-) |
+| Files | `benchmark/profiler.py`  `docs/audit_trail.md`  `modal_app.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert cd59e30 --no-edit` |
