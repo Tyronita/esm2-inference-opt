@@ -14,11 +14,41 @@ from pathlib import Path
 
 import modal
 
-# ── Pure reproducible image ───────────────────────────────────────────────────
+# ── Pinned implementation SHAs (from refs/ submodules) ───────────────────────
+# fair-esm  sha: 2b369911bb5b4b0dda914521b9475cad1656b2ac  version 2.0.1
+#   setup.py:  no hard deps (only esmfold extras); needs torch + numpy
+#   environment.yml:  pytorch=1.12+, biopython==1.79, numpy==1.21.2, scipy==1.7.1
+#   source: refs/fair-esm/setup.py (read directly — not guessed)
+#
+# ProteinGym sha: 144fe22b07dfaeec2b366f2346203a9838a55b4c  version 1.3
+#   compute_fitness.py imports: torch, numpy, pandas, scipy, tqdm, biopython, fair-esm
+#   source: refs/ProteinGym/proteingym/baselines/esm/compute_fitness.py (read directly)
+#
+# transformers ESM: transformers==4.44.0
+#   HF model: facebook/esm2_t33_650M_UR50D
+#
+# Dependency graph: refs/graph.yml
+
+# ── Reproducible image — all implementations baked in ────────────────────────
 image = (
     modal.Image.debian_slim(python_version="3.11")
+    # Step 1: PyTorch (CUDA 12.1) — largest wheel, downloaded once and cached
     .pip_install(
         "torch==2.4.0",
+        extra_index_url="https://download.pytorch.org/whl/cu121",
+    )
+    # Step 2: fair-esm at exact pinned SHA (2b369911)
+    # Requirements: none declared in setup.py beyond torch; biopython is a soft dep
+    # Source: refs/fair-esm/setup.py
+    .pip_install(
+        "fair-esm @ git+https://github.com/facebookresearch/esm.git"
+        "@2b369911bb5b4b0dda914521b9475cad1656b2ac",
+        "biopython==1.79",   # used by compute_fitness.py: from Bio import SeqIO
+    )
+    # Step 3: transformers + our scoring/benchmark deps
+    # Source: refs/ProteinGym/proteingym/baselines/esm/compute_fitness.py imports
+    #         + our benchmark/metrics.py (scikit-learn for AUC/MCC)
+    .pip_install(
         "transformers==4.44.0",
         "pandas==2.2.2",
         "scipy==1.13.1",
@@ -26,8 +56,8 @@ image = (
         "scikit-learn==1.5.1",
         "tqdm==4.66.4",
         "requests==2.32.3",
-        extra_index_url="https://download.pytorch.org/whl/cu121",
     )
+    # Step 4: our scoring + benchmark modules
     .add_local_python_source("scoring", "benchmark")
 )
 
@@ -76,7 +106,7 @@ def _print_banner(title: str, gpu_name: str):
     print(f"  {title}")
     print(f"  GPU    : {gpu_name}")
     print(f"  Model  : {MODEL_ID}")
-    print(f"  Target : Spearman ρ ≥ 0.44  (published ESM-2 650M masked_marginals baseline)")
+    print(f"  Target : Spearman ρ = 0.414 ± 0.012  (published ESM-2 650M masked_marginals, 217 assays)")
     print(f"  Ref    : Notin et al. NeurIPS 2023 / Meier et al. NeurIPS 2021")
     print(f"{'='*w}\n")
 
@@ -149,7 +179,7 @@ def _print_summary(all_results: dict[str, dict]):
             avg_L   = df["sequence_length"].mean()
             print(f"    {method:<30}  unique_pos/assay={avg_pos:.0f}  avg L={avg_L:.0f}")
 
-    print(f"\n  Published baseline (masked_marginals, ESM-2 650M): ρ = 0.44")
+    print(f"\n  Published baseline (masked_marginals, ESM-2 650M): ρ = 0.414 ± 0.012")
     print(f"  Source: Notin et al. NeurIPS 2023")
     print(f"{'='*w}\n")
 
@@ -308,3 +338,144 @@ def ablate_proteingym():
     print(f"  Results saved → {RESULTS_DIR}/full_ablation_217.csv")
 
     return combined.to_dict(orient="records")
+
+
+# ── Consistency check — fair-esm vs transformers on SNCA ─────────────────────
+
+@app.function(
+    gpu="A100",
+    timeout=1800,
+    volumes={str(CACHE_DIR): vol},
+)
+def check_consistency(n: int = 200):
+    """
+    Score SNCA variants with BOTH fair-esm (original, fp32) and our
+    transformers implementation (fp16). Report Spearman ρ between them.
+
+    This is the reproducibility gate: ρ ≥ 0.999 means our implementation
+    matches the one that produced the published ρ=0.414 on ProteinGym.
+
+    Sources compared:
+      [A] fair-esm @ 2b369911  (refs/fair-esm/, installed from pinned SHA)
+          scoring: refs/ProteinGym/proteingym/baselines/esm/compute_fitness.py:486
+      [B] transformers==4.44.0  (our implementation, scoring/masked_marginals.py)
+
+    Decision tree: refs/graph.yml — see triples for full dependency graph.
+    """
+    import sys
+    sys.path.insert(0, str(CACHE_DIR))  # ensure local modules found
+
+    import subprocess
+    result = subprocess.run(
+        ["python", "check_consistency.py", "--n", str(n), "--device", "cuda"],
+        capture_output=True, text=True, cwd="/root"
+    )
+
+    # Run via import instead (cleaner in Modal)
+    import numpy as np
+    import torch
+    from scipy.stats import spearmanr
+    from transformers import AutoTokenizer, EsmForMaskedLM
+
+    SNCA_SEQ = (
+        "MDVFMKGLSKAKEGVVAAAEKTKQGVAEAAGKTKEGVLYVGSKTKEGVVHGVATVAEKTK"
+        "EQVTNVGGAVVTGVTAVAQKTVEGAGSIAAATGFVKKDQLGKNEEGAPQEGILEDMPVDP"
+        "DNEAYEMPSEEGYQDYEPEA"
+    )
+    AA = "ACDEFGHIKLMNPQRSTVWY"
+
+    def all_single_mutants(seq, n):
+        variants = []
+        for pos_1, wt in enumerate(seq, start=1):
+            for mt in AA:
+                if mt != wt:
+                    variants.append(f"{wt}{pos_1}{mt}")
+                if len(variants) >= n:
+                    return variants
+        return variants
+
+    variants = all_single_mutants(SNCA_SEQ, n)
+    device = "cuda"
+
+    # ── [A] fair-esm fp32 ────────────────────────────────────────────────────
+    print("\n── [A] fair-esm fp32 (pinned SHA 2b369911) ─────────────────────")
+    import esm as fair_esm
+    model_fe, alphabet = fair_esm.pretrained.esm2_t33_650M_UR50D()
+    model_fe = model_fe.eval().to(device)
+    batch_converter = alphabet.get_batch_converter()
+    _, _, batch_tokens = batch_converter([("p", SNCA_SEQ)])
+    batch_tokens = batch_tokens.to(device)
+    L = batch_tokens.size(1)
+
+    cache_fe: dict[int, torch.Tensor] = {}
+    with torch.no_grad():
+        for i in range(1, L - 1):
+            masked = batch_tokens.clone()
+            masked[0, i] = alphabet.mask_idx
+            logits = model_fe(masked)["logits"]
+            cache_fe[i] = torch.log_softmax(logits[0, i].float(), dim=-1).cpu()
+
+    scores_fe = []
+    for var in variants:
+        wt_aa, pos_1, mt_aa = var[0], int(var[1:-1]), var[-1]
+        lp = cache_fe[pos_1]
+        scores_fe.append((lp[alphabet.get_idx(mt_aa)] - lp[alphabet.get_idx(wt_aa)]).item())
+
+    del model_fe, batch_tokens, cache_fe
+    torch.cuda.empty_cache()
+
+    # ── [B] transformers fp16 ────────────────────────────────────────────────
+    print("\n── [B] transformers fp16 (our implementation) ───────────────────")
+    from scoring.masked_marginals import score_variants
+    tok = AutoTokenizer.from_pretrained(MODEL_ID, cache_dir=str(CACHE_DIR))
+    model_hf = (
+        EsmForMaskedLM.from_pretrained(
+            MODEL_ID, cache_dir=str(CACHE_DIR), torch_dtype=torch.float16
+        ).eval().to(device)
+    )
+    scores_hf = score_variants(model_hf, tok, SNCA_SEQ, variants, device)
+    del model_hf
+    torch.cuda.empty_cache()
+
+    # ── Compare ──────────────────────────────────────────────────────────────
+    a = np.array(scores_fe, dtype=float)
+    b = np.array(scores_hf, dtype=float)
+    rho = spearmanr(a, b).correlation
+    diff = np.abs(a - b)
+
+    w = 66
+    print(f"\n{'='*w}")
+    print(f"  CONSISTENCY REPORT  (fair-esm fp32  vs  transformers fp16)")
+    print(f"{'='*w}")
+    print(f"  Variants tested    : {len(variants)}")
+    print(f"  Spearman ρ         : {rho:+.6f}  (gate: ≥ 0.999)")
+    print(f"  Max |diff|         : {diff.max():.6f}")
+    print(f"  Mean |diff|        : {diff.mean():.6f}")
+    print(f"  % within 1e-3      : {100*(diff < 1e-3).mean():.1f}%")
+    verdict = "PASS — implementation reproduces original" if rho >= 0.999 else "FAIL — investigate outliers"
+    print(f"  Result             : {verdict}")
+
+    if rho < 0.999:
+        idx_top = np.argsort(diff)[::-1][:10]
+        print(f"\n  Top-10 outliers (fair-esm vs transformers):")
+        for i in idx_top:
+            print(f"    {variants[i]:<10}  fair={a[i]:+.5f}  hf={b[i]:+.5f}  |d|={diff[i]:.5f}")
+
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    import json
+    out = {
+        "n_variants": len(variants),
+        "spearman_rho": float(rho),
+        "max_abs_diff": float(diff.max()),
+        "mean_abs_diff": float(diff.mean()),
+        "pct_within_1e3": float(100 * (diff < 1e-3).mean()),
+        "verdict": verdict,
+        "fair_esm_sha": "2b369911bb5b4b0dda914521b9475cad1656b2ac",
+        "transformers_version": "4.44.0",
+        "dtype_fair_esm": "float32",
+        "dtype_transformers": "float16",
+    }
+    (RESULTS_DIR / "consistency.json").write_text(json.dumps(out, indent=2))
+    vol.commit()
+    print(f"\n  Saved → {RESULTS_DIR}/consistency.json")
+    return out

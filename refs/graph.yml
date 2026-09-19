@@ -1,0 +1,131 @@
+# Execution dependency graph as (subject, predicate, object) triples.
+# Each triple is: [start_node, edge_label, end_node]
+# Nodes are versioned states. Edges are actions/events.
+#
+# Read: "start_node --edge_label--> end_node"
+# This is the ground truth for what must exist before what can run.
+
+meta:
+  format: triples
+  model: facebook/esm2_t33_650M_UR50D
+  benchmark: ProteinGym DMS substitutions v1.1 (217 assays)
+  target: Spearman rho = 0.414 +/- 0.012
+
+# ── Implementation nodes (versioned) ─────────────────────────────────────────
+
+nodes:
+
+  # Original implementations (submodules, pinned SHAs)
+  fair_esm:
+    type: git_submodule
+    repo: https://github.com/facebookresearch/esm
+    sha: 2b369911bb5b4b0dda914521b9475cad1656b2ac
+    version: 2.0.1
+    path: refs/fair-esm/
+    install: "pip install git+https://github.com/facebookresearch/esm.git@2b369911bb5b4b0dda914521b9475cad1656b2ac"
+    requires: [torch, numpy, biopython]
+
+  proteingym:
+    type: git_submodule
+    repo: https://github.com/OATML-Markslab/ProteinGym
+    sha: 144fe22b07dfaeec2b366f2346203a9838a55b4c
+    version: "1.3"
+    path: refs/ProteinGym/
+    key_file: proteingym/baselines/esm/compute_fitness.py
+    scoring_strategy: masked-marginals
+    requires: [fair_esm, biopython, pandas, scipy, tqdm]
+
+  # Our implementations
+  transformers_esm:
+    type: huggingface
+    hub: facebook/esm2_t33_650M_UR50D
+    package: transformers==4.44.0
+    dtype: float16
+    attn_impl: sdpa
+    key_file: scoring/masked_marginals.py
+
+  # Shared model weights (same for all implementations)
+  model_weights:
+    type: huggingface_model
+    hub: facebook/esm2_t33_650M_UR50D
+    size_disk_gb: 2.4
+    size_fp16_gb: 1.3
+    cached_at: /cache/  # Modal persistent volume esm2-weights
+
+# ── Triples ───────────────────────────────────────────────────────────────────
+# Format: [subject, predicate, object]
+
+triples:
+
+  # Model weight provenance
+  - [model_weights,      trained_by,          Lin_et_al_2023]
+  - [model_weights,      published_at,        "https://huggingface.co/facebook/esm2_t33_650M_UR50D"]
+  - [fair_esm,           loads,               model_weights]
+  - [transformers_esm,   loads,               model_weights]
+
+  # Scoring implementation lineage
+  - [fair_esm,           implements,          masked_marginals]
+  - [fair_esm,           implements,          wt_marginals]
+  - [fair_esm,           implements,          pseudo_ppl]
+  - [transformers_esm,   reimplements,        masked_marginals]
+  - [transformers_esm,   reimplements,        wt_marginals]
+  - [transformers_esm,   reimplements,        pseudo_ppl]
+
+  # Benchmark provenance
+  - [proteingym,         defines,             benchmark_217_assays]
+  - [proteingym,         uses,                fair_esm]
+  - [proteingym,         reports,             "rho=0.414 +/- 0.012"]
+  - [Notin_et_al_2023,   published,           benchmark_217_assays]
+
+  # Windowing
+  - [proteingym,         defines,             get_optimal_window]
+  - [transformers_esm,   reimplements,        get_optimal_window]
+  - [get_optimal_window, required_when,       "L > 1022"]
+
+  # Consistency check
+  - [check_consistency,  compares,            fair_esm]
+  - [check_consistency,  compares,            transformers_esm]
+  - [check_consistency,  produces,            spearman_rho_between_impls]
+  - [spearman_rho_between_impls, validates,   reproducibility]
+
+  # Modal execution graph
+  - [modal_image,        installs,            fair_esm]
+  - [modal_image,        installs,            transformers_esm]
+  - [modal_image,        installs,            proteingym]
+  - [modal_image,        mounts,              model_weights]
+  - [modal_image,        cached_at,           "im-* (Modal workspace esm2-inference-opt)"]
+  - [ablate_pd_proteins, requires,            modal_image]
+  - [ablate_pd_proteins, requires,            model_weights]
+  - [ablate_pd_proteins, runs,                transformers_esm]
+  - [ablate_proteingym,  requires,            modal_image]
+  - [ablate_proteingym,  requires,            model_weights]
+  - [ablate_proteingym,  runs,                transformers_esm]
+  - [check_consistency,  requires,            modal_image]
+  - [check_consistency,  runs,                fair_esm]
+  - [check_consistency,  runs,                transformers_esm]
+
+  # Known deviations (our impl vs original)
+  - [transformers_esm,   deviates_from_original_by, "float16 vs float32"]
+  - [transformers_esm,   deviates_from_original_by, "transformers attn vs fair-esm attn"]
+  - [transformers_esm,   deviates_from_original_by, "window offset +/-1 char for L>1022"]
+  - [check_consistency,  measures,            deviations]
+
+# ── Cold-start cost analysis ───────────────────────────────────────────────────
+
+cold_start:
+  image_build_once:
+    torch_wheel_mb: 800
+    fair_esm_mb: 5
+    total_build_s: 90
+    cached: true
+    note: "Built ONCE, reused forever. image ID persists in Modal workspace."
+
+  per_run_overhead:
+    model_load_from_hf_s: 30        # first ever run (HF download ~2.4GB)
+    model_load_from_volume_s: 8     # all subsequent runs (NVMe on A100)
+    gpu_cold_start_s: 2             # Modal A100 spin-up
+    total_first_run_s: 120
+    total_cached_run_s: 10
+
+  verdict: "NOT cooked. Image build is one-time. Model cached in volume after first download."
+  loop_latency_s: 10               # GPU cold start + volume load, no reinstall

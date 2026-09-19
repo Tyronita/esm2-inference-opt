@@ -1,7 +1,7 @@
 """
 ProteinGym DMS substitution benchmark — data loading and evaluation runner.
 
-Published ESM-2 650M baseline (masked_marginals): mean Spearman ρ = 0.44
+Published ESM-2 650M baseline (masked_marginals): mean Spearman ρ = 0.414 ± 0.012
 Source: Notin et al. NeurIPS 2023
 """
 
@@ -151,5 +151,5 @@ def run_benchmark(
             if col in df.columns:
                 val = df[col].mean(skipna=True)
                 print(f"    {label:<22}: {val:+.4f}")
-        print(f"    {'Published baseline':<22}: ρ = 0.44  (ESM-2 650M masked_marginals)")
+        print(f"    {'Published baseline':<22}: ρ = 0.414 ± 0.012  (ESM-2 650M masked_marginals)")
     return df

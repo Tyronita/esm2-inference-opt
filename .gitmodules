@@ -1,0 +1,6 @@
+[submodule "refs/fair-esm"]
+	path = refs/fair-esm
+	url = https://github.com/facebookresearch/esm.git
+[submodule "refs/ProteinGym"]
+	path = refs/ProteinGym
+	url = https://github.com/OATML-Markslab/ProteinGym.git
