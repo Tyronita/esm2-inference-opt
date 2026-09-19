@@ -645,6 +645,14 @@ Updated by \texttt{paper/generate\_results.py} after each \texttt{pull\_results}
 
 \input{results_table}
 
+\subsection{Reference wall-clock times with commit provenance}
+
+The table below is the canonical timing record: every row carries the exact
+git SHA of the code that ran (\textbf{Code@run}) and the commit that persisted
+the data (\textbf{Data}).  Regenerate with \lstinline|python scripts/reference_times.py|.
+
+\input{reference_times}
+
 \begin{infobox}
 \textbf{Published target:} ESM-2 650M masked marginals,
 $\rho = 0.414 \pm 0.012$ (217 assays, Notin et al.\ 2023~\cite{notin2023proteingym}).
