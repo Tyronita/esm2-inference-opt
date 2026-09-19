@@ -73,34 +73,50 @@ def run_benchmark(
     device: str,
     assay_ids: list[str] | None = None,
     cache_dir: Path = Path("/tmp/proteingym_cache"),
+    on_assay_done=None,
+    timer=None,
 ) -> pd.DataFrame:
     """
     Run ProteinGym benchmark.
 
+    on_assay_done(row: dict) — optional callback fired after each assay.
+    Receives the full row dict including metrics and timing. Use for streaming
+    JSONL writes or volume commits. Called in-process with ~0ms overhead.
+
+    timer — optional RunTimer instance for TTFT / β tracking.
+
     Returns DataFrame with all metrics per assay.
     """
+    from benchmark.timing import RunTimer
+
     ref      = fetch_reference(cache_dir)
     all_data = fetch_dms_data(cache_dir)
 
     if assay_ids is None:
         assay_ids = ref["DMS_id"].tolist()
 
+    # Feed remaining L² into timer for ETA
+    if timer is not None:
+        seq_lengths = []
+        for aid in assay_ids:
+            rr = ref[ref["DMS_id"] == aid]
+            if not rr.empty:
+                seq_lengths.append(len(rr["target_seq"].iloc[0]))
+        timer.set_remaining_L2(seq_lengths)
+
     rows = []
     for assay_id in assay_ids:
-        # Match by DMS_id in reference
         ref_row = ref[ref["DMS_id"] == assay_id]
         if ref_row.empty:
             print(f"  [SKIP] {assay_id} — not in reference")
             continue
 
-        # Find matching CSV (stem may differ from DMS_id)
         dms_df = None
         for key in all_data:
             if assay_id in key or key in assay_id:
                 dms_df = all_data[key]
                 break
         if dms_df is None:
-            # Try exact match
             dms_df = all_data.get(assay_id)
         if dms_df is None:
             print(f"  [SKIP] {assay_id} — CSV not found")
@@ -122,25 +138,31 @@ def run_benchmark(
             continue
         wall_s = time.perf_counter() - t0
 
-        # Count forward passes: unique positions needed
         unique_positions = len({int(m[1:-1]) for v in variants for m in v.split(":")})
-
         metrics = compute_all(scores, fitness, fitness_bin)
+
         row = {
-            "assay_id":       assay_id,
+            "assay_id":        assay_id,
             "sequence_length": L,
-            "n_variants":     N,
-            "wall_s":         round(wall_s, 3),
-            "variants_per_s": round(N / wall_s, 1) if wall_s > 0 else 0,
+            "n_variants":      N,
+            "wall_s":          round(wall_s, 3),
+            "variants_per_s":  round(N / wall_s, 1) if wall_s > 0 else 0,
             "unique_positions": unique_positions,
+            "beta":            round(wall_s / (L * L), 8) if L > 0 else None,
             **metrics,
         }
         rows.append(row)
 
-        rho = metrics.get("spearman_rho", float("nan"))
-        print(f"ρ={rho:+.3f}  {wall_s:.1f}s")
+        if timer is not None:
+            timer.record(L, wall_s)
 
-        # Explicitly free GPU cache between assays for long sequences
+        rho = metrics.get("spearman_rho", float("nan"))
+        eta_str = f"  {timer.summary_line()}" if timer else ""
+        print(f"ρ={rho:+.3f}  {wall_s:.1f}s{eta_str}")
+
+        if on_assay_done is not None:
+            on_assay_done(row)
+
         if L > 500:
             torch.cuda.empty_cache()
 
@@ -152,4 +174,11 @@ def run_benchmark(
                 val = df[col].mean(skipna=True)
                 print(f"    {label:<22}: {val:+.4f}")
         print(f"    {'Published baseline':<22}: ρ = 0.414 ± 0.012  (ESM-2 650M masked_marginals)")
+        if timer is not None:
+            r = timer.final_report()
+            print(f"\n  ── Timing ──")
+            print(f"    model_load           : {r['model_load_s']}s")
+            print(f"    TTFT                 : {r['ttft_s']}s")
+            print(f"    β̂ (median)          : {r['beta_hat']:.3e} s/(AA)²  (n={r['beta_n']})")
+            print(f"    total elapsed        : {r['elapsed_s']}s")
     return df

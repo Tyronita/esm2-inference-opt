@@ -248,32 +248,56 @@ def ablate_pd_proteins():
     """All scoring methods on PD-relevant assays. Fast (~15 min on A100)."""
     import pandas as pd
     import torch
+    import datetime, json
     from benchmark.proteingym import PD_ASSAY_IDS
+    from benchmark.timing import RunTimer
     from scoring.registry import get_registry
 
     device = "cuda"
     gpu_name = torch.cuda.get_device_name(0)
     _print_banner("ESM-2 650M — PD Protein Ablation (all methods)", gpu_name)
 
+    job_start_ts = datetime.datetime.utcnow().isoformat() + "Z"
     model, tok = load_model(device)
-    registry = get_registry(device)
+    model_loaded_ts = datetime.datetime.utcnow().isoformat() + "Z"
 
+    registry = get_registry(device)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     pg_cache = CACHE_DIR / "proteingym"
 
     from benchmark.proteingym import run_benchmark
 
+    # JSONL stream — one line per assay, never truncated
+    jsonl_path = RESULTS_DIR / "pd_proteins_stream.jsonl"
+
     all_results = {}
     for method in registry:
         print(f"\n{'─'*60}")
-        print(f"  Method : {method.name}")
-        print(f"  Passes : {method.passes}")
+        print(f"  Method : {method.name}   [{method.passes} passes/assay]")
         print(f"  Source : {method.source}")
         print(f"  Note   : {method.note}")
         print(f"{'─'*60}")
         torch.cuda.reset_peak_memory_stats()
 
-        df = run_benchmark(method.fn, model, tok, device, assay_ids=PD_ASSAY_IDS, cache_dir=pg_cache)
+        timer = RunTimer(method.name, len(PD_ASSAY_IDS))
+        timer.mark_model_loaded()
+        commit_counter = [0]
+
+        def on_done(row, method_name=method.name):
+            row["method"] = method_name
+            row["gpu"] = gpu_name
+            row["ts"] = datetime.datetime.utcnow().isoformat() + "Z"
+            with open(jsonl_path, "a") as f:
+                f.write(json.dumps(row) + "\n")
+            commit_counter[0] += 1
+            if commit_counter[0] % 2 == 0:   # commit every 2 (PD only has 3 assays)
+                vol.commit()
+
+        df = run_benchmark(
+            method.fn, model, tok, device,
+            assay_ids=PD_ASSAY_IDS, cache_dir=pg_cache,
+            on_assay_done=on_done, timer=timer,
+        )
 
         if not df.empty:
             df["method"]       = method.name
@@ -320,16 +344,21 @@ def ablate_proteingym():
     Reproduces and extends Table 1 of Notin et al. NeurIPS 2023.
     Runtime: ~3-4 hr on A100 40GB (dominated by masked_marginals and pseudo_ppl).
     """
+    import datetime, json
     import pandas as pd
     import torch
     from benchmark.proteingym import run_benchmark
+    from benchmark.timing import RunTimer
     from scoring.registry import get_registry
 
     device = "cuda"
     gpu_name = torch.cuda.get_device_name(0)
     _print_banner("ESM-2 650M — Full ProteinGym Ablation (217 assays × all methods)", gpu_name)
 
+    job_start_ts = datetime.datetime.utcnow().isoformat() + "Z"
     model, tok = load_model(device)
+    model_loaded_ts = datetime.datetime.utcnow().isoformat() + "Z"
+
     registry = get_registry(device)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     pg_cache = CACHE_DIR / "proteingym"
@@ -342,7 +371,27 @@ def ablate_proteingym():
         print(f"{'─'*60}")
         torch.cuda.reset_peak_memory_stats()
 
-        df = run_benchmark(method.fn, model, tok, device, assay_ids=None, cache_dir=pg_cache)
+        # Streaming JSONL — one line per assay, appended as results arrive
+        jsonl_path = RESULTS_DIR / f"{method.name}_stream.jsonl"
+        timer = RunTimer(method.name, 217)
+        timer.mark_model_loaded()
+        commit_counter = [0]
+
+        def on_done(row, method_name=method.name, jpath=jsonl_path):
+            row["method"] = method_name
+            row["gpu"] = gpu_name
+            row["ts"] = datetime.datetime.utcnow().isoformat() + "Z"
+            with open(jpath, "a") as f:
+                f.write(json.dumps(row) + "\n")
+            commit_counter[0] += 1
+            if commit_counter[0] % 10 == 0:   # flush every 10 assays, ~100ms overhead
+                vol.commit()
+
+        df = run_benchmark(
+            method.fn, model, tok, device,
+            assay_ids=None, cache_dir=pg_cache,
+            on_assay_done=on_done, timer=timer,
+        )
 
         if not df.empty:
             df["method"]       = method.name
@@ -529,6 +578,81 @@ def check_consistency(n: int = 200):
 
     print(f"\n  Saved → {RESULTS_DIR}/consistency.json")
     return out
+
+
+# ── torch.profiler trace — run once to see where time actually goes ───────────
+
+@app.function(
+    gpu="A100",
+    timeout=600,
+    volumes={str(CACHE_DIR): vol},
+)
+def profile_snca():
+    """
+    Profile masked_marginals on SNCA (L=140) using torch.profiler.
+    Writes a Chrome trace JSON to results/traces/snca_profile.json.
+    View with: chrome://tracing  or  https://ui.perfetto.dev
+
+    Cost: ~$0.05 (few minutes on A100).
+
+    Run:
+        python -m modal run modal_app.py::profile_snca
+        python -m modal volume get esm2-weights results/traces/snca_profile.json .
+    """
+    import datetime
+    import torch
+    from torch.profiler import ProfilerActivity, profile, record_function
+    from transformers import AutoTokenizer, EsmForMaskedLM
+
+    SNCA_SEQ = (
+        "MDVFMKGLSKAKEGVVAAAEKTKQGVAEAAGKTKEGVLYVGSKTKEGVVHGVATVAEKTK"
+        "EQVTNVGGAVVTGVTAVAQKTVEGAGSIAAATGFVKKDQLGKNEEGAPQEGILEDMPVDP"
+        "DNEAYEMPSEEGYQDYEPEA"
+    )
+    VARIANTS = ["A53T", "E46K", "A30P", "G51D", "H50Q"]
+    device = "cuda"
+
+    tok = AutoTokenizer.from_pretrained(MODEL_ID, cache_dir=str(CACHE_DIR))
+    model = EsmForMaskedLM.from_pretrained(
+        MODEL_ID, cache_dir=str(CACHE_DIR), torch_dtype=torch.float16
+    ).eval().to(device)
+
+    enc = tok(SNCA_SEQ, return_tensors="pt", add_special_tokens=True).to(device)
+    mask_id = tok.mask_token_id
+
+    trace_dir = RESULTS_DIR / "traces"
+    trace_dir.mkdir(parents=True, exist_ok=True)
+    ts = datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    trace_path = str(trace_dir / f"{ts}_snca_profile.json")
+
+    # Warm up — not profiled
+    with torch.no_grad():
+        ids = enc["input_ids"].clone(); ids[0, 1] = mask_id
+        _ = model(input_ids=ids).logits
+
+    with profile(
+        activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+        record_shapes=True,
+        profile_memory=True,
+        with_stack=False,
+        on_trace_ready=torch.profiler.tensorboard_trace_handler(str(trace_dir)),
+    ) as prof:
+        with torch.no_grad():
+            for pos_1 in range(1, min(21, len(SNCA_SEQ) + 1)):   # profile first 20 passes
+                with record_function(f"mask_pos_{pos_1}"):
+                    ids = enc["input_ids"].clone()
+                    ids[0, pos_1] = mask_id
+                    logits = model(input_ids=ids).logits
+                    _ = torch.log_softmax(logits[0, pos_1].float(), dim=-1)
+
+    prof.export_chrome_trace(trace_path)
+    vol.commit()
+
+    # Summary table
+    print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=15))
+    print(f"\n  Chrome trace → {trace_path}")
+    print(f"  View at: chrome://tracing  (load the .json)")
+    return {"trace_path": trace_path}
 
 
 # ── Pull results from Modal volume to local results/log.md ────────────────────

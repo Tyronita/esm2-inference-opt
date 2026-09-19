@@ -95,6 +95,44 @@ From `smoke_test.py` on M3 MPS:
 
 ---
 
+## All ESM-2 model configs (from paper + ProteinGym benchmark)
+
+Architecture from `refs/fair-esm/esm/model/esm2.py`: FFN = 4 × d, RoPE positional encoding,
+pre-LayerNorm, GELU. No positional embeddings beyond RoPE. Max input = 1024 tokens (1022 AA + BOS/EOS).
+
+| Model ID | Layers | d | Heads | FFN | Params | ProteinGym ρ | Rank |
+|---|---|---|---|---|---|---|---|
+| esm2_t6_8M_UR50D | 6 | 320 | 20 | 1280 | 8M | 0.226 ± 0.015 | 93 |
+| esm2_t12_35M_UR50D | 12 | 480 | 20 | 1920 | 35M | 0.321 ± 0.015 | 84 |
+| esm2_t30_150M_UR50D | 30 | 640 | 20 | 2560 | 150M | 0.387 ± 0.013 | 62 |
+| **esm2_t33_650M_UR50D** | **33** | **1280** | **20** | **5120** | **650M** | **0.414 ± 0.012** | **45** |
+| esm2_t36_3B_UR50D | 36 | 2560 | 40 | 10240 | 3B | 0.406 ± 0.011 | 50 |
+| esm2_t48_15B_UR50D | 48 | 5120 | 40 | 20480 | 15B | 0.400 ± 0.010 | 52 |
+
+Source: `refs/ProteinGym/benchmarks/.../Summary_performance_DMS_substitutions_Spearman.csv`
+Architecture: `refs/fair-esm/esm/model/esm2.py:14`
+
+**Key observation from paper**: 650M is the sweet spot. 3B and 15B are *worse* on ProteinGym
+despite 5–23× more parameters. The scaling law doesn't hold for variant effect prediction —
+larger models overfit to evolutionary structure that doesn't transfer to fitness.
+
+---
+
+## Empirical timing model
+
+`t(L) = β × L²` — total cost of masked_marginals on a sequence of length L.
+L passes (one per position) × O(L) tokens per pass = O(L²).
+
+| Hardware | β (s/(AA)²) | Source |
+|---|---|---|
+| M3 MPS (measured) | 8.25 × 10⁻⁴ | SNCA + LRRK2 timing |
+| A100 40GB (expected) | ~1.6 × 10⁻⁵ | ~50× MPS speedup |
+
+β̂ is fit from live data during every Modal run — `RunTimer` in `benchmark/timing.py`
+maintains a rolling median β̂ and prints ETA after each assay.
+
+---
+
 ## Running
 
 ```bash
