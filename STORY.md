@@ -269,3 +269,19 @@ Wall total: 2.9s · Hardware: NVIDIA A100-SXM4-40GB · Integrity: Merkle `889c17
 | BRCA1_HUMAN_Findlay_2018                      | L=1863  | N=1837   | ρ=+0.5136 | β=1.40e-07 | 0.5s |
 | A0A140D2T1_ZIKV_Sourisseau_2019               | L=3423  | N=9576   | ρ=+0.2086 | β=9.00e-08 | 1.0s |
 
+
+---
+
+### 2026-09-19 · `e3567c1` · nialloleary
+
+**feat: full LaTeX report + chat index + method results hooks**
+
+LaTeX reproducibility report added (paper/report.tex) with method math, architecture table, related papers, empirical timing model. EventLog class added (benchmark/events.py): append-only JSONL of job_start, model_loaded, assay_start, assay_done events for timeline plots.
+
+| | |
+|---|---|
+| SHA | `e3567c142f8fd688a6eaa4bb7093b2a432dc6d99` |
+| Changed | 9 files changed, 1527 insertions(+), 182 deletions(-) |
+| Files | `.githooks/post-commit`  `STORY.md`  `chat/index.md`  `paper/chat_index.tex`  `paper/report.tex`  `paper/results_table.tex`  _3 more_ |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert e3567c1 --no-edit` |
