@@ -32,12 +32,14 @@ import modal
 # ── Reproducible image — all implementations baked in ────────────────────────
 image = (
     modal.Image.debian_slim(python_version="3.11")
-    # Step 1: PyTorch (CUDA 12.1) — largest wheel, downloaded once and cached
+    # Step 1: git — needed to install fair-esm from pinned SHA
+    .run_commands("apt-get update -qq && apt-get install -y --no-install-recommends git")
+    # Step 2: PyTorch (CUDA 12.1) — largest wheel, downloaded once and cached
     .pip_install(
         "torch==2.4.0",
         extra_index_url="https://download.pytorch.org/whl/cu121",
     )
-    # Step 2: fair-esm at exact pinned SHA (2b369911)
+    # Step 3: fair-esm at exact pinned SHA (2b369911)
     # Requirements: none declared in setup.py beyond torch; biopython is a soft dep
     # Source: refs/fair-esm/setup.py
     .pip_install(
