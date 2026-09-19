@@ -24,11 +24,15 @@ DMS_ZIP_URL = (
     "DMS_ProteinGym_substitutions.zip"
 )
 
-# PD-relevant assay IDs (LewyGym focus)
+# PD-relevant assay IDs in ProteinGym 217 substitution benchmark.
+# Note: LRRK2 and GBA are NOT in the 217-assay set — not published there.
+# PRKN (Parkin/PARK2) is the second PD gene present.
+# BRCA1 and ZIKV-NS5 added for length diversity: L=1863, L=3423 (tests L² scaling).
 PD_ASSAY_IDS = [
-    "SYUA_HUMAN_Newberry_2020",   # SNCA — α-synuclein; A53T, E46K, A30P live here
-    "LRKK2_HUMAN_Zeng_2023",      # LRRK2
-    "GBA_HUMAN_Petrosino_2021",   # GBA
+    "SYUA_HUMAN_Newberry_2020",       # SNCA α-synuclein  L=140  (PD, A53T/E46K/A30P)
+    "PRKN_HUMAN_Clausen_2023",        # Parkin/PARK2       L=465  (PD)
+    "BRCA1_HUMAN_Findlay_2018",       # BRCA1              L=1863 (long, windowing test)
+    "A0A140D2T1_ZIKV_Sourisseau_2019",# ZIKV NS5           L=3423 (longest in PG, L² cost)
 ]
 
 
@@ -179,6 +183,8 @@ def run_benchmark(
             print(f"\n  ── Timing ──")
             print(f"    model_load           : {r['model_load_s']}s")
             print(f"    TTFT                 : {r['ttft_s']}s")
-            print(f"    β̂ (median)          : {r['beta_hat']:.3e} s/(AA)²  (n={r['beta_n']})")
+            bh = r['beta_hat']
+            bh_str = f"{bh:.3e}" if bh is not None else "n/a (need ≥2 assays)"
+            print(f"    β̂ (median)          : {bh_str} s/(AA)²  (n={r['beta_n']})")
             print(f"    total elapsed        : {r['elapsed_s']}s")
     return df
