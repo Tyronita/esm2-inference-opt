@@ -320,7 +320,7 @@ def compare_tracks(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP):
 
     pg_cache  = CACHE_DIR / "proteingym"
     reference = fetch_reference(pg_cache)
-    fetch_dms_data(pg_cache)
+    dms_dir   = fetch_dms_data(pg_cache)   # returns Path to dir of extracted CSVs
 
     # ── Load both models ──────────────────────────────────────────────────────
     print("Loading Track A (fair-esm fp32)...")
@@ -353,9 +353,9 @@ def compare_tracks(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP):
     assays = []
     for _, ref_row in reference.iterrows():
         assay_id = ref_row["DMS_id"]
-        dms_file = pg_cache / "DMS_substitutions" / ref_row["DMS_filename"]
+        dms_file = dms_dir / ref_row["DMS_filename"]
         if not dms_file.exists():
-            print(f"  SKIP {assay_id} — data file not found")
+            print(f"  SKIP {assay_id} — {ref_row['DMS_filename']} not in cache")
             continue
         dms = pd.read_csv(dms_file)
         assays.append({
@@ -655,7 +655,7 @@ def ablate_ref_proteingym(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP, meth
 
     pg_cache  = CACHE_DIR / "proteingym"
     reference = fetch_reference(pg_cache)
-    fetch_dms_data(pg_cache)
+    dms_dir   = fetch_dms_data(pg_cache)
 
     # Build set of already-done (assay, method) pairs to support resuming
     done: set[tuple[str, str]] = set()
@@ -679,7 +679,7 @@ def ablate_ref_proteingym(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP, meth
             if (assay_id, method.name) in done:
                 continue
 
-            dms_file = pg_cache / "DMS_substitutions" / ref_row["DMS_filename"]
+            dms_file = dms_dir / ref_row["DMS_filename"]
             if not dms_file.exists():
                 print(f"    SKIP {assay_id} — data file not found")
                 continue

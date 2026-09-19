@@ -47,27 +47,35 @@ def fetch_reference(cache_dir: Path) -> pd.DataFrame:
     return pd.read_csv(ref_path)
 
 
-def fetch_dms_data(cache_dir: Path) -> dict[str, pd.DataFrame]:
+def fetch_dms_data(cache_dir: Path) -> Path:
+    """Download and extract DMS CSVs. Returns the directory containing them."""
     zip_path = cache_dir / "DMS_substitutions.zip"
-    dms_dir  = cache_dir / "dms_files"
+    dms_dir  = cache_dir / "DMS_substitutions"   # matches ref_row["DMS_filename"] lookup
 
-    if not dms_dir.exists():
+    if not dms_dir.exists() or not any(dms_dir.glob("*.csv")):
         if not zip_path.exists():
             print("  Downloading ProteinGym DMS data (~500MB)...")
-            r = requests.get(DMS_ZIP_URL, stream=True, timeout=300)
+            r = requests.get(DMS_ZIP_URL, stream=True, timeout=600)
             r.raise_for_status()
             with open(zip_path, "wb") as f:
                 for chunk in r.iter_content(chunk_size=65536):
                     f.write(chunk)
-        print("  Extracting DMS files...")
-        with zipfile.ZipFile(zip_path) as z:
-            z.extractall(dms_dir)
+            print(f"  Downloaded {zip_path.stat().st_size / 1e6:.0f} MB")
 
-    assays = {}
-    for csv_path in sorted(dms_dir.rglob("*.csv")):
-        assays[csv_path.stem] = pd.read_csv(csv_path)
-    print(f"  Loaded {len(assays)} DMS assays from cache")
-    return assays
+        print("  Extracting DMS files...")
+        dms_dir.mkdir(parents=True, exist_ok=True)
+        with zipfile.ZipFile(zip_path) as z:
+            # Zip may have a top-level folder — flatten everything to dms_dir/
+            for member in z.namelist():
+                if member.endswith(".csv"):
+                    data = z.read(member)
+                    dest = dms_dir / Path(member).name
+                    dest.write_bytes(data)
+
+        n = len(list(dms_dir.glob("*.csv")))
+        print(f"  Extracted {n} CSV files → {dms_dir}")
+
+    return dms_dir
 
 
 def run_benchmark(
@@ -95,8 +103,8 @@ def run_benchmark(
     """
     from benchmark.timing import RunTimer
 
-    ref      = fetch_reference(cache_dir)
-    all_data = fetch_dms_data(cache_dir)
+    ref     = fetch_reference(cache_dir)
+    dms_dir = fetch_dms_data(cache_dir)
 
     if assay_ids is None:
         assay_ids = ref["DMS_id"].tolist()
@@ -117,16 +125,12 @@ def run_benchmark(
             print(f"  [SKIP] {assay_id} — not in reference")
             continue
 
-        dms_df = None
-        for key in all_data:
-            if assay_id in key or key in assay_id:
-                dms_df = all_data[key]
-                break
-        if dms_df is None:
-            dms_df = all_data.get(assay_id)
-        if dms_df is None:
-            print(f"  [SKIP] {assay_id} — CSV not found")
+        fname   = ref_row["DMS_filename"].iloc[0]
+        dms_path = dms_dir / fname
+        if not dms_path.exists():
+            print(f"  [SKIP] {assay_id} — CSV not found ({fname})")
             continue
+        dms_df = pd.read_csv(dms_path)
 
         sequence = ref_row["target_seq"].iloc[0]
         variants = dms_df["mutant"].tolist()
