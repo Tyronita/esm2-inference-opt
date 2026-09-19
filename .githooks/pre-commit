@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Guard: refuse commits that modify the pinned source code in refs/.
+#
+# refs/fair-esm and refs/ProteinGym are source-of-truth submodules.
+# We pin them to exact SHAs so every result is reproducible.
+# Modifying their files would silently break the reproducibility guarantee.
+#
+# Allowed: updating the submodule pointer (e.g. intentional SHA bump with a note).
+# Blocked: any edits to .py files inside refs/fair-esm/ or refs/ProteinGym/.
+
+PINNED_ESM="2b369911bb5b4b0dda914521b9475cad1656b2ac"
+PINNED_PG="144fe22b07dfaeec2b366f2346203a9838a55b4c"
+
+# Check for staged changes inside the submodule trees
+dirty_esm=$(git diff --cached --name-only | grep "^refs/fair-esm/")
+dirty_pg=$(git diff --cached --name-only | grep "^refs/ProteinGym/")
+
+if [[ -n "$dirty_esm" || -n "$dirty_pg" ]]; then
+  echo ""
+  echo "  ╔════════════════════════════════════════════════════════════╗"
+  echo "  ║  PRE-COMMIT BLOCKED — source submodule modified           ║"
+  echo "  ╠════════════════════════════════════════════════════════════╣"
+  [[ -n "$dirty_esm" ]] && echo "  ║  refs/fair-esm/ has staged changes (pinned @ $PINNED_ESM)  ║"
+  [[ -n "$dirty_pg"  ]] && echo "  ║  refs/ProteinGym/ has staged changes (pinned @ $PINNED_PG) ║"
+  echo "  ╠════════════════════════════════════════════════════════════╣"
+  echo "  ║  These are pinned source-of-truth copies.                 ║"
+  echo "  ║  To update a pin intentionally: git -C refs/fair-esm      ║"
+  echo "  ║  checkout <new-sha>, update .gitmodules, then commit       ║"
+  echo "  ║  with a note explaining the SHA bump.                     ║"
+  echo "  ╚════════════════════════════════════════════════════════════╝"
+  echo ""
+  exit 1
+fi
+
+# Warn if submodule pointer has changed (not a hard block — may be intentional)
+current_esm=$(git -C refs/fair-esm rev-parse HEAD 2>/dev/null)
+current_pg=$(git  -C refs/ProteinGym rev-parse HEAD 2>/dev/null)
+
+if [[ "$current_esm" != "$PINNED_ESM" ]]; then
+  echo "  [pre-commit] WARNING: fair-esm is at $current_esm (expected $PINNED_ESM)"
+  echo "  If this is intentional, update PINNED_ESM in .githooks/pre-commit."
+fi
+
+if [[ "$current_pg" != "$PINNED_PG" ]]; then
+  echo "  [pre-commit] WARNING: ProteinGym is at $current_pg (expected $PINNED_PG)"
+fi
+
+exit 0

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Auto-append story entry after every non-story commit.
+
+# Recursion guard: skip if this IS a story commit
+last_msg=$(git log --format=%s -1)
+if [[ "$last_msg" == "[story]"* ]]; then
+  exit 0
+fi
+
+# Require python to be available
+python_bin=$(command -v python3 || command -v python)
+if [[ -z "$python_bin" ]]; then
+  echo "  [story] skipped — python not found"
+  exit 0
+fi
+
+# Activate venv if present
+repo_root="$(git rev-parse --show-toplevel)"
+venv="$repo_root/.venv/bin/activate"
+[[ -f "$venv" ]] && source "$venv"
+
+# Append story entry
+"$python_bin" "$repo_root/scripts/story.py" || {
+  echo "  [story] story.py failed — skipping story commit"
+  exit 0
+}
+
+# Commit STORY.md as a [story] commit (--no-verify skips pre-commit only)
+short=$(git log --format=%h -1)
+msg=$(git log --format=%s -1 | cut -c1-60)
+git add STORY.md
+git diff --cached --quiet && exit 0   # nothing to commit
+git commit --no-verify -m "[story] $short: $msg"
