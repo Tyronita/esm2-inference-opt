@@ -349,3 +349,19 @@ feat: compare_tracks — all 217 assays, Track A + B, no cherry-picking
 | Files | `modal_app.py`  `scoring/registry.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert dbd6015 --no-edit` |
+
+---
+
+### 2026-09-20 · `576ee5b` · nialloleary
+
+**fix: DMS data path — fetch_dms_data extracts to DMS_substitutions/ flat dir**
+
+fix: DMS data path — fetch_dms_data extracts to DMS_substitutions/ flat dir
+
+| | |
+|---|---|
+| SHA | `576ee5b6d2f2d68bae596c4c842b11353da08e39` |
+| Changed | 2 files changed, 30 insertions(+), 26 deletions(-) |
+| Files | `benchmark/proteingym.py`  `modal_app.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 576ee5b --no-edit` |
