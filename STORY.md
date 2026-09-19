@@ -199,3 +199,19 @@ LaTeX reproducibility report added (paper/report.tex) with method math, architec
 | Files | `.gitignore`  `benchmark/events.py`  `benchmark/proteingym.py`  `modal_app.py`  `paper/build.sh`  `paper/generate_results.py`  _4 more_ |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 7dfe175 --no-edit` |
+
+---
+
+### 2026-09-19 · `2d88572` · nialloleary
+
+**feat: append-only story log + integrity hooks**
+
+results/log.md made append-only with timestamps. pull_results Modal entrypoint merges volume log → local log without overwriting.
+
+| | |
+|---|---|
+| SHA | `2d88572dc026c3990fd3ec257a8de4870d15352f` |
+| Changed | 5 files changed, 651 insertions(+) |
+| Files | `.githooks/post-commit`  `.githooks/pre-commit`  `STORY.md`  `benchmark/verify_integrity.py`  `scripts/story.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 2d88572 --no-edit` |
