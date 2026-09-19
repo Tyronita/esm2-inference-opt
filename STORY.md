@@ -285,3 +285,19 @@ LaTeX reproducibility report added (paper/report.tex) with method math, architec
 | Files | `.githooks/post-commit`  `STORY.md`  `chat/index.md`  `paper/chat_index.tex`  `paper/report.tex`  `paper/results_table.tex`  _3 more_ |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert e3567c1 --no-edit` |
+
+---
+
+### 2026-09-19 · `b2ba2b0` · nialloleary
+
+**fix: two-track integrity — pin transformers ESM production files by SHA256**
+
+Both source implementations pinned as git submodules with exact SHAs: fair-esm @ 2b369911 (the commit that produced ρ=0.414) and ProteinGym @ 144fe22b. Reproducibility gate added: fair-esm fp32 vs transformers fp16 on SNCA, ρ must be ≥ 0.999.
+
+| | |
+|---|---|
+| SHA | `b2ba2b0a29af33b33cb6d7e77026be0547ff4ea4` |
+| Changed | 2 files changed, 202 insertions(+), 62 deletions(-) |
+| Files | `benchmark/verify_integrity.py`  `paper/report.tex` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert b2ba2b0 --no-edit` |
