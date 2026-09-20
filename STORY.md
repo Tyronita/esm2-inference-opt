@@ -1529,3 +1529,19 @@ Add multi-task MLX inference: contact prediction, secondary structure, stability
 | Files | `benchmark/run_tasks.py`  `results/esmc_mlx_tasks.json`  `scoring/esmc/mlx_esmc.py`  `scoring/esmc/tasks/__init__.py`  `scoring/esmc/tasks/contact.py`  `scoring/esmc/tasks/secondary_structure.py`  _1 more_ |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert b7cbf4c --no-edit` |
+
+---
+
+### 2026-09-20 · `3ba84eb` · nialloleary
+
+**Add reproducible MLX vs MPS benchmark (5 runs, metal sync barriers)**
+
+Add reproducible MLX vs MPS benchmark (5 runs, metal sync barriers)
+
+| | |
+|---|---|
+| SHA | `3ba84ebc472ba6e28186a98d05e997b011b37bdc` |
+| Changed | 3 files changed, 1939 insertions(+) |
+| Files | `benchmark/mlx_vs_mps_bench.py`  `results/bench_20260920_215204.json`  `results/bench_20260920_215513.json` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 3ba84eb --no-edit` |
