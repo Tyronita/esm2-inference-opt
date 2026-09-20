@@ -87,7 +87,7 @@ image_c = (
     .pip_install(
         "esm>=3.0.0",
         "attrs",
-        "biopython==1.79",
+        # biopython: do NOT pin 1.79 — esm SDK requires >=1.80 (Bio.Data.PDBData)
         extra_index_url="https://download.pytorch.org/whl/cu121",
     )
     .pip_install(
