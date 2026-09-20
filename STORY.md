@@ -1593,3 +1593,19 @@ mlx-opt: throughput vs length curve (L=50..1000, opt=0,3)
 | Files | `results/evolve_length_curve.png`  `results/evolve_log.json` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 8eff571 --no-edit` |
+
+---
+
+### 2026-09-20 · `521db22` · nialloleary
+
+**mlx-opt: full overnight evolve results (5 levels + batch sweep + length curve)**
+
+mlx-opt: full overnight evolve results (5 levels + batch sweep + length curve)
+
+| | |
+|---|---|
+| SHA | `521db22d76d0d30faebd9be5f480883e33ba9ef3` |
+| Changed | 7 files changed, 188 insertions(+), 5 deletions(-) |
+| Files | `benchmark/evolve.py`  `refs/evolutionaryscale-esm`  `results/evolve_speedup.png`  `results/evolve_stdout.log`  `results/evolve_throughput.png`  `results/evolve_tradeoff.png`  _1 more_ |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 521db22 --no-edit` |
