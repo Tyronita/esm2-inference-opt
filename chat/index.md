@@ -208,37 +208,37 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 198 | 2026-09-19T23:28:36 | sure go for it | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 199 | 2026-09-19T23:47:22 | pls check progress, % done | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 200 | 2026-09-19T23:49:11 | pls ^ add this in an order and export the chat to include in our repo with anyth | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
-| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 203 | 2026-09-20T00:26:55 | progress on both pls | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
-| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 203 | 2026-09-20T00:26:55 | progress on both pls | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |
+| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `4da2fbe` | fix(image_c): remove biopython==1.79 pin — esm SDK |

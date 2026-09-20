@@ -1385,3 +1385,19 @@ Wall total: 0.0s · Hardware: NVIDIA A100-SXM4-40GB · Integrity: Merkle `889c17
 | YAP1_HUMAN_Araya_2012 | — | — | ρ=+0.4227 | β=— | — |
 | YNZC_BACSU_Tsuboyama_2023_2JVD | — | — | ρ=+0.6778 | β=— | — |
 
+
+---
+
+### 2026-09-20 · `4da2fbe` · nialloleary
+
+**fix(image_c): remove biopython==1.79 pin — esm SDK needs >=1.80 for Bio.Data.PDBData**
+
+Both source implementations pinned as git submodules with exact SHAs: fair-esm @ 2b369911 (the commit that produced ρ=0.414) and ProteinGym @ 144fe22b. Reproducibility gate added: fair-esm fp32 vs transformers fp16 on SNCA, ρ must be ≥ 0.999.
+
+| | |
+|---|---|
+| SHA | `4da2fbe0cfa12b8030e213f90a814ffae6d20ba4` |
+| Changed | 1 file changed, 1 insertion(+), 1 deletion(-) |
+| Files | `modal_app.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 4da2fbe --no-edit` |
