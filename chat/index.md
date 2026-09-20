@@ -208,31 +208,54 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 198 | 2026-09-19T23:28:36 | sure go for it | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 199 | 2026-09-19T23:47:22 | pls check progress, % done | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 200 | 2026-09-19T23:49:11 | pls ^ add this in an order and export the chat to include in our repo with anyth | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
-| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 203 | 2026-09-20T00:26:55 | progress on both pls | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
-| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `f26a73e` | docs: add strategy thought piece — ESM-2 intervent |
+| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 203 | 2026-09-20T00:26:55 | progress on both pls | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 235 | 2026-09-20T12:22:43 | results from A/B | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 236 | 2026-09-20T12:24:06 | get the timnings for track A pls | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 237 | 2026-09-20T12:24:50 | please save all these results to the repo | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 238 | 2026-09-20T12:27:00 | Check both Modal Track C jobs launched after the httpx fix (commit b9e6d6f). Rea | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 239 | 2026-09-20T12:43:32 | brainstorm a free way to run this... | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 240 | 2026-09-20T14:49:24 | bcaxukkdb toolu_01LSDXGB2WCuowbTWatZay5G /private/tmp/claude-501/-Users-niallole | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 241 | 2026-09-20T16:35:19 | hey status | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 242 | 2026-09-20T16:36:39 | install this, AIRS-Bench: a Suite of Tasks for Frontier AI Research Science Agen | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 243 | 2026-09-20T16:45:09 | CodeRetrievalCodeXGlueMRR <- what is this? | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 244 | 2026-09-20T16:45:57 | okay, here's what we're going to do, you see, Alxandria in my repo... please clo | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 245 | 2026-09-20T16:47:24 | great, now make it a parent of a series of my other repos we're going to iterati | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 246 | 2026-09-20T16:48:17 | i think Evolve needs to go...   │ Evolve                                         | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 247 | 2026-09-20T16:49:12 | sure, lets do this.... i feel as if we failed at this | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 248 | 2026-09-20T16:50:06 | yes please nest it under Alxandria... also include out next steps about how we'l | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 249 | 2026-09-20T16:57:53 | deleted it, the next thing is -> https://github.com/Tyronita/protein-language-mo | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 250 | 2026-09-20T16:58:43 | anything uncomitted on this repo? | `b2b228e` | docs: add inference cost analysis (from protein-la |
+| 251 | 2026-09-20T16:59:28 | Want me to migrate NUMBERS.md + the pd_variants CSVs (if not already in LewyGym) | `b2b228e` | docs: add inference cost analysis (from protein-la |
