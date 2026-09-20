@@ -166,8 +166,10 @@ Observed on M3 / 8GB:
 - Memory: ~700MB unified RAM
 - dtype: bfloat16 (MPS) — matches GPU behaviour
 
-**Flash Attention 2 not available on MPS.** Must pass `use_flash_attn=False` to
-`ESMC.from_pretrained()`. SDPA is used automatically.
+**Flash Attention 2 note:** the `flash_attn` package is CUDA-only (no MPS backend).
+`use_flash_attn=True` requests `attn_implementation="flash_attention_2"` from HuggingFace,
+but without `flash_attn` installed HuggingFace silently falls back to SDPA.
+Result: `use_flash_attn=True` and `False` behave identically on MPS.
 
 Key files:
 | File | What it does |

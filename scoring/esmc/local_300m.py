@@ -4,8 +4,14 @@ ESMC-300M local inference on Apple Silicon (MPS).
 Uses biohub/ESMC-300M via the EvolutionaryScale SDK.
 Run with: .venv-esmc/bin/python3 scoring/esmc/local_300m.py
 
-Flash Attention 2 is disabled — MPS uses SDPA instead.
+Attention: the `flash_attn` library is CUDA-only and is not installed here.
+When attn_implementation="flash_attention_2" is requested without flash_attn,
+HuggingFace silently falls back to SDPA. use_flash_attn=False is explicit but
+makes no practical difference on MPS — both paths land on SDPA.
+
 dtype: bfloat16 on MPS (matches GPU behaviour, saves ~600MB vs float32).
+
+Published ProteinGym ground truth (ρ target): 0.406 (rank #49/103 models).
 """
 import time
 import torch
