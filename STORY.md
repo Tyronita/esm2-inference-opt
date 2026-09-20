@@ -1481,3 +1481,19 @@ feat(esmc-300m): local MPS inference + refs entry
 | Files | `refs/README.md`  `scoring/esmc/local_300m.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 8d024ec --no-edit` |
+
+---
+
+### 2026-09-20 · `037b20b` · nialloleary
+
+**fix(esmc-300m): correct flash_attn/MPS comment, add ρ target**
+
+fix(esmc-300m): correct flash_attn/MPS comment, add ρ target
+
+| | |
+|---|---|
+| SHA | `037b20bb886d39cc0ecf0fe6beeac1fd7b1de0ec` |
+| Changed | 2 files changed, 11 insertions(+), 3 deletions(-) |
+| Files | `refs/README.md`  `scoring/esmc/local_300m.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 037b20b --no-edit` |
