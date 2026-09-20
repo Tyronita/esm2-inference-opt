@@ -1497,3 +1497,19 @@ fix(esmc-300m): correct flash_attn/MPS comment, add ρ target
 | Files | `refs/README.md`  `scoring/esmc/local_300m.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 037b20b --no-edit` |
+
+---
+
+### 2026-09-20 · `1aed4a1` · nialloleary
+
+**Add native MLX implementation of ESMC-300M/600M for Apple Silicon**
+
+Add native MLX implementation of ESMC-300M/600M for Apple Silicon
+
+| | |
+|---|---|
+| SHA | `1aed4a1669954bc54330ca241f58475e12266d4a` |
+| Changed | 1 file changed, 326 insertions(+) |
+| Files | `scoring/esmc/mlx_esmc.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 1aed4a1 --no-edit` |
