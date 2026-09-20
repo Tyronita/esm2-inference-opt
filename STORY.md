@@ -413,3 +413,19 @@ refactor: rename track labels A/B → fair-esm-fp32/hf-fp16
 | Files | `modal_app.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert e413132 --no-edit` |
+
+---
+
+### 2026-09-20 · `f26a73e` · nialloleary
+
+**docs: add strategy thought piece — ESM-2 interventions under $1000 budget**
+
+docs: add strategy thought piece — ESM-2 interventions under $1000 budget
+
+| | |
+|---|---|
+| SHA | `f26a73e5dae9b007f5b62be355db4caf589aa2e2` |
+| Changed | 1 file changed, 184 insertions(+) |
+| Files | `docs/thought_piece_esm2_strategy.md` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert f26a73e --no-edit` |
