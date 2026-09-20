@@ -208,79 +208,87 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 198 | 2026-09-19T23:28:36 | sure go for it | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 199 | 2026-09-19T23:47:22 | pls check progress, % done | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 200 | 2026-09-19T23:49:11 | pls ^ add this in an order and export the chat to include in our repo with anyth | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
-| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 203 | 2026-09-20T00:26:55 | progress on both pls | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 235 | 2026-09-20T12:22:43 | results from A/B | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 236 | 2026-09-20T12:24:06 | get the timnings for track A pls | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 237 | 2026-09-20T12:24:50 | please save all these results to the repo | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 238 | 2026-09-20T12:27:00 | Check both Modal Track C jobs launched after the httpx fix (commit b9e6d6f). Rea | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 239 | 2026-09-20T12:43:32 | brainstorm a free way to run this... | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 240 | 2026-09-20T14:49:24 | bcaxukkdb toolu_01LSDXGB2WCuowbTWatZay5G /private/tmp/claude-501/-Users-niallole | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 241 | 2026-09-20T16:35:19 | hey status | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 242 | 2026-09-20T16:36:39 | install this, AIRS-Bench: a Suite of Tasks for Frontier AI Research Science Agen | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 243 | 2026-09-20T16:45:09 | CodeRetrievalCodeXGlueMRR <- what is this? | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 244 | 2026-09-20T16:45:57 | okay, here's what we're going to do, you see, Alxandria in my repo... please clo | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 245 | 2026-09-20T16:47:24 | great, now make it a parent of a series of my other repos we're going to iterati | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 246 | 2026-09-20T16:48:17 | i think Evolve needs to go...   │ Evolve                                         | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 247 | 2026-09-20T16:49:12 | sure, lets do this.... i feel as if we failed at this | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 248 | 2026-09-20T16:50:06 | yes please nest it under Alxandria... also include out next steps about how we'l | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 249 | 2026-09-20T16:57:53 | deleted it, the next thing is -> https://github.com/Tyronita/protein-language-mo | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 250 | 2026-09-20T16:58:43 | anything uncomitted on this repo? | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 251 | 2026-09-20T16:59:28 | Want me to migrate NUMBERS.md + the pd_variants CSVs (if not already in LewyGym) | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 252 | 2026-09-20T17:19:18 | b8n8ujy3s toolu_012fF9EdKfNCmqoSAhJLy73D /private/tmp/claude-501/-Users-niallole | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 253 | 2026-09-20T17:33:01 | wait have you pushed up the other stuff | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 254 | 2026-09-20T17:34:24 | but did you grab the research from the other benchmark? | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 255 | 2026-09-20T17:40:11 | it was actually not just that, we also have https://github.com/Tyronita/protein- | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 256 | 2026-09-20T17:44:40 | please run ESMC-300m param model locally here on my mac, the biohub implementati | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 257 | 2026-09-20T17:52:54 | this is what i'd be interested in, is this model ESM-C on hugging face, what is  | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 258 | 2026-09-20T17:55:45 | but i mean, are per-assay ground-truths a thing? i.e. if we are using a mean/med | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 259 | 2026-09-20T18:00:14 | what is r? are these coded by someone and measurable? | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 260 | 2026-09-20T18:01:57 | great, so we've ran the esm crap, but did we run it on the GPU on my machine or  | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 261 | 2026-09-20T18:02:58 | modal we're out of money for now... pls kill this prgress... ESM-C how long did  | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 262 | 2026-09-20T18:03:50 | does the evolutionary scale offer an mps version? metals version? | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 263 | 2026-09-20T18:04:43 | how would you accelerate it? | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 264 | 2026-09-20T18:05:44 | ---   3. MLX (hardest, potentially 3-5× over compiled PyTorch on MPS)    Apple's | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 265 | 2026-09-20T18:16:20 | wait i cant even see the code man open it up, also pls rememember you're gonna h | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 266 | 2026-09-20T18:32:12 | how much mem vram does the m3 gpu i have here contain? the next big Q will be ho | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 267 | 2026-09-20T18:33:41 | a75332c4f2dcf01c1 toolu_01DayoeMWamPBJUQGtZ41VNb /private/tmp/claude-501/-Users- | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 268 | 2026-09-20T18:49:47 | a7b4ad87e3ee4f6e5 toolu_01CHePU7J48CkSSj6U5xK2S1 /private/tmp/claude-501/-Users- | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 269 | 2026-09-20T18:49:47 | a99616513835e7fa7 toolu_01RAmWVFXNYkWRxVurvG85he /private/tmp/claude-501/-Users- | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 270 | 2026-09-20T20:32:06 | open the ESMC paper, what tasks are shown, im trying to work out the FLOPS neede | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 271 | 2026-09-20T20:35:59 | can you please, do inference using our new MLX on the other tasks and datasets i | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 272 | 2026-09-20T20:45:36 | Results from MLX ESMC-300M — all three tasks    Task 1: Contact Prediction (P@L) | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 273 | 2026-09-20T20:46:55 | so 0.5 is the ground truth | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 274 | 2026-09-20T20:47:33 | │ Our result (raw attention, no training) │ 0.24                           │ <-  | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 275 | 2026-09-20T20:47:53 | run our mps vs mlx implementation for this task again pls | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
-| 276 | 2026-09-20T20:49:58 | oh thats interesting.... can you add this as working notes to the PR? is this re | `3ba84eb` | Add reproducible MLX vs MPS benchmark (5 runs, met |
+| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 203 | 2026-09-20T00:26:55 | progress on both pls | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 235 | 2026-09-20T12:22:43 | results from A/B | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 236 | 2026-09-20T12:24:06 | get the timnings for track A pls | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 237 | 2026-09-20T12:24:50 | please save all these results to the repo | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 238 | 2026-09-20T12:27:00 | Check both Modal Track C jobs launched after the httpx fix (commit b9e6d6f). Rea | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 239 | 2026-09-20T12:43:32 | brainstorm a free way to run this... | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 240 | 2026-09-20T14:49:24 | bcaxukkdb toolu_01LSDXGB2WCuowbTWatZay5G /private/tmp/claude-501/-Users-niallole | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 241 | 2026-09-20T16:35:19 | hey status | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 242 | 2026-09-20T16:36:39 | install this, AIRS-Bench: a Suite of Tasks for Frontier AI Research Science Agen | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 243 | 2026-09-20T16:45:09 | CodeRetrievalCodeXGlueMRR <- what is this? | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 244 | 2026-09-20T16:45:57 | okay, here's what we're going to do, you see, Alxandria in my repo... please clo | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 245 | 2026-09-20T16:47:24 | great, now make it a parent of a series of my other repos we're going to iterati | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 246 | 2026-09-20T16:48:17 | i think Evolve needs to go...   │ Evolve                                         | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 247 | 2026-09-20T16:49:12 | sure, lets do this.... i feel as if we failed at this | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 248 | 2026-09-20T16:50:06 | yes please nest it under Alxandria... also include out next steps about how we'l | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 249 | 2026-09-20T16:57:53 | deleted it, the next thing is -> https://github.com/Tyronita/protein-language-mo | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 250 | 2026-09-20T16:58:43 | anything uncomitted on this repo? | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 251 | 2026-09-20T16:59:28 | Want me to migrate NUMBERS.md + the pd_variants CSVs (if not already in LewyGym) | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 252 | 2026-09-20T17:19:18 | b8n8ujy3s toolu_012fF9EdKfNCmqoSAhJLy73D /private/tmp/claude-501/-Users-niallole | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 253 | 2026-09-20T17:33:01 | wait have you pushed up the other stuff | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 254 | 2026-09-20T17:34:24 | but did you grab the research from the other benchmark? | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 255 | 2026-09-20T17:40:11 | it was actually not just that, we also have https://github.com/Tyronita/protein- | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 256 | 2026-09-20T17:44:40 | please run ESMC-300m param model locally here on my mac, the biohub implementati | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 257 | 2026-09-20T17:52:54 | this is what i'd be interested in, is this model ESM-C on hugging face, what is  | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 258 | 2026-09-20T17:55:45 | but i mean, are per-assay ground-truths a thing? i.e. if we are using a mean/med | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 259 | 2026-09-20T18:00:14 | what is r? are these coded by someone and measurable? | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 260 | 2026-09-20T18:01:57 | great, so we've ran the esm crap, but did we run it on the GPU on my machine or  | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 261 | 2026-09-20T18:02:58 | modal we're out of money for now... pls kill this prgress... ESM-C how long did  | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 262 | 2026-09-20T18:03:50 | does the evolutionary scale offer an mps version? metals version? | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 263 | 2026-09-20T18:04:43 | how would you accelerate it? | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 264 | 2026-09-20T18:05:44 | ---   3. MLX (hardest, potentially 3-5× over compiled PyTorch on MPS)    Apple's | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 265 | 2026-09-20T18:16:20 | wait i cant even see the code man open it up, also pls rememember you're gonna h | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 266 | 2026-09-20T18:32:12 | how much mem vram does the m3 gpu i have here contain? the next big Q will be ho | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 267 | 2026-09-20T18:33:41 | a75332c4f2dcf01c1 toolu_01DayoeMWamPBJUQGtZ41VNb /private/tmp/claude-501/-Users- | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 268 | 2026-09-20T18:49:47 | a7b4ad87e3ee4f6e5 toolu_01CHePU7J48CkSSj6U5xK2S1 /private/tmp/claude-501/-Users- | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 269 | 2026-09-20T18:49:47 | a99616513835e7fa7 toolu_01RAmWVFXNYkWRxVurvG85he /private/tmp/claude-501/-Users- | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 270 | 2026-09-20T20:32:06 | open the ESMC paper, what tasks are shown, im trying to work out the FLOPS neede | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 271 | 2026-09-20T20:35:59 | can you please, do inference using our new MLX on the other tasks and datasets i | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 272 | 2026-09-20T20:45:36 | Results from MLX ESMC-300M — all three tasks    Task 1: Contact Prediction (P@L) | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 273 | 2026-09-20T20:46:55 | so 0.5 is the ground truth | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 274 | 2026-09-20T20:47:33 | │ Our result (raw attention, no training) │ 0.24                           │ <-  | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 275 | 2026-09-20T20:47:53 | run our mps vs mlx implementation for this task again pls | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 276 | 2026-09-20T20:49:58 | oh thats interesting.... can you add this as working notes to the PR? is this re | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 277 | 2026-09-20T21:01:22 | great, so pls find from leetgpu kernel implms of llama block and see whats porta | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 278 | 2026-09-20T21:10:56 | great, now we've defined the benchmark, do every mlx trick, on a loop with obser | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 279 | 2026-09-20T21:26:13 | ^ finish this session | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 280 | 2026-09-20T21:26:28 | no i bought more | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 281 | 2026-09-20T22:14:44 | https://leetbio.vercel.app/paths.html | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 282 | 2026-09-20T22:30:14 | ^^^ ✻ Churned for 6m 48s · 2 shells still running  ❯ great, now we've defined th | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 283 | 2026-09-20T22:34:33 | anyway, code execute, evolve, run all night until tokens fgone, you have my mac, | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |
+| 284 | 2026-09-20T22:35:02 | i want you to automatically pick all recommended steps ^ code in our refs/ mlx i | `8a0ff74` | mlx-opt: optimization evolution loop (levels 0-4)  |

@@ -1545,3 +1545,19 @@ Add reproducible MLX vs MPS benchmark (5 runs, metal sync barriers)
 | Files | `benchmark/mlx_vs_mps_bench.py`  `results/bench_20260920_215204.json`  `results/bench_20260920_215513.json` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 3ba84eb --no-edit` |
+
+---
+
+### 2026-09-20 · `8a0ff74` · nialloleary
+
+**mlx-opt: optimization evolution loop (levels 0-4) + PR-ready mlx_model.py**
+
+mlx-opt: optimization evolution loop (levels 0-4) + PR-ready mlx_model.py
+
+| | |
+|---|---|
+| SHA | `8a0ff74f516ea953440f944613dbc14d14c79ca9` |
+| Changed | 3 files changed, 954 insertions(+), 140 deletions(-) |
+| Files | `benchmark/evolve.py`  `refs/evolutionaryscale-esm`  `scoring/esmc/mlx_esmc.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 8a0ff74 --no-edit` |
