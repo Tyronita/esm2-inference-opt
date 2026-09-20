@@ -429,3 +429,19 @@ docs: add strategy thought piece — ESM-2 interventions under $1000 budget
 | Files | `docs/thought_piece_esm2_strategy.md` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert f26a73e --no-edit` |
+
+---
+
+### 2026-09-20 · `a017038` · nialloleary
+
+**feat(track-c): ESMC 600M — sequential SDK + shinkaevolve batched scoring**
+
+feat(track-c): ESMC 600M — sequential SDK + shinkaevolve batched scoring
+
+| | |
+|---|---|
+| SHA | `a017038fab97eadf3ebb79d7eec0263f2cc524e8` |
+| Changed | 9 files changed, 760 insertions(+), 1 deletion(-) |
+| Files | `.gitmodules`  `modal_app.py`  `refs/README.md`  `refs/evolutionaryscale-esm`  `refs/graph.yml`  `scoring/esmc/__init__.py`  _3 more_ |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert a017038 --no-edit` |
