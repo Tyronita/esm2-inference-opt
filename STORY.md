@@ -1577,3 +1577,19 @@ mlx-opt: extended batch sweep (B=1..16, L=140)
 | Files | `results/evolve_batch_sweep.png`  `results/evolve_log.json` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 950db96 --no-edit` |
+
+---
+
+### 2026-09-20 · `8eff571` · nialloleary
+
+**mlx-opt: throughput vs length curve (L=50..1000, opt=0,3)**
+
+mlx-opt: throughput vs length curve (L=50..1000, opt=0,3)
+
+| | |
+|---|---|
+| SHA | `8eff571c23a5a65690b02862dab75fd242dbcfb0` |
+| Changed | 2 files changed, 107 insertions(+), 1 deletion(-) |
+| Files | `results/evolve_length_curve.png`  `results/evolve_log.json` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 8eff571 --no-edit` |
