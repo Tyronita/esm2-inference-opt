@@ -1561,3 +1561,19 @@ mlx-opt: optimization evolution loop (levels 0-4) + PR-ready mlx_model.py
 | Files | `benchmark/evolve.py`  `refs/evolutionaryscale-esm`  `scoring/esmc/mlx_esmc.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 8a0ff74 --no-edit` |
+
+---
+
+### 2026-09-20 · `950db96` · nialloleary
+
+**mlx-opt: extended batch sweep (B=1..16, L=140)**
+
+mlx-opt: extended batch sweep (B=1..16, L=140)
+
+| | |
+|---|---|
+| SHA | `950db96865e1c6d17fa9f7741eaccbf778e9568e` |
+| Changed | 2 files changed, 908 insertions(+) |
+| Files | `results/evolve_batch_sweep.png`  `results/evolve_log.json` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 950db96 --no-edit` |
