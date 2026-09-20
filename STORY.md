@@ -1625,3 +1625,19 @@ mlx-opt: corrected batch sweep (BF16 numpy cast fix, B=12 sweet spot)
 | Files | `results/evolve_batch_sweep.png`  `results/evolve_log.json` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert e97537c --no-edit` |
+
+---
+
+### 2026-09-21 · `bbc66f1` · nialloleary
+
+**chore: bump submodule to updated mlx_model.py docstring**
+
+Both source implementations pinned as git submodules with exact SHAs: fair-esm @ 2b369911 (the commit that produced ρ=0.414) and ProteinGym @ 144fe22b. Reproducibility gate added: fair-esm fp32 vs transformers fp16 on SNCA, ρ must be ≥ 0.999.
+
+| | |
+|---|---|
+| SHA | `bbc66f1b59a4382d3a56c17d5f5f5eaf7c90eb27` |
+| Changed | 1 file changed, 1 insertion(+), 1 deletion(-) |
+| Files | `refs/evolutionaryscale-esm` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert bbc66f1 --no-edit` |
