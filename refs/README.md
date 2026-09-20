@@ -134,7 +134,51 @@ logits = model(input_ids=batch_ids, attention_mask=batch_mask).logits  # (B, L+2
 
 ---
 
-## 6. Known deviations (our code vs ProteinGym original)
+## 6. ESMC 300M — EvolutionaryScale (local / Mac MPS)
+
+**Submodule:** `refs/evolutionaryscale-esm/` (same repo as ESMC 600M, v3.4.1+)
+**HuggingFace hub:** https://huggingface.co/biohub/ESMC-300M
+**SDK alias:** `esmc_300m`
+**License:** MIT
+
+Key differences vs ESMC 600M:
+| | ESMC-300M | ESMC-600M |
+|---|---|---|
+| Params | 333M | 600M |
+| Layers | 30 | 36 |
+| Hidden dim | 960 | 1152 |
+| Heads | 15 | 16 |
+| Weight file | ~638MB bfloat16 | ~1.2GB bfloat16 |
+
+**Local Mac inference:**
+```bash
+# one-time env setup
+python3 -m venv .venv-esmc
+.venv-esmc/bin/pip install "esm>=3.0.0"
+
+# run
+.venv-esmc/bin/python3 scoring/esmc/local_300m.py
+```
+
+Observed on M3 / 8GB:
+- Load time: ~4s (weights cached at `~/.cache/huggingface/hub/`)
+- Inference: ~300ms per sequence after Metal shader warm-up (first pass ~1.8s)
+- Memory: ~700MB unified RAM
+- dtype: bfloat16 (MPS) — matches GPU behaviour
+
+**Flash Attention 2 not available on MPS.** Must pass `use_flash_attn=False` to
+`ESMC.from_pretrained()`. SDPA is used automatically.
+
+Key files:
+| File | What it does |
+|---|---|
+| `scoring/esmc/local_300m.py` | Local MPS inference script with demo (SNCA + GFP) |
+| `scoring/esmc/masked_marginals.py` | Masked-marginals scoring (GPU/Modal) |
+| `scoring/esmc/batched_masked.py` | Batched variant for throughput |
+
+---
+
+## 7. Known deviations (our code vs ProteinGym original)
 
 | # | What | Impact | Affects |
 |---|---|---|---|
