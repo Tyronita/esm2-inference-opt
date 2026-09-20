@@ -1465,3 +1465,19 @@ legacy: update README with migration map for protein-language-model-experiments
 | Files | `legacy/protein-language-model-experiments/README.md` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 3c5780c --no-edit` |
+
+---
+
+### 2026-09-20 · `8d024ec` · nialloleary
+
+**feat(esmc-300m): local MPS inference + refs entry**
+
+feat(esmc-300m): local MPS inference + refs entry
+
+| | |
+|---|---|
+| SHA | `8d024ece97787706927441e3333c881723943f63` |
+| Changed | 2 files changed, 121 insertions(+), 1 deletion(-) |
+| Files | `refs/README.md`  `scoring/esmc/local_300m.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 8d024ec --no-edit` |
