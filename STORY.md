@@ -1449,3 +1449,19 @@ docs: add inference cost analysis (from protein-language-model-experiments)
 | Files | `docs/inference_cost_analysis.md` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert b2b228e --no-edit` |
+
+---
+
+### 2026-09-20 · `3c5780c` · nialloleary
+
+**legacy: update README with migration map for protein-language-model-experiments**
+
+legacy: update README with migration map for protein-language-model-experiments
+
+| | |
+|---|---|
+| SHA | `3c5780cae3cd84479fff115e755f8303f0e67ec4` |
+| Changed | 1 file changed, 14 insertions(+), 1 deletion(-) |
+| Files | `legacy/protein-language-model-experiments/README.md` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 3c5780c --no-edit` |
