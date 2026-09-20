@@ -1010,5 +1010,48 @@
         "tok_s": 3557.0
       }
     ]
+  },
+  "extended_batch_sweep": {
+    "opt_level": 3,
+    "sequence_length": 140,
+    "note": "BF16 fix applied (logits.astype(float32) before numpy); B=12 is sweet spot",
+    "results": {
+      "1": {
+        "ms_batch": 51.7,
+        "ms_per_seq": 51.7,
+        "seqs_per_s": 19.3,
+        "speedup": 1.0
+      },
+      "2": {
+        "ms_batch": 82.0,
+        "ms_per_seq": 41.0,
+        "seqs_per_s": 24.4,
+        "speedup": 1.26
+      },
+      "4": {
+        "ms_batch": 139.1,
+        "ms_per_seq": 34.8,
+        "seqs_per_s": 28.8,
+        "speedup": 1.49
+      },
+      "8": {
+        "ms_batch": 262.7,
+        "ms_per_seq": 32.8,
+        "seqs_per_s": 30.5,
+        "speedup": 1.58
+      },
+      "12": {
+        "ms_batch": 355.7,
+        "ms_per_seq": 29.6,
+        "seqs_per_s": 33.7,
+        "speedup": 1.75
+      },
+      "16": {
+        "ms_batch": 482.5,
+        "ms_per_seq": 30.2,
+        "seqs_per_s": 33.2,
+        "speedup": 1.72
+      }
+    }
   }
 }
