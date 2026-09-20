@@ -1401,3 +1401,19 @@ Both source implementations pinned as git submodules with exact SHAs: fair-esm @
 | Files | `modal_app.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 4da2fbe --no-edit` |
+
+---
+
+### 2026-09-20 · `b9e6d6f` · nialloleary
+
+**fix: add httpx to image_c (esm.sdk.forge hard import)**
+
+fix: add httpx to image_c (esm.sdk.forge hard import)
+
+| | |
+|---|---|
+| SHA | `b9e6d6f6f3a07c4af50078c01ce6da51e83f5820` |
+| Changed | 1 file changed, 1 insertion(+) |
+| Files | `modal_app.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert b9e6d6f --no-edit` |
