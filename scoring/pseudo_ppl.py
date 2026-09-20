@@ -1,6 +1,6 @@
 # =============================================================================
-# TRACK B — transformers==4.44.0, fp16, HuggingFace API
-# STATUS: commented out for benchmark runs. See scoring/ref/pseudo_ppl.py for Track A.
+# TRACK B  alias: hf / hf-transformers / transformers-fp16
+#   Same weights as Track A. Bridge: rho=+0.999973. See scoring/ref/pseudo_ppl.py for Track A.
 # =============================================================================
 """
 Pseudo-perplexity scoring on the mutant sequence.

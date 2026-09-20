@@ -1,5 +1,6 @@
 """
-Masked marginal scoring — Track A (refs/fair-esm @ 2b369911, fp32).
+Masked marginal scoring — Track A  (alias: ref / meta-original / fair-esm-fp32)
+refs/fair-esm @ 2b369911, fp32.
 
 Score = Σ_i∈mut [ log p(x*_i | x_{-i}) − log p(x_i | x_{-i}) ]
 

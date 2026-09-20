@@ -14,6 +14,31 @@ from pathlib import Path
 
 import modal
 
+# ── Two-track naming ──────────────────────────────────────────────────────────
+#
+#  TRACK A  alias: "ref"  / "meta-original"  / "fair-esm-fp32"
+#    What:  Meta Research's own PyTorch code — the exact implementation that
+#           produced the published ρ=0.440 in Notin et al. NeurIPS 2023.
+#    Code:  refs/fair-esm @ 2b369911  (git submodule, SHA-pinned)
+#    API:   model(tokens)["logits"]  |  alphabet.mask_idx  |  alphabet.get_idx()
+#    Dtype: torch.float32  (no autocast)
+#    Used:  ablate_ref_proteingym, compare_tracks Track A
+#    Why:   Reproducibility anchor — if our ρ matches published, this is why.
+#
+#  TRACK B  alias: "hf"  / "hf-transformers"  / "transformers-fp16"
+#    What:  HuggingFace's independent re-implementation of ESM-2, ported into
+#           the transformers library. Same weights, different module classes,
+#           different dtype. NOT what the paper used — deployment-ready variant.
+#    Code:  transformers==4.44.0  |  EsmForMaskedLM
+#    API:   model(input_ids=ids).logits  |  tokenizer.mask_token_id
+#    Dtype: torch.float16  (tensor core acceleration on A100)
+#    Used:  compare_tracks Track B, check_consistency.py
+#    Why:   fp16 is ~1.5–2× faster; same ρ proven via bridge (ρ=+0.999973).
+#
+#  BRIDGE  check_consistency.py  →  Spearman ρ = +0.999973 (200 SNCA variants)
+#    Same weights, numerically equivalent scores. δρ at 217-assay scale ≈ 0.
+#    Any timing difference = dtype only. Any ρ difference = fp32 vs fp16 noise.
+#
 # ── Pinned implementation SHAs (from refs/ submodules) ───────────────────────
 # fair-esm  sha: 2b369911bb5b4b0dda914521b9475cad1656b2ac  version 2.0.1
 #   setup.py:  no hard deps (only esmfold extras); needs torch + numpy

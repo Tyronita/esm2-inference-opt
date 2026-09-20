@@ -1,9 +1,14 @@
 # =============================================================================
-# TRACK B — transformers==4.44.0, fp16, HuggingFace API
-# STATUS: commented out for benchmark runs. Kept for:
-#   (a) check_consistency.py — the consistency gate (rho=+0.999973 vs Track A)
-#   (b) future SOTA optimisation work (Flash Attention 2, torch.compile, etc.)
-# DO NOT use for ProteinGym benchmark scoring — use scoring/ref/ (Track A) instead.
+# TRACK B  alias: hf / hf-transformers / transformers-fp16
+#   transformers==4.44.0, fp16, HuggingFace API
+#   Same weights as Track A (facebook/esm2_t33_650M_UR50D) — different code, different dtype.
+#   Bridge: check_consistency.py → rho=+0.999973 vs Track A on 200 SNCA variants.
+#
+# STATUS: not used for canonical benchmark runs — use scoring/ref/ (Track A) instead.
+#   Kept for:
+#   (a) check_consistency.py — the consistency gate
+#   (b) compare_tracks — direct A-vs-B timing/rho comparison
+#   (c) future SOTA work (Flash Attention 2, torch.compile, batched inference)
 # TODO: when upgrading to SOTA settings, reactivate and update API calls here.
 # =============================================================================
 """
