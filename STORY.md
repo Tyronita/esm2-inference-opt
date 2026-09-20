@@ -1417,3 +1417,19 @@ fix: add httpx to image_c (esm.sdk.forge hard import)
 | Files | `modal_app.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert b9e6d6f --no-edit` |
+
+---
+
+### 2026-09-20 · `3474954` · nialloleary
+
+**results: add Track A benchmark data (217 assays, fair-esm A100)**
+
+Corrected all entrypoints to target A100 40GB — the GPU used in the original paper. MPS backend kept for local smoke tests only.
+
+| | |
+|---|---|
+| SHA | `3474954f8cd771b64f325d693812cf46440737b5` |
+| Changed | 4 files changed, 1412 insertions(+) |
+| Files | `results/comparison_stream.jsonl`  `results/modal_log_pulled.md`  `results/ref_proteingym_stream.jsonl`  `results/track_a_summary.md` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 3474954 --no-edit` |
