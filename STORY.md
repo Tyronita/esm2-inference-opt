@@ -381,3 +381,19 @@ Per-assay streaming JSONL added: every assay logs immediately, not batch at end.
 | Files | `benchmark/profiler.py`  `docs/audit_trail.md`  `modal_app.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert cd59e30 --no-edit` |
+
+---
+
+### 2026-09-20 · `8364482` · nialloleary
+
+**docs: name Track A/B with meaningful aliases throughout**
+
+docs: name Track A/B with meaningful aliases throughout
+
+| | |
+|---|---|
+| SHA | `8364482cd142667a2502fd22283443410cfe3e7f` |
+| Changed | 5 files changed, 41 insertions(+), 10 deletions(-) |
+| Files | `modal_app.py`  `scoring/masked_marginals.py`  `scoring/pseudo_ppl.py`  `scoring/ref/masked_marginals.py`  `scoring/wt_marginals.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 8364482 --no-edit` |
