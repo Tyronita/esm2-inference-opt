@@ -208,37 +208,37 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 198 | 2026-09-19T23:28:36 | sure go for it | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 199 | 2026-09-19T23:47:22 | pls check progress, % done | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 200 | 2026-09-19T23:49:11 | pls ^ add this in an order and export the chat to include in our repo with anyth | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
-| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 203 | 2026-09-20T00:26:55 | progress on both pls | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
-| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `a017038` | feat(track-c): ESMC 600M — sequential SDK + shinka |
+| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 203 | 2026-09-20T00:26:55 | progress on both pls | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
+| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `b9f5d94` | feat(track-c): add 3 MFU research ideas + 12-assay |
