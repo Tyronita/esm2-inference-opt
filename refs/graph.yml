@@ -44,6 +44,33 @@ nodes:
     attn_impl: sdpa
     key_file: scoring/masked_marginals.py
 
+  # Track C: ESMC 600M (EvolutionaryScale SDK)
+  esmc_sdk:
+    type: pip_package
+    package: "esm>=3.0.0"
+    hub: biohub/ESMC-600M
+    sha_pinned: 43b4548b86762edfa747b07d5f440aad3c33acee
+    path: refs/evolutionaryscale-esm/
+    api: ESMC.from_pretrained + model.encode + model.logits
+    dtype: bfloat16/float16
+    key_file: scoring/esmc/masked_marginals.py
+
+  esmc_hf:
+    type: pip_package
+    package: "esm>=3.0.0"
+    hub: biohub/ESMC-600M
+    api: EsmcForMaskedLM.from_pretrained + model(input_ids).logits
+    dtype: float16
+    key_file: scoring/esmc/batched_masked.py
+    note: shinkaevolve — batched over mask positions, exact scores
+
+  proteingym_evoscale:
+    type: git_submodule_subpath
+    path: refs/ProteinGym/proteingym/baselines/evoscale/
+    key_file: compute_fitness.py
+    scoring_fn: _score_mutations_common
+    requires: [esmc_sdk, attrs, biopython]
+
   # Shared model weights (same for all implementations)
   model_weights:
     type: huggingface_model
@@ -109,6 +136,20 @@ triples:
   - [transformers_esm,   deviates_from_original_by, "transformers attn vs fair-esm attn"]
   - [transformers_esm,   deviates_from_original_by, "window offset +/-1 char for L>1022"]
   - [check_consistency,  measures,            deviations]
+
+  # Track C: ESMC 600M
+  - [esmc_sdk,           loads,               model_weights]
+  - [esmc_hf,            loads,               model_weights]
+  - [esmc_sdk,           implements,          masked_marginals]
+  - [esmc_hf,            implements,          batched_masked_shinkaevolve]
+  - [proteingym_evoscale, defines,            esmc_scoring_reference]
+  - [proteingym_evoscale, uses,               esmc_sdk]
+  - [esmc_sdk,           derived_from,        proteingym_evoscale]
+  - [run_track_c,        requires,            image_c]
+  - [run_track_c,        runs,                esmc_sdk]
+  - [run_track_c,        runs,                esmc_hf]
+  - [image_c,            installs,            esmc_sdk]
+  - [image_c,            installs,            esmc_hf]
 
 # ── Cold-start cost analysis ───────────────────────────────────────────────────
 

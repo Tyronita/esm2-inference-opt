@@ -77,7 +77,53 @@ All in `scoring/`:
 
 ---
 
-## 5. Papers
+## 5. ESMC 600M — EvolutionaryScale SDK
+
+**Submodule:** `refs/evolutionaryscale-esm/`
+**Repo:** https://github.com/evolutionaryscale/esm
+**Commit pinned:** 43b4548b86762edfa747b07d5f440aad3c33acee (v3.0.7)
+**Install:** `pip install "esm>=3.0.0"`
+**HuggingFace hub:** https://huggingface.co/biohub/ESMC-600M
+**License:** MIT
+
+Key files:
+| File | What it does |
+|---|---|
+| `esm/models/esmc/model.py` | `ESMC` (SDK client) and `EsmcForMaskedLM` (HF-style) |
+| `esm/models/esmc/tokenizer.py` | `EsmcTokenizer` — vocab: 64 tokens, AAs at 4-23, `<mask>`=32 |
+| `esm/models/esmc/config.py` | `EsmcConfig` — ESMC_EXPANSION_RATIO=8/3, SwiGLU FFN |
+| `cookbook/snippets/esmc.py` | Canonical usage — encode/logits SDK + raw forward |
+| `esm/sdk/api.py` | `ESMProtein`, `LogitsConfig`, `LogitsOutput` |
+
+**ProteinGym ESMC baseline:**
+`refs/ProteinGym/proteingym/baselines/evoscale/compute_fitness.py` — canonical ESMC scoring.
+Score function: `_score_mutations_common` — mask each position, get log-softmax, compute log-LR.
+Environment: `refs/ProteinGym/proteingym/baselines/evoscale/evoscale_env.yml`
+
+**Two APIs:**
+```python
+# SDK API (ESMC class — sequential reference)
+from esm.models.esmc import ESMC
+model = ESMC.from_pretrained("esmc_600m").to("cuda")
+protein_tensor = model.encode(ESMProtein(sequence=seq))
+logits = model.logits(masked_tensor, LogitsConfig(sequence=True)).logits.sequence
+
+# HuggingFace-style API (EsmcForMaskedLM — batched shinkaevolve)
+from esm.models.esmc import EsmcForMaskedLM, EsmcTokenizer
+model = EsmcForMaskedLM.from_pretrained("biohub/ESMC-600M", dtype=torch.float16).cuda()
+logits = model(input_ids=batch_ids, attention_mask=batch_mask).logits  # (B, L+2, 64)
+```
+
+**ESMC vs ESM-2:**
+- Architecture: Pre-LN + RoPE + SwiGLU (no bias) vs Post-LN + learned pos emb + GELU
+- Training: 2.8B sequences (UniRef90 + more) vs 250M sequences (UniRef50)
+- Vocab: 64 tokens vs 33 tokens
+- Model: new weights (not distilled from ESM-2)
+- License: MIT (EvolutionaryScale) vs non-commercial (Meta)
+
+---
+
+## 6. Papers
 
 | Paper | arXiv | What it contributes |
 |---|---|---|

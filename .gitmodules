@@ -4,3 +4,6 @@
 [submodule "refs/ProteinGym"]
 	path = refs/ProteinGym
 	url = https://github.com/OATML-Markslab/ProteinGym.git
+[submodule "refs/evolutionaryscale-esm"]
+	path = refs/evolutionaryscale-esm
+	url = https://github.com/evolutionaryscale/esm.git

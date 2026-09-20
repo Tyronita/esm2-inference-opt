@@ -54,6 +54,52 @@ import modal
 #
 # Dependency graph: refs/graph.yml
 
+# ── Track C: ESMC 600M (EvolutionaryScale SDK) ───────────────────────────────
+#
+#  TRACK C  alias: "esmc"  / "evolutionaryscale"  / "esmc-600m"
+#    What:  EvolutionaryScale's ESMC 600M — sequence-only ESM-3 architecture
+#           (Pre-LN + RoPE + SwiGLU, no structure). Different model from ESM-2.
+#    Code:  refs/evolutionaryscale-esm @ 43b4548b  (git submodule, SHA-pinned)
+#           refs/ProteinGym/proteingym/baselines/evoscale/compute_fitness.py
+#    API:   ESMC SDK — model.encode(ESMProtein) + model.logits(LogitsConfig)
+#           EsmcForMaskedLM (HF-style) — model(input_ids=...).logits
+#    Dtype: bfloat16 / float16 (SDK default)
+#    Used:  run_track_c
+#    Why:   Newer architecture, MIT license, same ProteinGym task — clean apples-to-apples.
+#
+#  SHINKAEVOLVE: batched_masked_32 / batched_masked_64
+#    What:  True-batch optimised scoring — B sequences each with ONE masked position,
+#           single batched forward pass. Identical scores to sequential; B× faster.
+#    MFU target: 40-60% (vs ~3-5% sequential), fills GPU batch dimension.
+
+ESMC_MODEL_ID = "esmc_600m"   # EvolutionaryScale SDK identifier
+ESMC_HF_REPO  = "biohub/ESMC-600M"   # HuggingFace hub for EsmcForMaskedLM
+
+# ── Image C — EvolutionaryScale SDK, no fair-esm ─────────────────────────────
+# Source: refs/evolutionaryscale-esm/  |  refs/ProteinGym/proteingym/baselines/evoscale/evoscale_env.yml
+image_c = (
+    modal.Image.debian_slim(python_version="3.11")
+    .run_commands("apt-get update -qq && apt-get install -y --no-install-recommends git")
+    .pip_install(
+        "torch==2.4.0",
+        extra_index_url="https://download.pytorch.org/whl/cu121",
+    )
+    # EvolutionaryScale ESM SDK >= 3.0 — provides ESMC, EsmcForMaskedLM, EsmcTokenizer,
+    # ESMProtein, LogitsConfig. Pulls in: transformers, attrs, einops, biotite, tokenizers.
+    # Source: refs/evolutionaryscale-esm @ 43b4548b
+    .pip_install("esm>=3.0.0", "attrs", "biopython==1.79")
+    .pip_install(
+        "pandas==2.2.2",
+        "scipy==1.13.1",
+        "numpy==1.26.4",
+        "scikit-learn==1.5.1",
+        "tqdm==4.66.4",
+        "requests==2.32.3",
+    )
+    .pip_install("huggingface_hub==0.24.6", "datasets==2.20.0")
+    .add_local_python_source("scoring", "benchmark")
+)
+
 # ── Reproducible image — all implementations baked in ────────────────────────
 image = (
     modal.Image.debian_slim(python_version="3.11")
@@ -140,6 +186,65 @@ def load_model(device: str = "cuda"):
     params = sum(p.numel() for p in model.parameters()) / 1e6
     print(f"  Loaded {params:.0f}M params  fp16  peak={_gpu_mb():.0f}MB")
     return model, tok
+
+
+# ── Track C: ESMC 600M model loaders ─────────────────────────────────────────
+
+def load_model_esmc(device: str = "cuda"):
+    """Load ESMC 600M via EvolutionaryScale SDK (ESMC.from_pretrained).
+
+    Returns: (model, None) — SDK encodes internally, no separate tokenizer.
+    Refs: refs/evolutionaryscale-esm @ 43b4548b
+    """
+    import os, torch
+    from esm.models.esmc import ESMC
+
+    os.environ.setdefault("HF_HOME", str(CACHE_DIR))
+    print(f"  Loading ESMC 600M via SDK @ {ESMC_HF_REPO}  ({device})...")
+    model = ESMC.from_pretrained(ESMC_MODEL_ID).to(device)
+    model.eval()
+    params = sum(p.numel() for p in model.parameters()) / 1e6
+    dtype  = next(model.parameters()).dtype
+    print(f"  Loaded {params:.0f}M params  {dtype}  peak={_gpu_mb():.0f}MB")
+    return model, None
+
+
+def load_model_esmc_hf(device: str = "cuda"):
+    """Load ESMC 600M via HuggingFace-style EsmcForMaskedLM.
+
+    Returns: (model, tokenizer) — supports batched input_ids forward pass.
+    Used by: batched_masked (shinkaevolve).
+    Refs: refs/evolutionaryscale-esm/esm/models/esmc/model.py
+    """
+    import os, torch
+    from esm.models.esmc import EsmcForMaskedLM, EsmcTokenizer
+
+    os.environ.setdefault("HF_HOME", str(CACHE_DIR))
+    print(f"  Loading EsmcForMaskedLM @ {ESMC_HF_REPO}  ({device}) fp16...")
+    model = EsmcForMaskedLM.from_pretrained(
+        ESMC_HF_REPO,
+        cache_dir=str(CACHE_DIR),
+        dtype=torch.float16,
+    ).eval().to(device)
+    tokenizer = EsmcTokenizer()
+    params = sum(p.numel() for p in model.parameters()) / 1e6
+    print(f"  Loaded {params:.0f}M params  fp16  peak={_gpu_mb():.0f}MB")
+    return model, tokenizer
+
+
+def _compute_mfu(model, seq_len: int, wall_s: float, a100_tflops: float = 312.0) -> float:
+    """Model FLOPs Utilization: achieved / peak (A100 fp16 = 312 TFLOPS).
+
+    FLOPs approximation: 2 × N_params × L  (Chinchilla, forward pass).
+    For sequential scoring wall_s is per-pass; for batched it's total/B_passes.
+    """
+    n_params = sum(p.numel() for p in model.parameters())
+    L = seq_len + 2   # BOS + AAs + EOS
+    flops = 2 * n_params * L
+    if wall_s <= 0:
+        return 0.0
+    achieved = flops / wall_s / 1e12   # TFLOPS
+    return achieved / a100_tflops
 
 
 def _gpu_mb() -> float:
@@ -1175,3 +1280,274 @@ def pull_results():
         print("Don't forget to commit: git add results/log.md && git commit -m 'results: add Modal run'")
     else:
         print("No new entries — results/log.md is up to date.")
+
+
+# ── Track C: ESMC 600M — all 217 assays, sequential + shinkaevolve batched ───
+
+@app.function(
+    image=image_c,
+    gpu="A100",
+    timeout=21600,   # 6 hr — ESMC 600M sequential on 217 assays
+    volumes={str(CACHE_DIR): vol},
+)
+def run_track_c(methods: str = "all", n_assays: int = 0):
+    """
+    ESMC 600M on all 217 ProteinGym substitution assays.
+
+    Two tracks run sequentially in the same job:
+      sequential      — ESMC SDK, exact masked marginals, L passes/assay
+      batched_32      — EsmcForMaskedLM, true-batch shinkaevolve B=32, ceil(L/32) passes/assay
+      batched_64      — EsmcForMaskedLM, true-batch shinkaevolve B=64, ceil(L/64) passes/assay
+
+    MFU is computed per assay: (2 × N_params × L) / wall_s / 312e12
+
+    Outputs:
+      results/track_c_stream.jsonl  — one row per method × assay (streaming, resumable)
+
+    Run:    modal run --detach modal_app.py::run_track_c
+    Pull:   modal run modal_app.py::pull_track_c_results
+    Cost:   ~$15-25, ~6-8 hr on A100 40GB
+    """
+    import json, os
+    import statistics
+    import torch
+    from benchmark.proteingym import fetch_dms_data, fetch_reference
+
+    device   = "cuda"
+    gpu_name = torch.cuda.get_device_name(0)
+    os.environ.setdefault("HF_HOME", str(CACHE_DIR))
+
+    w = 76
+    print(f"\n{'='*w}")
+    print(f"  Track C — ESMC 600M ProteinGym benchmark")
+    print(f"  GPU     : {gpu_name}")
+    print(f"  Model   : {ESMC_HF_REPO}")
+    print(f"  Methods : sequential + batched_32 + batched_64")
+    print(f"  Assays  : {'all 217' if n_assays == 0 else n_assays}")
+    print(f"{'='*w}\n")
+
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    stream_path = RESULTS_DIR / "track_c_stream.jsonl"
+
+    pg_cache  = CACHE_DIR / "proteingym"
+    reference = fetch_reference(pg_cache)
+    dms_dir   = fetch_dms_data(pg_cache)
+
+    import pandas as pd
+    assays = []
+    for _, ref_row in reference.iterrows():
+        assay_id = ref_row["DMS_id"]
+        dms_file = dms_dir / ref_row["DMS_filename"]
+        if not dms_file.exists():
+            continue
+        dms = pd.read_csv(dms_file)
+        assays.append({
+            "assay_id": assay_id,
+            "sequence": ref_row["target_seq"],
+            "variants": dms["mutant"].tolist(),
+            "fitness":  dms["DMS_score"].tolist(),
+            "L":        len(ref_row["target_seq"]),
+            "N":        len(dms),
+        })
+    if n_assays > 0:
+        assays = assays[:n_assays]
+    print(f"  Loaded {len(assays)} assays")
+
+    # Build resume set
+    done: set[tuple[str, str]] = set()
+    if stream_path.exists():
+        with open(stream_path) as f:
+            for line in f:
+                r = json.loads(line)
+                done.add((r["method"], r["assay_id"]))
+        print(f"  Resuming — {len(done)} rows already in stream")
+
+    from benchmark.metrics import compute_all
+    from scoring.esmc.registry import get_registry_sdk, get_registry_hf
+
+    # ── Sequential: ESMC SDK ─────────────────────────────────────────────────
+    if methods in ("all", "sequential"):
+        print(f"\n{'─'*w}")
+        print(f"  Loading ESMC SDK (sequential)...")
+        model_sdk, _ = load_model_esmc(device)
+        n_params = sum(p.numel() for p in model_sdk.parameters())
+        print(f"  {n_params/1e6:.0f}M params")
+
+        registry_sdk = get_registry_sdk()
+        for method in registry_sdk:
+            print(f"\n  [{method.name}]  passes=L  source={method.source}")
+            rhos = []
+            for a in assays:
+                if (method.name, a["assay_id"]) in done:
+                    continue
+                import time
+                t0 = time.perf_counter()
+                try:
+                    scores = method.fn(model_sdk, None, a["sequence"], a["variants"], device)
+                except Exception as e:
+                    print(f"    ERROR {a['assay_id']}: {e}")
+                    continue
+                wall_s = time.perf_counter() - t0
+
+                metrics = compute_all(scores, a["fitness"])
+                rho = metrics["spearman_rho"]
+                mfu = _compute_mfu(model_sdk, a["L"], wall_s)
+                rhos.append(rho)
+
+                row = {
+                    "method":     method.name,
+                    "track":      "esmc-sdk-sequential",
+                    "model":      ESMC_HF_REPO,
+                    "assay_id":   a["assay_id"],
+                    "L":          a["L"],
+                    "N":          a["N"],
+                    "gpu":        gpu_name,
+                    "wall_s":     round(wall_s, 3),
+                    "mfu":        round(mfu, 4),
+                    "n_params":   n_params,
+                    **metrics,
+                }
+                with open(stream_path, "a") as f:
+                    f.write(json.dumps(row) + "\n")
+
+                print(f"    {a['assay_id']:<50}  ρ={rho:+.4f}  wall={wall_s:.1f}s  MFU={mfu*100:.1f}%")
+
+            if rhos:
+                mean_rho = statistics.mean(rhos)
+                print(f"\n  {method.name}  mean ρ = {mean_rho:+.4f}  ({len(rhos)} assays)")
+
+        del model_sdk
+        torch.cuda.empty_cache()
+        vol.commit()
+
+    # ── Shinkaevolve: EsmcForMaskedLM batched ────────────────────────────────
+    if methods in ("all", "batched"):
+        print(f"\n{'─'*w}")
+        print(f"  Loading EsmcForMaskedLM (batched shinkaevolve)...")
+        model_hf, tokenizer_hf = load_model_esmc_hf(device)
+        n_params = sum(p.numel() for p in model_hf.parameters())
+
+        registry_hf = get_registry_hf()
+        for method in registry_hf:
+            print(f"\n  [{method.name}]  passes={method.passes}")
+            rhos, mfus, walls = [], [], []
+            for a in assays:
+                if (method.name, a["assay_id"]) in done:
+                    continue
+                import time
+                t0 = time.perf_counter()
+                try:
+                    scores = method.fn(model_hf, tokenizer_hf, a["sequence"], a["variants"], device)
+                except Exception as e:
+                    print(f"    ERROR {a['assay_id']}: {e}")
+                    continue
+                wall_s = time.perf_counter() - t0
+
+                metrics = compute_all(scores, a["fitness"])
+                rho = metrics["spearman_rho"]
+                mfu = _compute_mfu(model_hf, a["L"], wall_s)
+                rhos.append(rho)
+                mfus.append(mfu)
+                walls.append(wall_s)
+
+                row = {
+                    "method":   method.name,
+                    "track":    "esmc-hf-batched",
+                    "model":    ESMC_HF_REPO,
+                    "assay_id": a["assay_id"],
+                    "L":        a["L"],
+                    "N":        a["N"],
+                    "gpu":      gpu_name,
+                    "wall_s":   round(wall_s, 3),
+                    "mfu":      round(mfu, 4),
+                    "n_params": n_params,
+                    **metrics,
+                }
+                with open(stream_path, "a") as f:
+                    f.write(json.dumps(row) + "\n")
+
+                print(
+                    f"    {a['assay_id']:<50}  ρ={rho:+.4f}  "
+                    f"wall={wall_s:.1f}s  MFU={mfu*100:.1f}%"
+                )
+
+            if rhos:
+                mean_rho = statistics.mean(rhos)
+                mean_mfu = statistics.mean(mfus) * 100
+                speedup  = statistics.mean([a["L"] for a in assays if a["L"] > 0]) / max(1, int(method.passes.split("/")[-1].rstrip(")"))) if "/" in method.passes else 1.0
+                print(
+                    f"\n  {method.name}  mean ρ = {mean_rho:+.4f}  "
+                    f"mean MFU = {mean_mfu:.1f}%  "
+                    f"({len(rhos)} assays)"
+                )
+
+        del model_hf
+        torch.cuda.empty_cache()
+        vol.commit()
+
+    # ── Summary ───────────────────────────────────────────────────────────────
+    all_rows = []
+    if stream_path.exists():
+        with open(stream_path) as f:
+            all_rows = [json.loads(l) for l in f if l.strip()]
+
+    print(f"\n{'='*w}")
+    print(f"  TRACK C SUMMARY")
+    print(f"  {'Method':<22}  {'mean ρ':>8}  {'mean MFU%':>10}  {'total wall':>10}  {'N assays':>8}")
+    print(f"  {'-'*22}  {'-'*8}  {'-'*10}  {'-'*10}  {'-'*8}")
+
+    for m_name in ["masked_marginals", "batched_masked_32", "batched_masked_64"]:
+        subset = [r for r in all_rows if r["method"] == m_name]
+        if not subset:
+            continue
+        mean_rho  = statistics.mean(r["spearman_rho"] for r in subset)
+        mean_mfu  = statistics.mean(r["mfu"] for r in subset) * 100
+        total_wall = sum(r["wall_s"] for r in subset)
+        print(
+            f"  {m_name:<22}  {mean_rho:+.4f}    {mean_mfu:>8.1f}%  "
+            f"{total_wall:>10.0f}s  {len(subset):>8}"
+        )
+
+    print(f"{'='*w}\n")
+    vol.commit()
+    return {"n_rows": len(all_rows), "stream": str(stream_path)}
+
+
+@app.local_entrypoint()
+def pull_track_c_results():
+    """Pull track_c_stream.jsonl from Modal volume. Logs all current results."""
+    import json
+    import subprocess
+    from pathlib import Path
+
+    Path("results").mkdir(exist_ok=True)
+    for fname in ["track_c_stream.jsonl"]:
+        r = subprocess.run(
+            ["modal", "volume", "get", "esm2-weights", f"results/{fname}", f"results/{fname}"],
+            capture_output=True, text=True,
+        )
+        if r.returncode == 0:
+            print(f"  pulled results/{fname}")
+            rows = [json.loads(l) for l in Path(f"results/{fname}").read_text().splitlines() if l.strip()]
+            methods_seen = {}
+            for row in rows:
+                m = row["method"]
+                if m not in methods_seen:
+                    methods_seen[m] = {"rhos": [], "mfus": [], "walls": []}
+                methods_seen[m]["rhos"].append(row.get("spearman_rho", float("nan")))
+                methods_seen[m]["mfus"].append(row.get("mfu", 0.0))
+                methods_seen[m]["walls"].append(row.get("wall_s", 0.0))
+
+            import statistics as st
+            print(f"\n  Progress: {len(rows)} rows complete")
+            for m_name, d in methods_seen.items():
+                rhos = [x for x in d["rhos"] if x == x]  # drop NaN
+                if rhos:
+                    print(
+                        f"  {m_name:<30}  ρ={st.mean(rhos):+.4f}  "
+                        f"MFU={st.mean(d['mfus'])*100:.1f}%  "
+                        f"wall_total={sum(d['walls']):.0f}s  "
+                        f"n={len(rhos)}"
+                    )
+        else:
+            print(f"  {fname} not ready yet (job still running or not started)")
