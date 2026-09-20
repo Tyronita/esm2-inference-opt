@@ -1433,3 +1433,19 @@ Corrected all entrypoints to target A100 40GB — the GPU used in the original p
 | Files | `results/comparison_stream.jsonl`  `results/modal_log_pulled.md`  `results/ref_proteingym_stream.jsonl`  `results/track_a_summary.md` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 3474954 --no-edit` |
+
+---
+
+### 2026-09-20 · `b2b228e` · nialloleary
+
+**docs: add inference cost analysis (from protein-language-model-experiments)**
+
+docs: add inference cost analysis (from protein-language-model-experiments)
+
+| | |
+|---|---|
+| SHA | `b2b228e7989a9c56a143164230b5b350e6bd0456` |
+| Changed | 1 file changed, 110 insertions(+) |
+| Files | `docs/inference_cost_analysis.md` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert b2b228e --no-edit` |
