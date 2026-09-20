@@ -208,68 +208,74 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 198 | 2026-09-19T23:28:36 | sure go for it | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 199 | 2026-09-19T23:47:22 | pls check progress, % done | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 200 | 2026-09-19T23:49:11 | pls ^ add this in an order and export the chat to include in our repo with anyth | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
-| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 203 | 2026-09-20T00:26:55 | progress on both pls | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 235 | 2026-09-20T12:22:43 | results from A/B | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 236 | 2026-09-20T12:24:06 | get the timnings for track A pls | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 237 | 2026-09-20T12:24:50 | please save all these results to the repo | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 238 | 2026-09-20T12:27:00 | Check both Modal Track C jobs launched after the httpx fix (commit b9e6d6f). Rea | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 239 | 2026-09-20T12:43:32 | brainstorm a free way to run this... | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 240 | 2026-09-20T14:49:24 | bcaxukkdb toolu_01LSDXGB2WCuowbTWatZay5G /private/tmp/claude-501/-Users-niallole | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 241 | 2026-09-20T16:35:19 | hey status | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 242 | 2026-09-20T16:36:39 | install this, AIRS-Bench: a Suite of Tasks for Frontier AI Research Science Agen | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 243 | 2026-09-20T16:45:09 | CodeRetrievalCodeXGlueMRR <- what is this? | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 244 | 2026-09-20T16:45:57 | okay, here's what we're going to do, you see, Alxandria in my repo... please clo | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 245 | 2026-09-20T16:47:24 | great, now make it a parent of a series of my other repos we're going to iterati | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 246 | 2026-09-20T16:48:17 | i think Evolve needs to go...   │ Evolve                                         | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 247 | 2026-09-20T16:49:12 | sure, lets do this.... i feel as if we failed at this | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 248 | 2026-09-20T16:50:06 | yes please nest it under Alxandria... also include out next steps about how we'l | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 249 | 2026-09-20T16:57:53 | deleted it, the next thing is -> https://github.com/Tyronita/protein-language-mo | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 250 | 2026-09-20T16:58:43 | anything uncomitted on this repo? | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 251 | 2026-09-20T16:59:28 | Want me to migrate NUMBERS.md + the pd_variants CSVs (if not already in LewyGym) | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 252 | 2026-09-20T17:19:18 | b8n8ujy3s toolu_012fF9EdKfNCmqoSAhJLy73D /private/tmp/claude-501/-Users-niallole | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 253 | 2026-09-20T17:33:01 | wait have you pushed up the other stuff | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 254 | 2026-09-20T17:34:24 | but did you grab the research from the other benchmark? | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 255 | 2026-09-20T17:40:11 | it was actually not just that, we also have https://github.com/Tyronita/protein- | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 256 | 2026-09-20T17:44:40 | please run ESMC-300m param model locally here on my mac, the biohub implementati | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 257 | 2026-09-20T17:52:54 | this is what i'd be interested in, is this model ESM-C on hugging face, what is  | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 258 | 2026-09-20T17:55:45 | but i mean, are per-assay ground-truths a thing? i.e. if we are using a mean/med | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 259 | 2026-09-20T18:00:14 | what is r? are these coded by someone and measurable? | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 260 | 2026-09-20T18:01:57 | great, so we've ran the esm crap, but did we run it on the GPU on my machine or  | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 261 | 2026-09-20T18:02:58 | modal we're out of money for now... pls kill this prgress... ESM-C how long did  | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 262 | 2026-09-20T18:03:50 | does the evolutionary scale offer an mps version? metals version? | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 263 | 2026-09-20T18:04:43 | how would you accelerate it? | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 264 | 2026-09-20T18:05:44 | ---   3. MLX (hardest, potentially 3-5× over compiled PyTorch on MPS)    Apple's | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
-| 265 | 2026-09-20T18:16:20 | wait i cant even see the code man open it up, also pls rememember you're gonna h | `1aed4a1` | Add native MLX implementation of ESMC-300M/600M fo |
+| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 203 | 2026-09-20T00:26:55 | progress on both pls | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 235 | 2026-09-20T12:22:43 | results from A/B | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 236 | 2026-09-20T12:24:06 | get the timnings for track A pls | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 237 | 2026-09-20T12:24:50 | please save all these results to the repo | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 238 | 2026-09-20T12:27:00 | Check both Modal Track C jobs launched after the httpx fix (commit b9e6d6f). Rea | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 239 | 2026-09-20T12:43:32 | brainstorm a free way to run this... | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 240 | 2026-09-20T14:49:24 | bcaxukkdb toolu_01LSDXGB2WCuowbTWatZay5G /private/tmp/claude-501/-Users-niallole | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 241 | 2026-09-20T16:35:19 | hey status | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 242 | 2026-09-20T16:36:39 | install this, AIRS-Bench: a Suite of Tasks for Frontier AI Research Science Agen | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 243 | 2026-09-20T16:45:09 | CodeRetrievalCodeXGlueMRR <- what is this? | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 244 | 2026-09-20T16:45:57 | okay, here's what we're going to do, you see, Alxandria in my repo... please clo | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 245 | 2026-09-20T16:47:24 | great, now make it a parent of a series of my other repos we're going to iterati | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 246 | 2026-09-20T16:48:17 | i think Evolve needs to go...   │ Evolve                                         | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 247 | 2026-09-20T16:49:12 | sure, lets do this.... i feel as if we failed at this | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 248 | 2026-09-20T16:50:06 | yes please nest it under Alxandria... also include out next steps about how we'l | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 249 | 2026-09-20T16:57:53 | deleted it, the next thing is -> https://github.com/Tyronita/protein-language-mo | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 250 | 2026-09-20T16:58:43 | anything uncomitted on this repo? | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 251 | 2026-09-20T16:59:28 | Want me to migrate NUMBERS.md + the pd_variants CSVs (if not already in LewyGym) | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 252 | 2026-09-20T17:19:18 | b8n8ujy3s toolu_012fF9EdKfNCmqoSAhJLy73D /private/tmp/claude-501/-Users-niallole | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 253 | 2026-09-20T17:33:01 | wait have you pushed up the other stuff | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 254 | 2026-09-20T17:34:24 | but did you grab the research from the other benchmark? | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 255 | 2026-09-20T17:40:11 | it was actually not just that, we also have https://github.com/Tyronita/protein- | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 256 | 2026-09-20T17:44:40 | please run ESMC-300m param model locally here on my mac, the biohub implementati | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 257 | 2026-09-20T17:52:54 | this is what i'd be interested in, is this model ESM-C on hugging face, what is  | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 258 | 2026-09-20T17:55:45 | but i mean, are per-assay ground-truths a thing? i.e. if we are using a mean/med | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 259 | 2026-09-20T18:00:14 | what is r? are these coded by someone and measurable? | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 260 | 2026-09-20T18:01:57 | great, so we've ran the esm crap, but did we run it on the GPU on my machine or  | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 261 | 2026-09-20T18:02:58 | modal we're out of money for now... pls kill this prgress... ESM-C how long did  | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 262 | 2026-09-20T18:03:50 | does the evolutionary scale offer an mps version? metals version? | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 263 | 2026-09-20T18:04:43 | how would you accelerate it? | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 264 | 2026-09-20T18:05:44 | ---   3. MLX (hardest, potentially 3-5× over compiled PyTorch on MPS)    Apple's | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 265 | 2026-09-20T18:16:20 | wait i cant even see the code man open it up, also pls rememember you're gonna h | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 266 | 2026-09-20T18:32:12 | how much mem vram does the m3 gpu i have here contain? the next big Q will be ho | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 267 | 2026-09-20T18:33:41 | a75332c4f2dcf01c1 toolu_01DayoeMWamPBJUQGtZ41VNb /private/tmp/claude-501/-Users- | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 268 | 2026-09-20T18:49:47 | a7b4ad87e3ee4f6e5 toolu_01CHePU7J48CkSSj6U5xK2S1 /private/tmp/claude-501/-Users- | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 269 | 2026-09-20T18:49:47 | a99616513835e7fa7 toolu_01RAmWVFXNYkWRxVurvG85he /private/tmp/claude-501/-Users- | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 270 | 2026-09-20T20:32:06 | open the ESMC paper, what tasks are shown, im trying to work out the FLOPS neede | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |
+| 271 | 2026-09-20T20:35:59 | can you please, do inference using our new MLX on the other tasks and datasets i | `b7cbf4c` | Add multi-task MLX inference: contact prediction,  |

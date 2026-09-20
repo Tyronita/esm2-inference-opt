@@ -1513,3 +1513,19 @@ Add native MLX implementation of ESMC-300M/600M for Apple Silicon
 | Files | `scoring/esmc/mlx_esmc.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 1aed4a1 --no-edit` |
+
+---
+
+### 2026-09-20 · `b7cbf4c` · nialloleary
+
+**Add multi-task MLX inference: contact prediction, secondary structure, stability**
+
+Add multi-task MLX inference: contact prediction, secondary structure, stability
+
+| | |
+|---|---|
+| SHA | `b7cbf4c98b9581b0fcf29e0a0f6224ed1637e42a` |
+| Changed | 7 files changed, 848 insertions(+), 10 deletions(-) |
+| Files | `benchmark/run_tasks.py`  `results/esmc_mlx_tasks.json`  `scoring/esmc/mlx_esmc.py`  `scoring/esmc/tasks/__init__.py`  `scoring/esmc/tasks/contact.py`  `scoring/esmc/tasks/secondary_structure.py`  _1 more_ |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert b7cbf4c --no-edit` |
