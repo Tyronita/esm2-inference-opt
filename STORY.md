@@ -397,3 +397,19 @@ docs: name Track A/B with meaningful aliases throughout
 | Files | `modal_app.py`  `scoring/masked_marginals.py`  `scoring/pseudo_ppl.py`  `scoring/ref/masked_marginals.py`  `scoring/wt_marginals.py` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 8364482 --no-edit` |
+
+---
+
+### 2026-09-20 · `e413132` · nialloleary
+
+**refactor: rename track labels A/B → fair-esm-fp32/hf-fp16**
+
+refactor: rename track labels A/B → fair-esm-fp32/hf-fp16
+
+| | |
+|---|---|
+| SHA | `e413132ce523875f94d4010feaf21a9f2493d58a` |
+| Changed | 1 file changed, 7 insertions(+), 7 deletions(-) |
+| Files | `modal_app.py` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert e413132 --no-edit` |

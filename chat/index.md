@@ -208,11 +208,12 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 198 | 2026-09-19T23:28:36 | sure go for it | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 199 | 2026-09-19T23:47:22 | pls check progress, % done | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 200 | 2026-09-19T23:49:11 | pls ^ add this in an order and export the chat to include in our repo with anyth | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
-| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `8364482` | docs: name Track A/B with meaningful aliases throu |
-| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `8364482` | docs: name Track A/B with meaningful aliases throu |
-| 203 | 2026-09-20T00:26:55 | progress on both pls | `8364482` | docs: name Track A/B with meaningful aliases throu |
-| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `8364482` | docs: name Track A/B with meaningful aliases throu |
-| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `8364482` | docs: name Track A/B with meaningful aliases throu |
-| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `8364482` | docs: name Track A/B with meaningful aliases throu |
-| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `8364482` | docs: name Track A/B with meaningful aliases throu |
-| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `8364482` | docs: name Track A/B with meaningful aliases throu |
+| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `e413132` | refactor: rename track labels A/B → fair-esm-fp32/ |
+| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `e413132` | refactor: rename track labels A/B → fair-esm-fp32/ |
+| 203 | 2026-09-20T00:26:55 | progress on both pls | `e413132` | refactor: rename track labels A/B → fair-esm-fp32/ |
+| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `e413132` | refactor: rename track labels A/B → fair-esm-fp32/ |
+| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `e413132` | refactor: rename track labels A/B → fair-esm-fp32/ |
+| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `e413132` | refactor: rename track labels A/B → fair-esm-fp32/ |
+| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `e413132` | refactor: rename track labels A/B → fair-esm-fp32/ |
+| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `e413132` | refactor: rename track labels A/B → fair-esm-fp32/ |
+| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `e413132` | refactor: rename track labels A/B → fair-esm-fp32/ |
