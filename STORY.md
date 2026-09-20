@@ -1609,3 +1609,19 @@ mlx-opt: full overnight evolve results (5 levels + batch sweep + length curve)
 | Files | `benchmark/evolve.py`  `refs/evolutionaryscale-esm`  `results/evolve_speedup.png`  `results/evolve_stdout.log`  `results/evolve_throughput.png`  `results/evolve_tradeoff.png`  _1 more_ |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert 521db22 --no-edit` |
+
+---
+
+### 2026-09-21 · `e97537c` · nialloleary
+
+**mlx-opt: corrected batch sweep (BF16 numpy cast fix, B=12 sweet spot)**
+
+mlx-opt: corrected batch sweep (BF16 numpy cast fix, B=12 sweet spot)
+
+| | |
+|---|---|
+| SHA | `e97537cf1decb6575f2decb5fbcacd220050eedf` |
+| Changed | 2 files changed, 43 insertions(+) |
+| Files | `results/evolve_batch_sweep.png`  `results/evolve_log.json` |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert e97537c --no-edit` |

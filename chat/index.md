@@ -208,87 +208,87 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 198 | 2026-09-19T23:28:36 | sure go for it | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 199 | 2026-09-19T23:47:22 | pls check progress, % done | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
 | 200 | 2026-09-19T23:49:11 | pls ^ add this in an order and export the chat to include in our repo with anyth | `dbd6015` | feat: compare_tracks — all 217 assays, Track A + B |
-| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 203 | 2026-09-20T00:26:55 | progress on both pls | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 235 | 2026-09-20T12:22:43 | results from A/B | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 236 | 2026-09-20T12:24:06 | get the timnings for track A pls | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 237 | 2026-09-20T12:24:50 | please save all these results to the repo | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 238 | 2026-09-20T12:27:00 | Check both Modal Track C jobs launched after the httpx fix (commit b9e6d6f). Rea | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 239 | 2026-09-20T12:43:32 | brainstorm a free way to run this... | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 240 | 2026-09-20T14:49:24 | bcaxukkdb toolu_01LSDXGB2WCuowbTWatZay5G /private/tmp/claude-501/-Users-niallole | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 241 | 2026-09-20T16:35:19 | hey status | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 242 | 2026-09-20T16:36:39 | install this, AIRS-Bench: a Suite of Tasks for Frontier AI Research Science Agen | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 243 | 2026-09-20T16:45:09 | CodeRetrievalCodeXGlueMRR <- what is this? | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 244 | 2026-09-20T16:45:57 | okay, here's what we're going to do, you see, Alxandria in my repo... please clo | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 245 | 2026-09-20T16:47:24 | great, now make it a parent of a series of my other repos we're going to iterati | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 246 | 2026-09-20T16:48:17 | i think Evolve needs to go...   │ Evolve                                         | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 247 | 2026-09-20T16:49:12 | sure, lets do this.... i feel as if we failed at this | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 248 | 2026-09-20T16:50:06 | yes please nest it under Alxandria... also include out next steps about how we'l | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 249 | 2026-09-20T16:57:53 | deleted it, the next thing is -> https://github.com/Tyronita/protein-language-mo | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 250 | 2026-09-20T16:58:43 | anything uncomitted on this repo? | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 251 | 2026-09-20T16:59:28 | Want me to migrate NUMBERS.md + the pd_variants CSVs (if not already in LewyGym) | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 252 | 2026-09-20T17:19:18 | b8n8ujy3s toolu_012fF9EdKfNCmqoSAhJLy73D /private/tmp/claude-501/-Users-niallole | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 253 | 2026-09-20T17:33:01 | wait have you pushed up the other stuff | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 254 | 2026-09-20T17:34:24 | but did you grab the research from the other benchmark? | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 255 | 2026-09-20T17:40:11 | it was actually not just that, we also have https://github.com/Tyronita/protein- | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 256 | 2026-09-20T17:44:40 | please run ESMC-300m param model locally here on my mac, the biohub implementati | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 257 | 2026-09-20T17:52:54 | this is what i'd be interested in, is this model ESM-C on hugging face, what is  | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 258 | 2026-09-20T17:55:45 | but i mean, are per-assay ground-truths a thing? i.e. if we are using a mean/med | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 259 | 2026-09-20T18:00:14 | what is r? are these coded by someone and measurable? | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 260 | 2026-09-20T18:01:57 | great, so we've ran the esm crap, but did we run it on the GPU on my machine or  | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 261 | 2026-09-20T18:02:58 | modal we're out of money for now... pls kill this prgress... ESM-C how long did  | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 262 | 2026-09-20T18:03:50 | does the evolutionary scale offer an mps version? metals version? | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 263 | 2026-09-20T18:04:43 | how would you accelerate it? | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 264 | 2026-09-20T18:05:44 | ---   3. MLX (hardest, potentially 3-5× over compiled PyTorch on MPS)    Apple's | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 265 | 2026-09-20T18:16:20 | wait i cant even see the code man open it up, also pls rememember you're gonna h | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 266 | 2026-09-20T18:32:12 | how much mem vram does the m3 gpu i have here contain? the next big Q will be ho | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 267 | 2026-09-20T18:33:41 | a75332c4f2dcf01c1 toolu_01DayoeMWamPBJUQGtZ41VNb /private/tmp/claude-501/-Users- | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 268 | 2026-09-20T18:49:47 | a7b4ad87e3ee4f6e5 toolu_01CHePU7J48CkSSj6U5xK2S1 /private/tmp/claude-501/-Users- | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 269 | 2026-09-20T18:49:47 | a99616513835e7fa7 toolu_01RAmWVFXNYkWRxVurvG85he /private/tmp/claude-501/-Users- | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 270 | 2026-09-20T20:32:06 | open the ESMC paper, what tasks are shown, im trying to work out the FLOPS neede | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 271 | 2026-09-20T20:35:59 | can you please, do inference using our new MLX on the other tasks and datasets i | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 272 | 2026-09-20T20:45:36 | Results from MLX ESMC-300M — all three tasks    Task 1: Contact Prediction (P@L) | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 273 | 2026-09-20T20:46:55 | so 0.5 is the ground truth | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 274 | 2026-09-20T20:47:33 | │ Our result (raw attention, no training) │ 0.24                           │ <-  | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 275 | 2026-09-20T20:47:53 | run our mps vs mlx implementation for this task again pls | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 276 | 2026-09-20T20:49:58 | oh thats interesting.... can you add this as working notes to the PR? is this re | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 277 | 2026-09-20T21:01:22 | great, so pls find from leetgpu kernel implms of llama block and see whats porta | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 278 | 2026-09-20T21:10:56 | great, now we've defined the benchmark, do every mlx trick, on a loop with obser | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 279 | 2026-09-20T21:26:13 | ^ finish this session | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 280 | 2026-09-20T21:26:28 | no i bought more | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 281 | 2026-09-20T22:14:44 | https://leetbio.vercel.app/paths.html | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 282 | 2026-09-20T22:30:14 | ^^^ ✻ Churned for 6m 48s · 2 shells still running  ❯ great, now we've defined th | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 283 | 2026-09-20T22:34:33 | anyway, code execute, evolve, run all night until tokens fgone, you have my mac, | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
-| 284 | 2026-09-20T22:35:02 | i want you to automatically pick all recommended steps ^ code in our refs/ mlx i | `521db22` | mlx-opt: full overnight evolve results (5 levels + |
+| 201 | 2026-09-20T00:07:02 | okay, show me my results pls, which track is running... get me all current metri | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 202 | 2026-09-20T00:22:54 | pls do both tracks, kick off both | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 203 | 2026-09-20T00:26:55 | progress on both pls | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 204 | 2026-09-20T00:28:18 | cost est... get current billing | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 205 | 2026-09-20T00:45:18 | is track a, vs b, show me the reference code please, and urls for provenance, pl | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 206 | 2026-09-20T00:48:31 | how is this matching with the spearman claim, and whats our timing saying on bot | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 207 | 2026-09-20T00:53:42 | wait, what is compare_tracks vs ablate_ref? surely we do both? and claude analys | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 208 | 2026-09-20T01:01:09 | is there a way to rename this with a comment somewhere, i.e. this track a hiding | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 209 | 2026-09-20T01:04:11 | no i know, but i meant that we have the hf implem (B) and then the esm (track a) | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 210 | 2026-09-20T01:40:55 | okay out of interest right, you see leetgpu... it offers mojo, cutedsl, we have  | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 211 | 2026-09-20T01:43:51 | a03db8b66a28cefc9 toolu_01Q8XFwkKudjJLbg3RHXMWii /private/tmp/claude-501/-Users- | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 212 | 2026-09-20T01:45:39 | af96f33b7226b1b01 toolu_01LayTbvARQ1Dgkxzk8pJVwE /private/tmp/claude-501/-Users- | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 213 | 2026-09-20T01:47:24 | ... pls set a watcher/observer for our inference roll-out being done too pls, i  | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 214 | 2026-09-20T01:49:05 | a0a5a39097c32fd53 toolu_011fWGGosFzF9NGZ6x5nU3v6 /private/tmp/claude-501/-Users- | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 215 | 2026-09-20T01:50:06 | does reducing inference time compute for this, affect ESMFold compute? anyone ac | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 216 | 2026-09-20T01:51:22 | also is there any A vs B comparisons we can do with our current benchmark too? | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 217 | 2026-09-20T01:54:44 | time pls, of compared assays so far... | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 218 | 2026-09-20T01:56:01 | yeah but hf vs esm impl timing comparisons | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 219 | 2026-09-20T01:59:55 | retrain eta for full dataset - tell me the loss, and the method, find the origin | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 220 | 2026-09-20T02:03:17 | no. tokens in UniRef... assays included,... show an example of an assay... where | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 221 | 2026-09-20T02:05:15 | START: human α-synuclein protein (L=140 AA, Parkinson's gene SNCA) is this extra | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 222 | 2026-09-20T02:06:20 | is DNA codon -> amino acid deterministic | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 223 | 2026-09-20T02:07:53 | please explain to me maps contents, like bidrectional, injective, subjctive, usi | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 224 | 2026-09-20T02:10:32 | now go into the information theory, BERT is bidirectionally drawing attention pa | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 225 | 2026-09-20T02:13:01 | Check progress on two running Modal benchmark jobs and report to user.  Run thes | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 226 | 2026-09-20T02:19:04 | what can we learn from this, is it possible we are, for dataset D, some weights  | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 227 | 2026-09-20T02:20:52 | i.e. isnt this attention vllm sglang'able ? for batching? | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 228 | 2026-09-20T02:21:36 | ^ pls continue ur thought oo | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 229 | 2026-09-20T02:28:00 | §wait... how are you going to fix the kernel problem... here? like fr? also pls  | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 230 | 2026-09-20T02:33:05 | please pull the ESM-3 vs ESM-2 deep dive + arch differences, vs data differences | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 231 | 2026-09-20T02:34:56 | can ESM-C - be in ESMFold? | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 232 | 2026-09-20T02:37:08 | ---   1. The kernel fix — here, realistically?      I overstated the elegance ea | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 233 | 2026-09-20T02:40:48 | │ evolutionaryscale/esm         │ ~2.2K │ Active (ESM-3)    │ No ESM-2 scoring t | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 234 | 2026-09-20T02:45:25 | again... stop.. you cant be adding code... you need to pull in the OG references | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 235 | 2026-09-20T12:22:43 | results from A/B | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 236 | 2026-09-20T12:24:06 | get the timnings for track A pls | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 237 | 2026-09-20T12:24:50 | please save all these results to the repo | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 238 | 2026-09-20T12:27:00 | Check both Modal Track C jobs launched after the httpx fix (commit b9e6d6f). Rea | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 239 | 2026-09-20T12:43:32 | brainstorm a free way to run this... | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 240 | 2026-09-20T14:49:24 | bcaxukkdb toolu_01LSDXGB2WCuowbTWatZay5G /private/tmp/claude-501/-Users-niallole | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 241 | 2026-09-20T16:35:19 | hey status | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 242 | 2026-09-20T16:36:39 | install this, AIRS-Bench: a Suite of Tasks for Frontier AI Research Science Agen | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 243 | 2026-09-20T16:45:09 | CodeRetrievalCodeXGlueMRR <- what is this? | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 244 | 2026-09-20T16:45:57 | okay, here's what we're going to do, you see, Alxandria in my repo... please clo | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 245 | 2026-09-20T16:47:24 | great, now make it a parent of a series of my other repos we're going to iterati | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 246 | 2026-09-20T16:48:17 | i think Evolve needs to go...   │ Evolve                                         | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 247 | 2026-09-20T16:49:12 | sure, lets do this.... i feel as if we failed at this | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 248 | 2026-09-20T16:50:06 | yes please nest it under Alxandria... also include out next steps about how we'l | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 249 | 2026-09-20T16:57:53 | deleted it, the next thing is -> https://github.com/Tyronita/protein-language-mo | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 250 | 2026-09-20T16:58:43 | anything uncomitted on this repo? | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 251 | 2026-09-20T16:59:28 | Want me to migrate NUMBERS.md + the pd_variants CSVs (if not already in LewyGym) | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 252 | 2026-09-20T17:19:18 | b8n8ujy3s toolu_012fF9EdKfNCmqoSAhJLy73D /private/tmp/claude-501/-Users-niallole | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 253 | 2026-09-20T17:33:01 | wait have you pushed up the other stuff | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 254 | 2026-09-20T17:34:24 | but did you grab the research from the other benchmark? | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 255 | 2026-09-20T17:40:11 | it was actually not just that, we also have https://github.com/Tyronita/protein- | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 256 | 2026-09-20T17:44:40 | please run ESMC-300m param model locally here on my mac, the biohub implementati | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 257 | 2026-09-20T17:52:54 | this is what i'd be interested in, is this model ESM-C on hugging face, what is  | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 258 | 2026-09-20T17:55:45 | but i mean, are per-assay ground-truths a thing? i.e. if we are using a mean/med | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 259 | 2026-09-20T18:00:14 | what is r? are these coded by someone and measurable? | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 260 | 2026-09-20T18:01:57 | great, so we've ran the esm crap, but did we run it on the GPU on my machine or  | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 261 | 2026-09-20T18:02:58 | modal we're out of money for now... pls kill this prgress... ESM-C how long did  | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 262 | 2026-09-20T18:03:50 | does the evolutionary scale offer an mps version? metals version? | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 263 | 2026-09-20T18:04:43 | how would you accelerate it? | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 264 | 2026-09-20T18:05:44 | ---   3. MLX (hardest, potentially 3-5× over compiled PyTorch on MPS)    Apple's | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 265 | 2026-09-20T18:16:20 | wait i cant even see the code man open it up, also pls rememember you're gonna h | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 266 | 2026-09-20T18:32:12 | how much mem vram does the m3 gpu i have here contain? the next big Q will be ho | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 267 | 2026-09-20T18:33:41 | a75332c4f2dcf01c1 toolu_01DayoeMWamPBJUQGtZ41VNb /private/tmp/claude-501/-Users- | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 268 | 2026-09-20T18:49:47 | a7b4ad87e3ee4f6e5 toolu_01CHePU7J48CkSSj6U5xK2S1 /private/tmp/claude-501/-Users- | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 269 | 2026-09-20T18:49:47 | a99616513835e7fa7 toolu_01RAmWVFXNYkWRxVurvG85he /private/tmp/claude-501/-Users- | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 270 | 2026-09-20T20:32:06 | open the ESMC paper, what tasks are shown, im trying to work out the FLOPS neede | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 271 | 2026-09-20T20:35:59 | can you please, do inference using our new MLX on the other tasks and datasets i | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 272 | 2026-09-20T20:45:36 | Results from MLX ESMC-300M — all three tasks    Task 1: Contact Prediction (P@L) | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 273 | 2026-09-20T20:46:55 | so 0.5 is the ground truth | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 274 | 2026-09-20T20:47:33 | │ Our result (raw attention, no training) │ 0.24                           │ <-  | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 275 | 2026-09-20T20:47:53 | run our mps vs mlx implementation for this task again pls | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 276 | 2026-09-20T20:49:58 | oh thats interesting.... can you add this as working notes to the PR? is this re | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 277 | 2026-09-20T21:01:22 | great, so pls find from leetgpu kernel implms of llama block and see whats porta | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 278 | 2026-09-20T21:10:56 | great, now we've defined the benchmark, do every mlx trick, on a loop with obser | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 279 | 2026-09-20T21:26:13 | ^ finish this session | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 280 | 2026-09-20T21:26:28 | no i bought more | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 281 | 2026-09-20T22:14:44 | https://leetbio.vercel.app/paths.html | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 282 | 2026-09-20T22:30:14 | ^^^ ✻ Churned for 6m 48s · 2 shells still running  ❯ great, now we've defined th | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 283 | 2026-09-20T22:34:33 | anyway, code execute, evolve, run all night until tokens fgone, you have my mac, | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 284 | 2026-09-20T22:35:02 | i want you to automatically pick all recommended steps ^ code in our refs/ mlx i | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
