@@ -371,8 +371,8 @@ def compare_tracks(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP):
     ]
 
     tracks = [
-        ("A", "fair-esm@2b369911", "float32", model_a, alphabet,  registry_a),
-        ("B", "transformers-4.44", "float16", model_b, tokenizer, registry_b),
+        ("fair-esm-fp32", "fair-esm@2b369911", "float32", model_a, alphabet,  registry_a),
+        ("hf-fp16",       "transformers-4.44",  "float16", model_b, tokenizer, registry_b),
     ]
 
     # ── Build assay list from full reference — ALL 217, no filter ────────────
@@ -419,7 +419,7 @@ def compare_tracks(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP):
                     continue
 
                 # Profile only the very first assay of the entire run
-                profile_this = (i == 0 and track_id == "A" and method.name == "masked_marginals")
+                profile_this = (i == 0 and track_id == "fair-esm-fp32" and method.name == "masked_marginals")
                 label = f"{track_id}_{method.name}_{a['assay_id'][:12]}"
 
                 events.assay_start(a["assay_id"], a["L"], a["N"])
@@ -485,8 +485,8 @@ def compare_tracks(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP):
     # ── Summary: mean ρ per method per track ─────────────────────────────────
     print(f"\n{'='*w}")
     print(f"  COMPARISON SUMMARY  (all {len(assays)} assays)")
-    print(f"  {'Method':<20}  {'Track':>5}  {'mean ρ':>8}  {'published':>9}  {'Δρ vs pub':>9}  {'total wall':>10}")
-    print(f"  {'-'*20}  {'-'*5}  {'-'*8}  {'-'*9}  {'-'*9}  {'-'*10}")
+    print(f"  {'Method':<22}  {'Track':<15}  {'mean ρ':>8}  {'published':>9}  {'Δρ vs pub':>9}  {'total wall':>10}")
+    print(f"  {'-'*22}  {'-'*15}  {'-'*8}  {'-'*9}  {'-'*9}  {'-'*10}")
 
     all_stored = all_rows
     if stream_path.exists() and not all_stored:
@@ -495,7 +495,7 @@ def compare_tracks(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP):
 
     for method_name in ["wt_marginals", "masked_marginals", "pseudo_ppl"]:
         pub = {"wt_marginals": 0.430, "masked_marginals": 0.440, "pseudo_ppl": 0.440}[method_name]
-        for track_id in ["A", "B"]:
+        for track_id in ["fair-esm-fp32", "hf-fp16"]:
             subset = [r for r in all_stored if r["method"] == method_name and r["track"] == track_id]
             if not subset:
                 continue
@@ -503,7 +503,7 @@ def compare_tracks(n_timed: int = N_TIMED, n_warmup: int = N_WARMUP):
             total_wall = sum(r["wall_mean"] for r in subset)
             delta     = mean_rho - pub
             print(
-                f"  {method_name:<20}  {track_id:>5}  {mean_rho:+.4f}  "
+                f"  {method_name:<22}  {track_id:<15}  {mean_rho:+.4f}  "
                 f"{pub:+.3f}     {delta:+.4f}    {total_wall:8.0f}s"
             )
 
