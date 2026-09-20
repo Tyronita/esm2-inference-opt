@@ -80,14 +80,16 @@ ESMC_HF_REPO  = "biohub/ESMC-600M"   # HuggingFace hub for EsmcForMaskedLM
 image_c = (
     modal.Image.debian_slim(python_version="3.11")
     .run_commands("apt-get update -qq && apt-get install -y --no-install-recommends git")
+    # EvolutionaryScale ESM SDK — provides ESMC, EsmcForMaskedLM, EsmcTokenizer,
+    # ESMProtein, LogitsConfig. Let esm>=3.0.0 resolve its own torch (avoids
+    # version conflict between torch==2.4.0 and torchvision>=0.29 pulled by esm 3.2+).
+    # Source: refs/evolutionaryscale-esm @ 43b4548b (v3.0.7+77)
     .pip_install(
-        "torch==2.4.0",
+        "esm>=3.0.0",
+        "attrs",
+        "biopython==1.79",
         extra_index_url="https://download.pytorch.org/whl/cu121",
     )
-    # EvolutionaryScale ESM SDK >= 3.0 — provides ESMC, EsmcForMaskedLM, EsmcTokenizer,
-    # ESMProtein, LogitsConfig. Pulls in: transformers, attrs, einops, biotite, tokenizers.
-    # Source: refs/evolutionaryscale-esm @ 43b4548b
-    .pip_install("esm>=3.0.0", "attrs", "biopython==1.79")
     .pip_install(
         "pandas==2.2.2",
         "scipy==1.13.1",
@@ -1511,6 +1513,221 @@ def run_track_c(methods: str = "all", n_assays: int = 0):
     print(f"{'='*w}\n")
     vol.commit()
     return {"n_rows": len(all_rows), "stream": str(stream_path)}
+
+
+# ── 12-assay fast harness — MFU comparison across 5 configs ─────────────────
+# Stratified by sequence length: covers the full L² cost distribution.
+# 3 very-short (L~37-39), 3 short (L~69), 3 medium (L~245-252),
+# 2 medium-long (L=536), 1 longest (L=3423)
+FAST_12 = [
+    "TCRG1_MOUSE_Tsuboyama_2023_1E0L",           # L=37
+    "PIN1_HUMAN_Tsuboyama_2023_1I6C",            # L=39
+    "YNZC_BACSU_Tsuboyama_2023_2JVD",            # L=39
+    "FKBP3_HUMAN_Tsuboyama_2023_2KFV",           # L=69
+    "NUSA_ECOLI_Tsuboyama_2023_1WCL",            # L=69
+    "UBE4B_HUMAN_Tsuboyama_2023_3L1X",           # L=69
+    "TPMT_HUMAN_Matreyek_2018",                  # L=245
+    "TRPC_SACS2_Chan_2017",                      # L=248
+    "TRPC_THEMA_Chan_2017",                      # L=252
+    "SRC_HUMAN_Ahler_2019",                      # L=536
+    "SRC_HUMAN_Chakraborty_2023_binding-DAS_25uM",  # L=536
+    "A0A140D2T1_ZIKV_Sourisseau_2019",           # L=3423
+]
+
+
+@app.function(
+    image=image_c,
+    gpu="A100",
+    timeout=10800,   # 3 hr — 12 assays × 5 configs × warmup
+    volumes={str(CACHE_DIR): vol},
+)
+def run_track_c_fast():
+    """
+    MFU research: 12 stratified assays × 5 model configurations.
+
+    Configs tested:
+      0. sequential   — ESMC SDK, L passes, reference (exact)
+      1. batched_32   — EsmcForMaskedLM fp16, B=32, exact
+      2. idea1_compile  — Idea 1: EsmcForMaskedLM + torch.compile reduce-overhead, B=32
+      3. idea2_autotune — Idea 2: EsmcForMaskedLM + torch.compile max-autotune, B=64
+      4. idea3_fa2      — Idea 3: EsmcForMaskedLM + FA2 (or SDPA) + compile, B=32
+
+    Reports: Spearman ρ, wall_s, MFU%, speedup_vs_sequential for each.
+    All batched configs have identical ρ to sequential (exact, no approximation).
+
+    Run:  modal run --detach modal_app.py::run_track_c_fast
+    Pull: modal run modal_app.py::pull_track_c_results
+    Cost: ~$5-8, ~1-2 hr on A100 40GB
+    """
+    import json, os, time, statistics
+    import torch
+    from benchmark.proteingym import fetch_dms_data, fetch_reference
+    from benchmark.metrics import compute_all
+    from scoring.esmc.batched_masked import score_variants as score_batched
+    from scoring.esmc.masked_marginals import score_variants as score_sequential
+
+    device   = "cuda"
+    gpu_name = torch.cuda.get_device_name(0)
+    os.environ.setdefault("HF_HOME", str(CACHE_DIR))
+
+    w = 76
+    print(f"\n{'='*w}")
+    print(f"  Track C — 12-Assay MFU Research Harness")
+    print(f"  GPU   : {gpu_name}")
+    print(f"  Model : {ESMC_HF_REPO}")
+    print(f"  Ideas : sequential | batched_32 | compile_32 | autotune_64 | fa2_32")
+    print(f"{'='*w}\n")
+
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    stream_path = RESULTS_DIR / "track_c_fast_stream.jsonl"
+
+    # Load reference + DMS data
+    pg_cache  = CACHE_DIR / "proteingym"
+    reference = fetch_reference(pg_cache)
+    dms_dir   = fetch_dms_data(pg_cache)
+
+    import pandas as pd
+    assays = []
+    for assay_id in FAST_12:
+        ref_row = reference[reference["DMS_id"] == assay_id]
+        if ref_row.empty:
+            print(f"  SKIP {assay_id} — not in reference")
+            continue
+        ref_row = ref_row.iloc[0]
+        dms_file = dms_dir / ref_row["DMS_filename"]
+        if not dms_file.exists():
+            print(f"  SKIP {assay_id} — data file missing")
+            continue
+        dms = pd.read_csv(dms_file)
+        assays.append({
+            "assay_id": assay_id,
+            "sequence": ref_row["target_seq"],
+            "variants": dms["mutant"].tolist(),
+            "fitness":  dms["DMS_score"].tolist(),
+            "L":        len(ref_row["target_seq"]),
+            "N":        len(dms),
+        })
+    print(f"  Loaded {len(assays)} assays: {[a['assay_id'][:15] for a in assays]}")
+
+    summary: dict[str, dict] = {}
+
+    # ── Config 0: Sequential ESMC SDK ────────────────────────────────────────
+    print(f"\n{'─'*w}")
+    print(f"  CONFIG 0: Sequential ESMC SDK (reference)")
+    model_sdk, _ = load_model_esmc(device)
+    n_params = sum(p.numel() for p in model_sdk.parameters())
+
+    c0_rows = []
+    for a in assays:
+        t0 = time.perf_counter()
+        scores = score_sequential(model_sdk, None, a["sequence"], a["variants"], device)
+        wall_s = time.perf_counter() - t0
+        metrics = compute_all(scores, a["fitness"])
+        mfu = _compute_mfu(model_sdk, a["L"], wall_s)
+        row = {"config": "sequential", **metrics, "wall_s": wall_s, "mfu": mfu, "assay_id": a["assay_id"], "L": a["L"]}
+        c0_rows.append(row)
+        with open(stream_path, "a") as f:
+            f.write(json.dumps(row) + "\n")
+        print(f"    {a['assay_id']:<45}  ρ={metrics['spearman_rho']:+.4f}  {wall_s:.1f}s  MFU={mfu*100:.1f}%")
+
+    seq_wall = {r["assay_id"]: r["wall_s"] for r in c0_rows}
+    summary["sequential"] = {"mean_rho": statistics.mean(r["spearman_rho"] for r in c0_rows),
+                             "mean_mfu": statistics.mean(r["mfu"] for r in c0_rows) * 100,
+                             "speedup": 1.0}
+    del model_sdk; torch.cuda.empty_cache()
+
+    # ── Configs 1-4: EsmcForMaskedLM batched variants ────────────────────────
+    from esm.models.esmc import EsmcForMaskedLM, EsmcTokenizer
+
+    configs = [
+        ("batched_32",     {"dtype": torch.float16},                              32, None),
+        ("idea1_compile",  {"dtype": torch.float16},                              32, "reduce-overhead"),
+        ("idea2_autotune", {"dtype": torch.float16},                              64, "max-autotune"),
+        ("idea3_fa2",      {"dtype": torch.float16, "attn_implementation": "flash_attention_2"}, 32, "reduce-overhead"),
+    ]
+
+    for cfg_name, hf_kwargs, batch_sz, compile_mode in configs:
+        print(f"\n{'─'*w}")
+        print(f"  CONFIG: {cfg_name}  B={batch_sz}  compile={compile_mode}")
+        try:
+            model_hf = EsmcForMaskedLM.from_pretrained(
+                ESMC_HF_REPO,
+                cache_dir=str(CACHE_DIR),
+                **hf_kwargs,
+            ).eval().to(device)
+        except Exception as e:
+            # FA2 may not be available; fall back to SDPA
+            if "flash_attention_2" in str(hf_kwargs.get("attn_implementation", "")):
+                print(f"  FA2 unavailable ({e}), falling back to SDPA")
+                hf_kwargs = {k: v for k, v in hf_kwargs.items() if k != "attn_implementation"}
+                model_hf = EsmcForMaskedLM.from_pretrained(
+                    ESMC_HF_REPO, cache_dir=str(CACHE_DIR), **hf_kwargs
+                ).eval().to(device)
+                cfg_name = cfg_name + "_sdpa_fallback"
+            else:
+                print(f"  SKIP {cfg_name}: {e}")
+                continue
+
+        if compile_mode:
+            print(f"  Compiling with mode={compile_mode}...")
+            model_hf = torch.compile(model_hf, mode=compile_mode, fullgraph=False)
+
+        tok = EsmcTokenizer()
+        n_params_hf = sum(p.numel() for p in (model_hf._orig_mod if hasattr(model_hf, "_orig_mod") else model_hf).parameters())
+
+        # Warmup: 1 forward pass on a dummy sequence to trigger compilation
+        print(f"  Warming up...")
+        dummy = "ACDEFGHIKLMNPQRSTVWY" * 5
+        _ = score_batched(model_hf, tok, dummy, [f"A{i+1}C" for i in range(5)], device, batch_size=batch_sz)
+        torch.cuda.synchronize()
+
+        cfg_rows = []
+        for a in assays:
+            t0 = time.perf_counter()
+            scores = score_batched(model_hf, tok, a["sequence"], a["variants"], device, batch_size=batch_sz)
+            torch.cuda.synchronize()
+            wall_s = time.perf_counter() - t0
+            metrics = compute_all(scores, a["fitness"])
+            mfu = _compute_mfu(
+                model_hf._orig_mod if hasattr(model_hf, "_orig_mod") else model_hf,
+                a["L"], wall_s / max(1, len({m[1:-1] for v in a["variants"] for m in v.split(":")}) / batch_sz)
+            )
+            speedup = seq_wall.get(a["assay_id"], wall_s) / wall_s if wall_s > 0 else 1.0
+            row = {"config": cfg_name, **metrics, "wall_s": wall_s, "mfu": mfu, "speedup": speedup,
+                   "assay_id": a["assay_id"], "L": a["L"], "batch_size": batch_sz}
+            cfg_rows.append(row)
+            with open(stream_path, "a") as f:
+                f.write(json.dumps(row) + "\n")
+            print(f"    {a['assay_id']:<45}  ρ={metrics['spearman_rho']:+.4f}  {wall_s:.1f}s  MFU={mfu*100:.1f}%  {speedup:.1f}×")
+
+        if cfg_rows:
+            summary[cfg_name] = {
+                "mean_rho": statistics.mean(r["spearman_rho"] for r in cfg_rows),
+                "mean_mfu": statistics.mean(r["mfu"] for r in cfg_rows) * 100,
+                "speedup":  statistics.mean(r["speedup"] for r in cfg_rows),
+            }
+
+        del model_hf; torch.cuda.empty_cache()
+
+    vol.commit()
+
+    # ── Summary table ─────────────────────────────────────────────────────────
+    print(f"\n{'='*w}")
+    print(f"  12-ASSAY MFU RESEARCH SUMMARY")
+    print(f"  {'Config':<24}  {'mean ρ':>8}  {'MFU%':>7}  {'Speedup':>9}  {'Notes'}")
+    print(f"  {'-'*24}  {'-'*8}  {'-'*7}  {'-'*9}")
+    for cfg, d in summary.items():
+        note = ""
+        if cfg == "sequential":    note = "reference (exact)"
+        if cfg == "batched_32":    note = "exact, B=32"
+        if cfg == "idea1_compile": note = "Idea 1: +compile reduce-overhead"
+        if cfg == "idea2_autotune": note = "Idea 2: +compile max-autotune, B=64"
+        if "fa2" in cfg or "sdpa" in cfg: note = "Idea 3: FA2/SDPA+compile"
+        print(f"  {cfg:<24}  {d['mean_rho']:+.4f}    {d['mean_mfu']:>5.1f}%  {d['speedup']:>7.1f}×  {note}")
+    print(f"\n  Published ESM-2 baseline: ρ=0.414 (217 assays, Notin 2023)")
+    print(f"{'='*w}\n")
+    vol.commit()
+    return {"summary": summary, "n_assays": len(assays)}
 
 
 @app.local_entrypoint()
