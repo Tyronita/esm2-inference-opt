@@ -80,7 +80,8 @@ class EsmcAttention(nn.Module):
         self.o_proj = nn.Linear(hidden, hidden, bias=False)
         self.rope   = nn.RoPE(self.d_head, traditional=False, base=10000)
 
-    def __call__(self, x: mx.array) -> mx.array:
+    def __call__(self, x: mx.array,
+                 return_attn: bool = False) -> tuple[mx.array, mx.array | None]:
         B, L, _ = x.shape
         h = self.ln(x)
 
@@ -96,12 +97,18 @@ class EsmcAttention(nn.Module):
         q = self.rope(q)
         k = self.rope(k)
 
-        # [B, H, L, D]
-        out = mx.fast.scaled_dot_product_attention(q, k, v, scale=self.scale)
+        attn_weights = None
+        if return_attn:
+            # manual softmax attention so we can capture the weights
+            scores = (q @ k.transpose(0, 1, 3, 2)) * self.scale  # [B, H, L, L]
+            attn_weights = mx.softmax(scores, axis=-1)            # [B, H, L, L]
+            out = attn_weights @ v                                 # [B, H, L, D]
+        else:
+            out = mx.fast.scaled_dot_product_attention(q, k, v, scale=self.scale)
 
         # [B, H, L, D] -> [B, L, hidden]
         out = out.transpose(0, 2, 1, 3).reshape(B, L, -1)
-        return self.o_proj(out)
+        return self.o_proj(out), attn_weights
 
 
 class EsmcBlock(nn.Module):
@@ -112,10 +119,12 @@ class EsmcBlock(nn.Module):
         self.ffn  = SwiGLUFFN(hidden, intermediate)
         self.scaling_factor = scaling_factor
 
-    def __call__(self, x: mx.array) -> mx.array:
-        x = x + self.attn(x) / self.scaling_factor
+    def __call__(self, x: mx.array,
+                 return_attn: bool = False) -> tuple[mx.array, mx.array | None]:
+        attn_out, attn_weights = self.attn(x, return_attn=return_attn)
+        x = x + attn_out / self.scaling_factor
         x = x + self.ffn(x) / self.scaling_factor
-        return x
+        return x, attn_weights
 
 
 class EsmcLMHead(nn.Module):
@@ -160,11 +169,34 @@ class EsmcMLX(nn.Module):
         self.norm   = nn.LayerNorm(hidden, bias=False)
         self.lm_head = EsmcLMHead(hidden, vocab)
 
-    def __call__(self, input_ids: mx.array) -> mx.array:
+    def encode(self, input_ids: mx.array, *,
+               return_attentions: bool = False,
+               return_hidden_states: bool = False):
+        """Return per-token representations before the LM head.
+
+        Returns
+        -------
+        last_hidden : mx.array  (B, L, hidden)  — final-layer, post-norm embeddings
+        hidden_states : list[mx.array] | None   — [embed, layer0, …, layer_N]
+        attentions    : list[mx.array] | None   — [layer0, …, layer_N], each (B, H, L, L)
+        """
         x = self.embed_tokens(input_ids)
+        all_hidden = [x] if return_hidden_states else None
+        all_attn   = [] if return_attentions else None
+
         for block in self.layers:
-            x = block(x)
-        return self.lm_head(self.norm(x))
+            x, attn_w = block(x, return_attn=return_attentions)
+            if return_hidden_states:
+                all_hidden.append(x)
+            if return_attentions:
+                all_attn.append(attn_w)
+
+        last_hidden = self.norm(x)
+        return last_hidden, all_hidden, all_attn
+
+    def __call__(self, input_ids: mx.array) -> mx.array:
+        last_hidden, _, _ = self.encode(input_ids)
+        return self.lm_head(last_hidden)
 
     @classmethod
     def from_pretrained(cls, repo_id: str = "biohub/ESMC-300M") -> "EsmcMLX":

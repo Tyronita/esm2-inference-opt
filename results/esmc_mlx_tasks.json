@@ -1,0 +1,52 @@
+{
+  "contact": [
+    {
+      "pdb": "1UBQ",
+      "chain": "A",
+      "L": 76,
+      "P@L": 0.276,
+      "P@2L": 0.184
+    },
+    {
+      "pdb": "2LZM",
+      "chain": "A",
+      "L": 164,
+      "P@L": 0.213,
+      "P@2L": 0.165
+    },
+    {
+      "pdb": "1TEN",
+      "chain": "A",
+      "L": 89,
+      "P@L": 0.416,
+      "P@2L": 0.275
+    },
+    {
+      "pdb": "8FBK",
+      "chain": "A",
+      "L": 218,
+      "P@L": 0.211,
+      "P@2L": 0.174
+    },
+    {
+      "pdb": "8BSN",
+      "chain": "A",
+      "L": 311,
+      "P@L": 0.09,
+      "P@2L": 0.09
+    }
+  ],
+  "contact_mean_pal": 0.241,
+  "secondary_structure": {
+    "Q3": 0.59,
+    "Q8": 0.59,
+    "n_proteins": 5,
+    "n_residues": 512
+  },
+  "stability": {
+    "dataset": "FireProtDB T4 lysozyme",
+    "spearman_r": -0.238,
+    "spearman_p": "5.70e-01",
+    "n_mutations": 8
+  }
+}
