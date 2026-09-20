@@ -360,7 +360,7 @@ class EsmcMLX(nn.Module):
             logits = self(ids_mx)                           # [B, L, 64]
             mx.eval(logits)
 
-            log_probs = np.array(nn.log_softmax(logits, axis=-1))  # [B, L, 64]
+            log_probs = np.array(nn.log_softmax(logits.astype(mx.float32), axis=-1))  # [B, L, 64]
             for b_idx, pos in enumerate(batch_pos):
                 pos_to_lp[pos] = log_probs[b_idx, pos + 1]  # log-probs at masked pos
 

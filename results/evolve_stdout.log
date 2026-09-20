@@ -1,0 +1,184 @@
+=================================================================
+  ESMC-300M  MLX Optimization Evolution Loop
+  Device: Apple M3
+  MLX: 0.32.2
+  Levels: [0, 1, 2, 3, 4]
+=================================================================
+
+Computing fp32 reference logits ...
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 4356.46it/s]
+  Done
+
+=================================================================
+  OPT LEVEL 0: BASELINE  —  fp32, no compile
+=================================================================
+  Loading model ... Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 7833.31it/s]
+2.4s
+  Memory  active=1332.0MB  peak=1564.7MB
+  Correctness check ... Matplotlib is building the font cache; this may take a moment.
+MAE=0.0000 ✓
+  Benchmarking logits (3w+5r per length) ...
+    L=76        37.8 ± 0.2 ms
+    L=100       38.6 ± 0.9 ms
+    L=140       56.5 ± 0.4 ms
+    L=200       58.7 ± 0.4 ms
+    L=280       78.6 ± 0.9 ms
+    L=360      100.3 ± 1.4 ms
+    L=450      101.9 ± 1.6 ms
+  Throughput (tok/s): {76: 2012, 100: 2589, 140: 2479, 200: 3407, 280: 3562, 360: 3587, 450: 4415}
+  Per-layer timing (L=140) ...
+    Block avg: 2.49 ms  (first-15: 2.84ms  last-15: 2.13ms)
+  [graph] speedup chart → /Users/nialloleary/esm2-inference-opt/results/evolve_speedup.png
+  [graph] throughput chart → /Users/nialloleary/esm2-inference-opt/results/evolve_throughput.png
+  [graph] trade-off chart → /Users/nialloleary/esm2-inference-opt/results/evolve_tradeoff.png
+  [git] commit failed: b"fatal: Pathspec 'refs/evolutionaryscale-esm/esm/models/esmc/mlx_model.py' is in submodule 'refs/evolutionaryscale-esm'"
+
+=================================================================
+  OPT LEVEL 1: MX.COMPILE  —  fp32 + JIT  (+3%)
+=================================================================
+  Loading model ... Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 7413.34it/s]
+3.1s
+  Memory  active=1332.0MB  peak=1809.3MB
+  Correctness check ... MAE=0.0002 ✓
+  Benchmarking logits (3w+5r per length) ...
+    L=76        37.1 ± 1.1 ms
+    L=100       37.3 ± 0.5 ms
+    L=140       55.5 ± 1.2 ms
+    L=200       58.1 ± 0.9 ms
+    L=280       77.3 ± 0.2 ms
+    L=360      115.2 ± 14.9 ms
+    L=450      106.6 ± 18.1 ms
+  Throughput (tok/s): {76: 2047, 100: 2680, 140: 2523, 200: 3440, 280: 3623, 360: 3125, 450: 4220}
+  [graph] speedup chart → /Users/nialloleary/esm2-inference-opt/results/evolve_speedup.png
+  [graph] throughput chart → /Users/nialloleary/esm2-inference-opt/results/evolve_throughput.png
+  [graph] trade-off chart → /Users/nialloleary/esm2-inference-opt/results/evolve_tradeoff.png
+  [git] commit failed: b"fatal: Pathspec 'refs/evolutionaryscale-esm/esm/models/esmc/mlx_model.py' is in submodule 'refs/evolutionaryscale-esm'"
+
+=================================================================
+  OPT LEVEL 2: BF16_ONLY  —  BF16, no compile  (WARNING: slower without JIT — BF16 dispatch overhead > bandwidth savings)
+=================================================================
+  Loading model ... Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 2231.54it/s]
+26.6s
+  Memory  active=667.0MB  peak=1999.0MB
+  Correctness check ... MAE=1.2120 ✓
+  Benchmarking logits (3w+5r per length) ...
+    L=76        33.3 ± 1.1 ms
+    L=100       32.5 ± 0.3 ms
+    L=140       48.2 ± 0.3 ms
+    L=200       48.8 ± 0.5 ms
+    L=280       65.5 ± 0.6 ms
+    L=360       83.5 ± 0.8 ms
+    L=450       82.8 ± 0.9 ms
+  Throughput (tok/s): {76: 2285, 100: 3078, 140: 2905, 200: 4100, 280: 4272, 360: 4309, 450: 5437}
+  [graph] speedup chart → /Users/nialloleary/esm2-inference-opt/results/evolve_speedup.png
+  [graph] throughput chart → /Users/nialloleary/esm2-inference-opt/results/evolve_throughput.png
+  [graph] trade-off chart → /Users/nialloleary/esm2-inference-opt/results/evolve_tradeoff.png
+  [git] commit failed: b"fatal: Pathspec 'refs/evolutionaryscale-esm/esm/models/esmc/mlx_model.py' is in submodule 'refs/evolutionaryscale-esm'"
+
+=================================================================
+  OPT LEVEL 3: BF16+COMPILE  —  BF16 + JIT  [recommended — best quality/speed]  (+22%)
+=================================================================
+  Loading model ... Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 1738.77it/s]
+16.1s
+  Memory  active=667.0MB  peak=2002.8MB
+  Correctness check ... MAE=1.2120 ✓
+  Benchmarking logits (3w+5r per length) ...
+    L=76        32.1 ± 1.2 ms
+    L=100       31.8 ± 0.7 ms
+    L=140       47.3 ± 0.7 ms
+    L=200       48.4 ± 1.0 ms
+    L=280       64.4 ± 0.4 ms
+    L=360       81.7 ± 0.2 ms
+    L=450       81.2 ± 0.5 ms
+  Throughput (tok/s): {76: 2365, 100: 3148, 140: 2958, 200: 4135, 280: 4345, 360: 4406, 450: 5539}
+  Per-layer timing (L=140) ...
+    Block avg: 2.42 ms  (first-15: 2.83ms  last-15: 2.02ms)
+  Batched masked-marginals scoring ...
+    batched scoring failed: 'bfloat16' is not a valid PEP 3118 buffer format string
+  [graph] speedup chart → /Users/nialloleary/esm2-inference-opt/results/evolve_speedup.png
+  [graph] throughput chart → /Users/nialloleary/esm2-inference-opt/results/evolve_throughput.png
+  [graph] trade-off chart → /Users/nialloleary/esm2-inference-opt/results/evolve_tradeoff.png
+  [git] commit failed: b"fatal: Pathspec 'refs/evolutionaryscale-esm/esm/models/esmc/mlx_model.py' is in submodule 'refs/evolutionaryscale-esm'"
+
+=================================================================
+  OPT LEVEL 4: FUSED_LN  —  BF16 + JIT + pure-MLX fused residual+LN blocks
+=================================================================
+  Loading model ... Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 5467.66it/s]
+25.2s
+  Memory  active=667.0MB  peak=2002.8MB
+  Correctness check ... MAE=1.5958 ✓
+  Benchmarking logits (3w+5r per length) ...
+    L=76        32.0 ± 1.1 ms
+    L=100       31.9 ± 0.5 ms
+    L=140       47.1 ± 0.8 ms
+    L=200       47.5 ± 0.2 ms
+    L=280       64.0 ± 0.5 ms
+    L=360       82.7 ± 0.9 ms
+    L=450       81.2 ± 0.6 ms
+  Throughput (tok/s): {76: 2374, 100: 3139, 140: 2969, 200: 4209, 280: 4375, 360: 4354, 450: 5542}
+  Batched masked-marginals scoring ...
+    batched scoring failed: 'bfloat16' is not a valid PEP 3118 buffer format string
+  [graph] speedup chart → /Users/nialloleary/esm2-inference-opt/results/evolve_speedup.png
+  [graph] throughput chart → /Users/nialloleary/esm2-inference-opt/results/evolve_throughput.png
+  [graph] trade-off chart → /Users/nialloleary/esm2-inference-opt/results/evolve_tradeoff.png
+  [git] commit failed: b"fatal: Pathspec 'refs/evolutionaryscale-esm/esm/models/esmc/mlx_model.py' is in submodule 'refs/evolutionaryscale-esm'"
+
+=================================================================
+  EXTENDED: Batched Inference Throughput Sweep
+=================================================================
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 6110.19it/s]
+  Sequence length L=140
+     B    ms/batch      ms/seq      seqs/s     speedup
+     1        48.4        48.4        20.6       1.00x
+     2        81.8        40.9        24.4       1.18x
+     4       139.2        34.8        28.7       1.39x
+     8       267.5        33.4        29.9       1.45x
+    12       396.8        33.1        30.2       1.46x
+    16       517.3        32.3        30.9       1.50x
+  [graph] batch sweep → results/evolve_batch_sweep.png
+
+=================================================================
+  EXTENDED: Throughput vs Sequence Length (L=50..1000)
+=================================================================
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 2311.34it/s]
+
+  Opt level 0 (baseline (fp32)):
+    L=50         33.9 ms     1476 tok/s
+    L=100        46.1 ms     2171 tok/s
+    L=150        59.5 ms     2520 tok/s
+    L=200        78.9 ms     2535 tok/s
+    L=300       103.3 ms     2903 tok/s
+    L=400       143.8 ms     2782 tok/s
+    L=500       172.9 ms     2893 tok/s
+    L=600       215.7 ms     2782 tok/s
+    L=750       262.1 ms     2861 tok/s
+    L=1000      368.9 ms     2711 tok/s
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 425.51it/s]
+
+  Opt level 3 (bf16+compile):
+    L=50         24.1 ms     2072 tok/s
+    L=100        35.9 ms     2784 tok/s
+    L=150        48.5 ms     3093 tok/s
+    L=200        64.0 ms     3127 tok/s
+    L=300        80.5 ms     3727 tok/s
+    L=400       112.4 ms     3557 tok/s
+    L=500       131.2 ms     3811 tok/s
+    L=600       164.8 ms     3641 tok/s
+    L=750       202.9 ms     3697 tok/s
+    L=1000      281.1 ms     3557 tok/s
+
+  [graph] length curve → results/evolve_length_curve.png
+
+=================================================================
+  FINAL SUMMARY
+=================================================================
+  Level                     L=140 ms     Speedup       MAE    OK
+  baseline                   56.48ms       1.00x     0.000     ✓
+  mx.compile                 55.49ms       1.02x     0.000     ✓
+  bf16_only                   48.2ms       1.17x     1.212     ✓
+  bf16+compile               47.33ms       1.19x     1.212     ✓
+  fused_ln                   47.15ms       1.20x     1.596     ✓
+
+  Log → results/evolve_log.json
+  Graphs → results/evolve_speedup.png, evolve_throughput.png
+  Branch: mlx-optim-loop  (git log --oneline to review)

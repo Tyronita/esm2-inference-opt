@@ -358,7 +358,7 @@ def run_level(level_id: int, tok, ids_dict: dict,
     layer_timing = None
     if level_id in (0, 3):
         print("  Per-layer timing (L=140) ...")
-        ids_140 = ids_dict.get(140) or list(ids_dict.values())[2]
+        ids_140 = ids_dict[140] if 140 in ids_dict else list(ids_dict.values())[2]
         try:
             layer_timing = per_layer_timing(model, ids_140, n_run=3)
             attn_mean = np.mean([l["mean_ms"] for l in layer_timing[:15]])
@@ -414,8 +414,7 @@ def run_level(level_id: int, tok, ids_dict: dict,
                "results/evolve_log.json",
                "results/evolve_speedup.png",
                "results/evolve_throughput.png",
-               "results/evolve_tradeoff.png",
-               "refs/evolutionaryscale-esm/esm/models/esmc/mlx_model.py"],
+               "results/evolve_tradeoff.png"],
         no_git=no_git,
     )
     if sha:
