@@ -1,0 +1,202 @@
+[20:16:07] =================================================================
+[20:16:07]   ESMC-300M MLX  —  Serial Benchmark  (levels 0-10)
+[20:16:07]   Device: Apple M3  (8GB)
+[20:16:07] =================================================================
+[20:16:07]   Building fp32 reference ...
+[20:16:11]   Reference built.
+[20:16:11] 
+[20:16:11] ─────────────────────────────────────────────────────────────────
+[20:16:11]   OPT LEVEL 0
+[20:16:11] ─────────────────────────────────────────────────────────────────
+[20:16:11]   Loading model opt=0 ...
+[20:16:12]   Loaded in 1.2s
+[20:16:12]   Memory  active=1332.0MB  peak=1564.7MB  cache=0.0MB
+[20:16:12]   MAE vs fp32: 0.0000 ✓
+[20:16:13]   L=50      29.7 ± 1.5 ms    1682 tok/s
+[20:16:13]   L=76      37.2 ± 0.3 ms    2044 tok/s
+[20:16:13]   L=140     55.5 ± 0.0 ms    2520 tok/s
+[20:16:14]   L=280     76.9 ± 0.1 ms    3642 tok/s
+[20:16:15]   L=450     97.3 ± 1.0 ms    4625 tok/s
+[20:16:15]   ★ Speedup vs fp32 baseline @ L=140: 1.017x
+JSON:{"type": "level_done", "level": 0, "ms140": 55.54, "speedup": 1.017, "mae": 0.0}
+[20:16:15]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:15] 
+[20:16:15] ─────────────────────────────────────────────────────────────────
+[20:16:15]   OPT LEVEL 1
+[20:16:15] ─────────────────────────────────────────────────────────────────
+[20:16:15]   Loading model opt=1 ...
+[20:16:17]   Loaded in 2.0s
+[20:16:17]   Memory  active=1332.0MB  peak=1707.6MB  cache=10.7MB
+[20:16:17]   MAE vs fp32: 0.0000 ✓
+[20:16:17]   L=50      26.6 ± 0.1 ms    1876 tok/s
+[20:16:17]   L=76      35.6 ± 0.1 ms    2135 tok/s
+[20:16:18]   L=140     55.3 ± 1.0 ms    2531 tok/s
+[20:16:18]   L=280     74.9 ± 0.1 ms    3735 tok/s
+[20:16:19]   L=450     95.0 ± 0.3 ms    4736 tok/s
+[20:16:19]   ★ Speedup vs fp32 baseline @ L=140: 1.022x
+JSON:{"type": "level_done", "level": 1, "ms140": 55.3, "speedup": 1.022, "mae": 4.1961669921875e-05}
+[20:16:19]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:19] 
+[20:16:19] ─────────────────────────────────────────────────────────────────
+[20:16:19]   OPT LEVEL 2
+[20:16:19] ─────────────────────────────────────────────────────────────────
+[20:16:19]   Loading model opt=2 ...
+[20:16:22]   Loaded in 2.7s
+[20:16:22]   Memory  active=667.0MB  peak=2664.0MB  cache=2664.1MB
+[20:16:22]   MAE vs fp32: 0.5253 ✓
+[20:16:22]   L=50      22.2 ± 0.2 ms    2247 tok/s
+[20:16:22]   L=76      31.9 ± 0.2 ms    2383 tok/s
+[20:16:23]   L=140     48.1 ± 0.9 ms    2911 tok/s
+[20:16:23]   L=280     64.1 ± 0.1 ms    4369 tok/s
+[20:16:24]   L=450     80.7 ± 0.9 ms    5576 tok/s
+[20:16:24]   ★ Speedup vs fp32 baseline @ L=140: 1.175x
+JSON:{"type": "level_done", "level": 2, "ms140": 48.08, "speedup": 1.175, "mae": 0.5253372192382812}
+[20:16:24]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:24] 
+[20:16:24] ─────────────────────────────────────────────────────────────────
+[20:16:24]   OPT LEVEL 3
+[20:16:24] ─────────────────────────────────────────────────────────────────
+[20:16:24]   Loading model opt=3 ...
+[20:16:26]   Loaded in 2.0s
+[20:16:26]   Memory  active=667.0MB  peak=2664.0MB  cache=1335.8MB
+[20:16:26]   MAE vs fp32: 0.5253 ✓
+[20:16:26]   L=50      21.2 ± 0.1 ms    2360 tok/s
+[20:16:27]   L=76      31.3 ± 0.7 ms    2431 tok/s
+[20:16:27]   L=140     46.2 ± 0.0 ms    3029 tok/s
+[20:16:28]   L=280     63.0 ± 0.0 ms    4442 tok/s
+[20:16:28]   L=450     78.6 ± 0.0 ms    5724 tok/s
+[20:16:28]   ★ Speedup vs fp32 baseline @ L=140: 1.223x
+JSON:{"type": "level_done", "level": 3, "ms140": 46.21, "speedup": 1.223, "mae": 0.5253372192382812}
+[20:16:28]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:28] 
+[20:16:28] ─────────────────────────────────────────────────────────────────
+[20:16:28]   OPT LEVEL 4
+[20:16:28] ─────────────────────────────────────────────────────────────────
+[20:16:28]   Loading model opt=4 ...
+[20:16:29]   Loaded in 0.9s
+[20:16:29]   Memory  active=1334.0MB  peak=2669.8MB  cache=1335.8MB
+[20:16:29]   MAE vs fp32: 0.6068 ✓
+[20:16:29]   L=50      21.5 ± 0.3 ms    2328 tok/s
+[20:16:30]   L=76      30.9 ± 0.2 ms    2460 tok/s
+[20:16:30]   L=140     46.2 ± 0.0 ms    3027 tok/s
+[20:16:30]   L=280     63.0 ± 0.1 ms    4444 tok/s
+[20:16:31]   L=450     78.9 ± 0.7 ms    5704 tok/s
+[20:16:31]   ★ Speedup vs fp32 baseline @ L=140: 1.222x
+JSON:{"type": "level_done", "level": 4, "ms140": 46.24, "speedup": 1.222, "mae": 0.6068086624145508}
+[20:16:31]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:31] 
+[20:16:31] ─────────────────────────────────────────────────────────────────
+[20:16:31]   OPT LEVEL 5
+[20:16:31] ─────────────────────────────────────────────────────────────────
+[20:16:31]   Loading model opt=5 ...
+[20:16:33]   Loaded in 2.1s
+[20:16:33]   Memory  active=2000.5MB  peak=3794.0MB  cache=1798.7MB
+[20:16:33]   MAE vs fp32: 0.5389 ✓
+[20:16:34]   L=50      19.6 ± 0.3 ms    2556 tok/s
+[20:16:34]   L=76      30.7 ± 0.1 ms    2476 tok/s
+[20:16:34]   L=140     46.3 ± 0.0 ms    3023 tok/s
+[20:16:35]   L=280     62.9 ± 0.9 ms    4453 tok/s
+[20:16:36]   L=450     79.0 ± 0.1 ms    5697 tok/s
+[20:16:36]   ★ Speedup vs fp32 baseline @ L=140: 1.220x
+JSON:{"type": "level_done", "level": 5, "ms140": 46.31, "speedup": 1.22, "mae": 0.5388545989990234}
+[20:16:36]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:36] 
+[20:16:36] ─────────────────────────────────────────────────────────────────
+[20:16:36]   OPT LEVEL 6
+[20:16:36] ─────────────────────────────────────────────────────────────────
+[20:16:36]   Loading model opt=6 ...
+[20:16:38]   Loaded in 2.1s
+[20:16:38]   Memory  active=2405.5MB  peak=4460.6MB  cache=2185.6MB
+[20:16:38]   MAE vs fp32: 0.8076 ✓
+[20:16:38]   L=50      19.6 ± 0.1 ms    2554 tok/s
+[20:16:38]   L=76      29.1 ± 0.0 ms    2608 tok/s
+[20:16:39]   L=140     45.8 ± 0.4 ms    3057 tok/s
+[20:16:39]   L=280     63.3 ± 0.1 ms    4424 tok/s
+[20:16:40]   L=450     83.5 ± 0.6 ms    5387 tok/s
+[20:16:40]   ★ Speedup vs fp32 baseline @ L=140: 1.234x
+JSON:{"type": "level_done", "level": 6, "ms140": 45.79, "speedup": 1.234, "mae": 0.8076362609863281}
+[20:16:40]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:40] 
+[20:16:40] ─────────────────────────────────────────────────────────────────
+[20:16:40]   OPT LEVEL 7
+[20:16:40] ─────────────────────────────────────────────────────────────────
+[20:16:40]   Loading model opt=7 ...
+[20:16:42]   Loaded in 2.2s
+[20:16:42]   Memory  active=2747.6MB  peak=4865.6MB  cache=2241.1MB
+[20:16:42]   MAE vs fp32: 3.4065 ✓
+[20:16:43]   L=50      19.8 ± 0.6 ms    2526 tok/s
+[20:16:43]   L=76      29.8 ± 0.9 ms    2553 tok/s
+[20:16:43]   L=140     45.3 ± 0.2 ms    3092 tok/s
+[20:16:44]   L=280     64.3 ± 0.6 ms    4356 tok/s
+[20:16:44]   L=450     80.9 ± 0.6 ms    5560 tok/s
+[20:16:44]   ★ Speedup vs fp32 baseline @ L=140: 1.248x
+JSON:{"type": "level_done", "level": 7, "ms140": 45.28, "speedup": 1.248, "mae": 3.4064598083496094}
+[20:16:44]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:44] 
+[20:16:44] ─────────────────────────────────────────────────────────────────
+[20:16:44]   OPT LEVEL 8
+[20:16:44] ─────────────────────────────────────────────────────────────────
+[20:16:44]   Loading model opt=8 ...
+[20:16:47]   Loaded in 2.3s
+[20:16:47]   Memory  active=3299.6MB  peak=5207.7MB  cache=1946.2MB
+[20:16:47]   MAE vs fp32: 2.5767 ✓
+[20:16:47]   L=50      19.4 ± 0.4 ms    2575 tok/s
+[20:16:47]   L=76      31.5 ± 0.9 ms    2409 tok/s
+[20:16:48]   L=140     46.8 ± 1.0 ms    2994 tok/s
+[20:16:48]   L=280     64.4 ± 0.8 ms    4347 tok/s
+[20:16:49]   L=450     80.0 ± 0.7 ms    5624 tok/s
+[20:16:49]   ★ Speedup vs fp32 baseline @ L=140: 1.208x
+JSON:{"type": "level_done", "level": 8, "ms140": 46.76, "speedup": 1.208, "mae": 2.5767226219177246}
+[20:16:49]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:49] 
+[20:16:49] ─────────────────────────────────────────────────────────────────
+[20:16:49]   OPT LEVEL 9
+[20:16:49] ─────────────────────────────────────────────────────────────────
+[20:16:49]   Loading model opt=9 ...
+[20:16:52]   Loaded in 2.6s
+[20:16:52]   Memory  active=3966.6MB  peak=5302.4MB  cache=1335.8MB
+[20:16:52]   MAE vs fp32: 0.5253 ✓
+[20:16:52]   L=50      22.5 ± 0.4 ms    2225 tok/s
+[20:16:52]   L=76      31.5 ± 0.6 ms    2414 tok/s
+[20:16:53]   L=140     46.8 ± 0.6 ms    2989 tok/s
+[20:16:53]   L=280     66.6 ± 1.2 ms    4206 tok/s
+[20:16:54]   L=450     79.8 ± 1.0 ms    5637 tok/s
+[20:16:54]   ★ Speedup vs fp32 baseline @ L=140: 1.206x
+JSON:{"type": "level_done", "level": 9, "ms140": 46.84, "speedup": 1.206, "mae": 0.5253372192382812}
+[20:16:54]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:54] 
+[20:16:54] ─────────────────────────────────────────────────────────────────
+[20:16:54]   OPT LEVEL 10
+[20:16:54] ─────────────────────────────────────────────────────────────────
+[20:16:54]   Loading model opt=10 ...
+[20:16:56]   Loaded in 2.6s
+[20:16:56]   Memory  active=4371.7MB  peak=6426.7MB  cache=1336.4MB
+[20:16:56]   MAE vs fp32: 0.8076 ✓
+[20:16:57]   L=50      20.0 ± 0.2 ms    2499 tok/s
+[20:16:57]   L=76      30.0 ± 0.7 ms    2533 tok/s
+[20:16:57]   L=140     48.0 ± 0.6 ms    2915 tok/s
+[20:16:58]   L=280     65.8 ± 1.0 ms    4258 tok/s
+[20:16:58]   L=450     84.6 ± 1.5 ms    5316 tok/s
+[20:16:58]   ★ Speedup vs fp32 baseline @ L=140: 1.176x
+JSON:{"type": "level_done", "level": 10, "ms140": 48.03, "speedup": 1.176, "mae": 0.8076362609863281}
+[20:16:58]   Checkpoint saved → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json
+[20:16:58] 
+[20:16:58] =================================================================
+[20:16:58]   FINAL SUMMARY
+[20:16:58] =================================================================
+[20:16:58] Level  Name                              ms140   Speedup      MAE
+[20:16:58] -----------------------------------------------------------------
+[20:16:58]   0    baseline (fp32)                    55.5     1.017x    0.000
+[20:16:58]   1    mx.compile                         55.3     1.022x    0.000
+[20:16:58]   2    bfloat16                           48.1     1.175x    0.525
+[20:16:58]   3    bf16+compile                       46.2     1.223x    0.525
+[20:16:58]   4    fused_ln                           46.2     1.222x    0.607
+[20:16:58]   5    qkv+swiglu fusion                  46.3     1.220x    0.539
+[20:16:58]   6    bits=6 FFN                         45.8     1.234x    0.808
+[20:16:58]   7    mxfp4 FFN                          45.3     1.248x    3.406
+[20:16:58]   8    bits=3 down_proj                   46.8     1.208x    2.577
+[20:16:58]   9    fast_layer_norm                    46.8     1.206x    0.525
+[20:16:58]   10   kitchen_sink                       48.0     1.176x    0.808
+[20:16:58] 
+[20:16:58] Full log  → /Users/nialloleary/esm2-inference-opt/results/bench_serial.log
+[20:16:58] JSON data → /Users/nialloleary/esm2-inference-opt/results/bench_serial.json

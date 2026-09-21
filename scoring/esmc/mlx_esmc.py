@@ -2,12 +2,17 @@
 ESMC-300M / ESMC-600M inference in MLX (Apple Silicon, native Metal).
 
 Optimization levels (applied via EsmcMLX.from_pretrained / EsmcMLX.optimize):
-  opt=0  baseline     float32, no compile
-  opt=1  mx.compile   float32 + JIT
-  opt=2  bf16         bfloat16 weights, no compile
-  opt=3  bf16+compile bfloat16 + JIT  (best general-purpose)
-  opt=4  fused        bf16 + compile + fused residual+scale+LN Metal kernel
-  opt=5  batched      opt=4 + batched masked-marginals scoring B=8
+  opt=0  baseline          float32, no compile
+  opt=1  mx.compile        float32 + JIT
+  opt=2  bf16              bfloat16 weights, no compile
+  opt=3  bf16+compile      bfloat16 + JIT  (best general-purpose)
+  opt=4  fused             bf16 + compile + fused residual+scale+LN Metal kernel
+  opt=5  qkv+swiglu        opt=3 + QKV-fused attention + SwiGLU-fused FFN
+  opt=6  bits6-ffn         opt=5 + 6-bit affine quantization of FFN layers
+  opt=7  mxfp4-ffn         opt=5 + mxfp4 (4-bit microscaling) FFN layers
+  opt=8  int3-down         opt=5 + 3-bit affine quantization of down_proj only
+  opt=9  fast-ln           opt=3 + mx.fast.layer_norm for all norm layers
+  opt=10 kitchen-sink      opt=5 + bits=6 FFN + FastLayerNorm
 
 Architecture: pre-LN transformer · RoPE (base=10000) · QK-Norm · SwiGLU FFN
   300M: 30 layers, hidden=960,  heads=15, intermediate=2560
@@ -232,6 +237,105 @@ class EsmcBlock(nn.Module):
         return x, attn_weights
 
 
+# ---------------------------------------------------------------------------
+# Level 5 – QKV-fused attention + SwiGLU-fused FFN
+# ---------------------------------------------------------------------------
+
+class EsmcAttentionFused(nn.Module):
+    """Attention with QKV merged into a single projection (3×hidden output).
+
+    Reduces three separate matmuls to one, improving memory bandwidth usage.
+    QK-Norm is preserved on the split q and k tensors.
+    """
+
+    def __init__(self, hidden: int, n_heads: int):
+        super().__init__()
+        self.n_heads   = n_heads
+        self.d_head    = hidden // n_heads
+        self.scale     = self.d_head ** -0.5
+        self.hidden    = hidden
+
+        self.ln        = nn.LayerNorm(hidden)
+        self.qkv_proj  = nn.Linear(hidden, 3 * hidden, bias=False)
+        self.q_norm    = nn.LayerNorm(hidden, bias=False)
+        self.k_norm    = nn.LayerNorm(hidden, bias=False)
+        self.o_proj    = nn.Linear(hidden, hidden, bias=False)
+        self.rope      = nn.RoPE(self.d_head, traditional=False, base=10000)
+
+    def __call__(self, x: mx.array,
+                 return_attn: bool = False) -> tuple[mx.array, mx.array | None]:
+        B, L, _ = x.shape
+        h = self.ln(x)
+
+        qkv = self.qkv_proj(h)
+        # Split along last dim: each chunk is [B, L, hidden]
+        q, k, v = mx.split(qkv, 3, axis=-1)
+
+        # Apply QK-Norm (operates on the full [B, L, hidden] tensors)
+        q = self.q_norm(q)
+        k = self.k_norm(k)
+
+        def to_heads(t: mx.array) -> mx.array:
+            return t.reshape(B, L, self.n_heads, self.d_head).transpose(0, 2, 1, 3)
+
+        q, k, v = to_heads(q), to_heads(k), to_heads(v)
+        q = self.rope(q)
+        k = self.rope(k)
+
+        attn_weights = None
+        if return_attn:
+            scores = (q @ k.transpose(0, 1, 3, 2)) * self.scale
+            attn_weights = mx.softmax(scores, axis=-1)
+            out = attn_weights @ v
+        else:
+            out = mx.fast.scaled_dot_product_attention(q, k, v, scale=self.scale)
+
+        out = out.transpose(0, 2, 1, 3).reshape(B, L, -1)
+        return self.o_proj(out), attn_weights
+
+
+class SwiGLUFFNFused(nn.Module):
+    """FFN with gate+up merged into a single projection (2×intermediate output).
+
+    Reduces two separate matmuls to one for the expand projection.
+    """
+
+    def __init__(self, hidden: int, intermediate: int):
+        super().__init__()
+        self.ln            = nn.LayerNorm(hidden)
+        self.gate_up_proj  = nn.Linear(hidden, 2 * intermediate, bias=False)
+        self.down_proj     = nn.Linear(intermediate, hidden, bias=False)
+        self._intermediate = intermediate
+
+    def __call__(self, x: mx.array) -> mx.array:
+        h = self.ln(x)
+        gate_up = self.gate_up_proj(h)
+        gate, up = mx.split(gate_up, 2, axis=-1)
+        return self.down_proj(nn.silu(gate) * up)
+
+
+# ---------------------------------------------------------------------------
+# Level 9 – FastLayerNorm: wraps mx.fast.layer_norm
+# ---------------------------------------------------------------------------
+
+class FastLayerNorm(nn.Module):
+    """Drop-in replacement for nn.LayerNorm backed by mx.fast.layer_norm.
+
+    mx.fast.layer_norm dispatches a single fused Metal kernel instead of
+    the multi-op sequence emitted by nn.LayerNorm, saving kernel-launch
+    overhead on every norm call.
+    """
+
+    def __init__(self, dims: int, eps: float = 1e-5, bias: bool = True):
+        super().__init__()
+        self.eps    = eps
+        self.weight = mx.ones((dims,))
+        self.bias   = mx.zeros((dims,)) if bias else None
+
+    def __call__(self, x: mx.array) -> mx.array:
+        return mx.fast.layer_norm(x, self.weight, self.bias, self.eps)
+
+
 class EsmcLMHead(nn.Module):
     def __init__(self, hidden: int, vocab: int):
         super().__init__()
@@ -248,7 +352,7 @@ class EsmcLMHead(nn.Module):
 # ---------------------------------------------------------------------------
 
 class EsmcMLX(nn.Module):
-    """ESMC-300M / 600M in MLX with optimization levels 0-5."""
+    """ESMC-300M / 600M in MLX with optimization levels 0-10."""
 
     CONFIGS = {
         "biohub/ESMC-300M": dict(hidden=960,  n_heads=15, n_layers=30, intermediate=2560),
@@ -257,12 +361,17 @@ class EsmcMLX(nn.Module):
 
     # opt_level → description
     OPT_NAMES = {
-        0: "baseline (fp32)",
-        1: "mx.compile",
-        2: "bfloat16",
-        3: "bf16+compile",
-        4: "bf16+compile+fused_ln",
-        5: "bf16+compile+fused_ln+batched",
+        0:  "baseline (fp32)",
+        1:  "mx.compile",
+        2:  "bfloat16",
+        3:  "bf16+compile",
+        4:  "bf16+compile+fused_ln",
+        5:  "qkv+swiglu fusion (bf16+compile)",
+        6:  "qkv+swiglu + bits=6 FFN quant",
+        7:  "qkv+swiglu + mxfp4 FFN quant",
+        8:  "qkv+swiglu + bits=3 down_proj",
+        9:  "bf16+compile + fast layer_norm",
+        10: "kitchen-sink (qkv+swiglu+bits6+fast-ln)",
     }
 
     def __init__(self, hidden: int, n_heads: int, n_layers: int,
@@ -333,10 +442,11 @@ class EsmcMLX(nn.Module):
         base_ids = enc["input_ids"].numpy()[0].astype("int32").tolist()
         L = len(base_ids)
 
+        # Token IDs verified against EsmcTokenizer.from_pretrained("biohub/ESMC-300M")
         AA_TO_ID = {
-            "A": 4, "C": 5, "D": 6, "E": 7, "F": 8, "G": 9, "H": 10,
-            "I": 11, "K": 14, "L": 12, "M": 13, "N": 15, "P": 17,
-            "Q": 16, "R": 18, "S": 19, "T": 20, "V": 21, "W": 22, "Y": 23,
+            "A": 5,  "C": 23, "D": 13, "E": 9,  "F": 18, "G": 6,  "H": 21,
+            "I": 12, "K": 15, "L": 4,  "M": 20, "N": 17, "P": 14, "Q": 16,
+            "R": 10, "S": 8,  "T": 11, "V": 7,  "W": 22, "Y": 19,
         }
         MASK_ID = 32
 
@@ -374,6 +484,110 @@ class EsmcMLX(nn.Module):
         return scores
 
     # ------------------------------------------------------------------
+    # Optimization helpers (levels 5-10)
+    # ------------------------------------------------------------------
+
+    def _apply_qkv_fusion(self) -> None:
+        """Replace separate q/k/v projections and gate/up projections with
+        fused counterparts.  Weights are concatenated along axis=0 (output dim).
+        The layer norms (ln, q_norm, k_norm) and rope are copied by reference.
+        """
+        for block in self.layers:
+            old_attn = block.attn
+            old_ffn  = block.ffn
+
+            # --- fused attention ---
+            # q_proj.weight shape: [hidden, hidden] (out=in for square projection)
+            attn_hidden = old_attn.q_proj.weight.shape[0]  # out_features = hidden
+            fused_attn = EsmcAttentionFused(
+                hidden  = attn_hidden,
+                n_heads = old_attn.n_heads,
+            )
+            # Concat Q, K, V weights: each is [hidden, hidden], result [3*hidden, hidden]
+            fused_attn.qkv_proj.weight = mx.concatenate(
+                [old_attn.q_proj.weight, old_attn.k_proj.weight, old_attn.v_proj.weight],
+                axis=0,
+            )
+            fused_attn.ln      = old_attn.ln
+            fused_attn.q_norm  = old_attn.q_norm
+            fused_attn.k_norm  = old_attn.k_norm
+            fused_attn.o_proj  = old_attn.o_proj
+            fused_attn.rope    = old_attn.rope
+            block.attn = fused_attn
+
+            # --- fused FFN ---
+            # gate_proj.weight shape: [intermediate, hidden]
+            intermediate = old_ffn.gate_proj.weight.shape[0]
+            hidden_dim   = old_ffn.gate_proj.weight.shape[1]
+            fused_ffn = SwiGLUFFNFused(
+                hidden       = hidden_dim,
+                intermediate = intermediate,
+            )
+            # Concat gate, up weights: each is [intermediate, hidden], result [2*intermediate, hidden]
+            fused_ffn.gate_up_proj.weight = mx.concatenate(
+                [old_ffn.gate_proj.weight, old_ffn.up_proj.weight],
+                axis=0,
+            )
+            fused_ffn.ln        = old_ffn.ln
+            fused_ffn.down_proj = old_ffn.down_proj
+            block.ffn = fused_ffn
+
+            # The block no longer uses the old fused-residual path (opt=4)
+            block._use_fused = False
+
+        mx.eval(self.parameters())
+
+    def _apply_fast_layer_norm(self) -> None:
+        """Replace every nn.LayerNorm in the transformer blocks and final norm
+        with FastLayerNorm backed by mx.fast.layer_norm.
+
+        LM-head LayerNorm is also replaced.  The weight/bias tensors are
+        transferred so no re-loading is needed.
+        """
+
+        def _convert_ln(ln_module: nn.LayerNorm) -> FastLayerNorm:
+            dims = ln_module.weight.shape[0]
+            has_bias = getattr(ln_module, "bias", None) is not None
+            fast_ln = FastLayerNorm(dims, eps=getattr(ln_module, "eps", 1e-5), bias=has_bias)
+            fast_ln.weight = ln_module.weight
+            if has_bias:
+                fast_ln.bias = ln_module.bias
+            return fast_ln
+
+        for block in self.layers:
+            # Attention and FFN pre-norms
+            block.attn.ln = _convert_ln(block.attn.ln)
+            block.ffn.ln  = _convert_ln(block.ffn.ln)
+            # QK-Norms (no bias)
+            block.attn.q_norm = _convert_ln(block.attn.q_norm)
+            block.attn.k_norm = _convert_ln(block.attn.k_norm)
+
+        # Final encoder norm (no bias)
+        self.norm = _convert_ln(self.norm)
+
+        # LM-head norm
+        self.lm_head.layer_norm = _convert_ln(self.lm_head.layer_norm)
+
+        mx.eval(self.parameters())
+
+    def _apply_quant_ffn(self, bits: int, group_size: int,
+                         mode: str = "affine",
+                         layers_filter: tuple[str, ...] = ("gate_proj", "up_proj", "down_proj",
+                                                            "gate_up_proj")) -> None:
+        """Quantize only FFN linear layers; attention stays in BF16."""
+        nn.quantize(
+            self,
+            bits=bits,
+            group_size=group_size,
+            mode=mode,
+            class_predicate=lambda path, module: (
+                isinstance(module, nn.Linear) and
+                any(name in str(path) for name in layers_filter)
+            ),
+        )
+        mx.eval(self.parameters())
+
+    # ------------------------------------------------------------------
     # Optimization API
     # ------------------------------------------------------------------
 
@@ -383,18 +597,53 @@ class EsmcMLX(nn.Module):
             self.set_dtype(mx.bfloat16)
             mx.eval(self.parameters())
 
-        if level >= 4:
+        if level >= 4 and level not in range(5, 11):
+            # opt=4 only: fused residual+LN Metal kernel path
             for block in self.layers:
                 block._use_fused = True
                 block.attn._use_fused = True
                 block.ffn._use_fused = True
 
-        if level in (1, 3, 4, 5):
-            # Warm Metal shader compilation with a dummy forward pass first
+        # ---- levels 5-10: QKV + SwiGLU fusion (and further per-level opts) ----
+
+        if level == 5:
+            # bf16 already applied above; apply fusion then compile
+            self._apply_qkv_fusion()
+
+        elif level == 6:
+            # QKV fusion + bits=6 affine FFN quantization
+            self._apply_qkv_fusion()
+            self._apply_quant_ffn(bits=6, group_size=64, mode="affine",
+                                  layers_filter=("gate_up_proj", "down_proj"))
+
+        elif level == 7:
+            # QKV fusion + mxfp4 FFN quantization (group_size=32 required for mxfp4)
+            self._apply_qkv_fusion()
+            self._apply_quant_ffn(bits=4, group_size=32, mode="mxfp4",
+                                  layers_filter=("gate_up_proj", "down_proj"))
+
+        elif level == 8:
+            # QKV fusion + bits=3 down_proj only (largest FFN weight: intermediate→hidden)
+            self._apply_qkv_fusion()
+            self._apply_quant_ffn(bits=3, group_size=64, mode="affine",
+                                  layers_filter=("down_proj",))
+
+        elif level == 9:
+            # bf16+compile + fast layer_norm (no QKV fusion)
+            self._apply_fast_layer_norm()
+
+        elif level == 10:
+            # Kitchen sink: QKV fusion + SwiGLU fusion + bits=6 FFN + FastLayerNorm
+            self._apply_qkv_fusion()
+            self._apply_quant_ffn(bits=6, group_size=64, mode="affine",
+                                  layers_filter=("gate_up_proj", "down_proj"))
+            self._apply_fast_layer_norm()
+
+        # Compile for levels that benefit from JIT (all except pure-bf16 level 2)
+        if level in (1, 3, 4, 5, 6, 7, 8, 9, 10):
             dummy = mx.zeros((1, 4), dtype=mx.int32)
             out = self._raw_forward(dummy); mx.eval(out)
             self._compiled_fn = mx.compile(self._raw_forward)
-            # warm the compiled version
             out = self._compiled_fn(dummy); mx.eval(out)
 
         self._opt_level = level
@@ -413,7 +662,8 @@ class EsmcMLX(nn.Module):
         if repo_id not in cls.CONFIGS:
             raise ValueError(f"Unknown: {repo_id!r}. Known: {list(cls.CONFIGS)}")
         cfg = cls.CONFIGS[repo_id]
-        use_fused = opt_level >= 4
+        # use_fused_ln (Metal kernel path) only applies to level 4
+        use_fused = (opt_level == 4)
         model = cls(**cfg, use_fused_ln=use_fused)
         local_dir = Path(snapshot_download(repo_id, ignore_patterns=["*.msgpack"]))
         weights = _load_safetensors(local_dir)

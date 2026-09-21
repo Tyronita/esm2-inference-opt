@@ -1,0 +1,133 @@
+{
+  "opt_level": 7,
+  "opt_name": "qkv+swiglu + mxfp4 FFN quant",
+  "n_assays": 12,
+  "mean_spearman_rho": 0.5791,
+  "sem_spearman_rho": 0.057,
+  "published_rho": 0.406,
+  "published_sem": 0.013,
+  "model_load_s": 2.9,
+  "total_s": 14.3,
+  "per_assay": [
+    {
+      "assay_id": "VG08_BPP22_Tsuboyama_2023_2GP8",
+      "L": 40,
+      "N": 723,
+      "n_valid": 40,
+      "spearman_rho": 0.5699,
+      "pval": 0.00012378845486241838,
+      "time_s": 0.52,
+      "variants_per_s": 1394.1
+    },
+    {
+      "assay_id": "SDA_BACSU_Tsuboyama_2023_1PV0",
+      "L": 44,
+      "N": 2770,
+      "n_valid": 50,
+      "spearman_rho": 0.7584,
+      "pval": 1.7725119462945083e-10,
+      "time_s": 0.63,
+      "variants_per_s": 4409.9
+    },
+    {
+      "assay_id": "AMFR_HUMAN_Tsuboyama_2023_4G3O",
+      "L": 47,
+      "N": 2972,
+      "n_valid": 54,
+      "spearman_rho": 0.7368,
+      "pval": 2.1339815316971856e-10,
+      "time_s": 0.63,
+      "variants_per_s": 4688.2
+    },
+    {
+      "assay_id": "SR43C_ARATH_Tsuboyama_2023_2N88",
+      "L": 48,
+      "N": 1583,
+      "n_valid": 50,
+      "spearman_rho": 0.83,
+      "pval": 9.213073598089393e-14,
+      "time_s": 0.64,
+      "variants_per_s": 2459.2
+    },
+    {
+      "assay_id": "RAD_ANTMA_Tsuboyama_2023_2CJJ",
+      "L": 54,
+      "N": 912,
+      "n_valid": 54,
+      "spearman_rho": 0.5752,
+      "pval": 5.365681852526828e-06,
+      "time_s": 0.85,
+      "variants_per_s": 1071.7
+    },
+    {
+      "assay_id": "HCP_LAMBD_Tsuboyama_2023_2L6Q",
+      "L": 55,
+      "N": 1040,
+      "n_valid": 55,
+      "spearman_rho": 0.651,
+      "pval": 7.396095153742478e-08,
+      "time_s": 0.91,
+      "variants_per_s": 1137.4
+    },
+    {
+      "assay_id": "SPA_STAAU_Tsuboyama_2023_1LP1",
+      "L": 55,
+      "N": 2105,
+      "n_valid": 58,
+      "spearman_rho": 0.0402,
+      "pval": 0.7642915015789612,
+      "time_s": 0.84,
+      "variants_per_s": 2509.8
+    },
+    {
+      "assay_id": "MYO3_YEAST_Tsuboyama_2023_2BTT",
+      "L": 61,
+      "N": 3297,
+      "n_valid": 69,
+      "spearman_rho": 0.4513,
+      "pval": 9.949318243207044e-05,
+      "time_s": 1.09,
+      "variants_per_s": 3026.2
+    },
+    {
+      "assay_id": "RS15_GEOSE_Tsuboyama_2023_1A32",
+      "L": 63,
+      "N": 1195,
+      "n_valid": 63,
+      "spearman_rho": 0.4762,
+      "pval": 7.97374509516861e-05,
+      "time_s": 1.27,
+      "variants_per_s": 943.0
+    },
+    {
+      "assay_id": "DOCK1_MOUSE_Tsuboyama_2023_2M0Y",
+      "L": 66,
+      "N": 2915,
+      "n_valid": 70,
+      "spearman_rho": 0.6267,
+      "pval": 6.503614000230933e-09,
+      "time_s": 1.21,
+      "variants_per_s": 2416.9
+    },
+    {
+      "assay_id": "SRBS1_HUMAN_Tsuboyama_2023_2O2W",
+      "L": 67,
+      "N": 1556,
+      "n_valid": 68,
+      "spearman_rho": 0.7187,
+      "pval": 5.174715972142947e-12,
+      "time_s": 1.3,
+      "variants_per_s": 1199.9
+    },
+    {
+      "assay_id": "CATR_CHLRE_Tsuboyama_2023_2AMI",
+      "L": 72,
+      "N": 1903,
+      "n_valid": 75,
+      "spearman_rho": 0.5149,
+      "pval": 2.2817766121066522e-06,
+      "time_s": 1.4,
+      "variants_per_s": 1361.4
+    }
+  ]
+}
