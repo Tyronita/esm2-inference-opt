@@ -292,3 +292,9 @@ Each row: one real user prompt → nearest git commit that resulted from it.
 | 282 | 2026-09-20T22:30:14 | ^^^ ✻ Churned for 6m 48s · 2 shells still running  ❯ great, now we've defined th | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
 | 283 | 2026-09-20T22:34:33 | anyway, code execute, evolve, run all night until tokens fgone, you have my mac, | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
 | 284 | 2026-09-20T22:35:02 | i want you to automatically pick all recommended steps ^ code in our refs/ mlx i | `e97537c` | mlx-opt: corrected batch sweep (BF16 numpy cast fi |
+| 285 | 2026-09-21T09:51:36 | what time did this finish? | `055f4dc` | mlx-opt v2: levels 5-10 + full serial benchmark +  |
+| 286 | 2026-09-21T09:54:02 | you are an inference engineer, consume the full leet gpu, guidance, nvidia dev g | `055f4dc` | mlx-opt v2: levels 5-10 + full serial benchmark +  |
+| 287 | 2026-09-21T10:11:58 | can we access MFU? is there a platform to see how this will scale on other mac h | `055f4dc` | mlx-opt v2: levels 5-10 + full serial benchmark +  |
+| 288 | 2026-09-21T10:14:06 | fyi, when our agents are finished, please test/execute every step, when those ex | `055f4dc` | mlx-opt v2: levels 5-10 + full serial benchmark +  |
+| 289 | 2026-09-21T12:15:35 | w4n35k5am toolu_01An15Ge7KKuo9QKuDvhSzvQ /private/tmp/claude-501/-Users-niallole | `055f4dc` | mlx-opt v2: levels 5-10 + full serial benchmark +  |
+| 290 | 2026-09-21T19:14:08 | out of interest ^ continue | `055f4dc` | mlx-opt v2: levels 5-10 + full serial benchmark +  |

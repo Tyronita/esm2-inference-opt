@@ -1641,3 +1641,19 @@ Both source implementations pinned as git submodules with exact SHAs: fair-esm @
 | Files | `refs/evolutionaryscale-esm` |
 | Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
 | Undo | `git revert bbc66f1 --no-edit` |
+
+---
+
+### 2026-09-21 · `055f4dc` · nialloleary
+
+**mlx-opt v2: levels 5-10 + full serial benchmark + ProteinGym 12-assay sweep**
+
+mlx-opt v2: levels 5-10 + full serial benchmark + ProteinGym 12-assay sweep
+
+| | |
+|---|---|
+| SHA | `055f4dce2001e695428c540a203469f597da9a58` |
+| Changed | 16 files changed, 2911 insertions(+), 21 deletions(-) |
+| Files | `benchmark/bench_serial.py`  `benchmark/proteingym_mlx.py`  `results/bench_serial.json`  `results/bench_serial.log`  `results/proteingym_opt0.json`  `results/proteingym_opt1.json`  _10 more_ |
+| Integrity | Merkle `889c170fe685c443` · fair-esm@`2b369911` · ProteinGym@`144fe22b` |
+| Undo | `git revert 055f4dc --no-edit` |
